@@ -31,12 +31,7 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // FIXME: Example delayed navigation
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                NavHostFragment.findNavController(MainFragment.this)
-                        .navigate(MainFragmentDirections.actionMainFragmentToLoginGraph());
-            }
-        }, 1000);
+        new Handler().postDelayed(() -> NavHostFragment.findNavController(MainFragment.this)
+                .navigate(MainFragmentDirections.actionMainFragmentToLoginGraph()), 1000);
     }
 }

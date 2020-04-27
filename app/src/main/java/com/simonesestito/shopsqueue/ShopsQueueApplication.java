@@ -20,7 +20,7 @@ package com.simonesestito.shopsqueue;
 
 import android.app.Application;
 
-import com.simonesestito.shopsqueue.di.DaggerApplicationComponent;
+import com.simonesestito.shopsqueue.di.DaggerInjector;
 import com.simonesestito.shopsqueue.di.Injector;
 
 public class ShopsQueueApplication extends Application {
@@ -33,7 +33,7 @@ public class ShopsQueueApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        injector = DaggerApplicationComponent.builder()
+        injector = DaggerInjector.builder()
                 .provideContext(getApplicationContext())
                 .build();
     }

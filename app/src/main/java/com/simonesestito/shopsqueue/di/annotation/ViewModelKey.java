@@ -16,27 +16,20 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.di;
+package com.simonesestito.shopsqueue.di.annotation;
 
-import android.content.Context;
+import androidx.lifecycle.ViewModel;
 
-import com.simonesestito.shopsqueue.MainActivity;
-import com.simonesestito.shopsqueue.di.module.ViewModelModule;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import dagger.BindsInstance;
-import dagger.Component;
+import dagger.MapKey;
 
-@Component(modules = {
-        ViewModelModule.class
-})
-public interface Injector {
-    void inject(MainActivity mainActivity);
-
-    @Component.Builder
-    interface Builder {
-        Injector build();
-
-        @BindsInstance
-        Builder provideContext(Context context);
-    }
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@MapKey
+public @interface ViewModelKey {
+    Class<? extends ViewModel> value();
 }

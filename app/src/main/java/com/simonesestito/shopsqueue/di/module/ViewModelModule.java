@@ -16,27 +16,26 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.di;
+package com.simonesestito.shopsqueue.di.module;
 
-import android.content.Context;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.simonesestito.shopsqueue.MainActivity;
-import com.simonesestito.shopsqueue.di.module.ViewModelModule;
+import com.simonesestito.shopsqueue.di.annotation.ViewModelKey;
+import com.simonesestito.shopsqueue.lifecycle.viewmodel.LoginViewModel;
+import com.simonesestito.shopsqueue.lifecycle.viewmodel.ViewModelFactory;
 
-import dagger.BindsInstance;
-import dagger.Component;
+import dagger.Binds;
+import dagger.Module;
+import dagger.multibindings.IntoMap;
 
-@Component(modules = {
-        ViewModelModule.class
-})
-public interface Injector {
-    void inject(MainActivity mainActivity);
+@Module
+public interface ViewModelModule {
+    @Binds
+    ViewModelProvider.Factory bindFactory(ViewModelFactory viewModelFactory);
 
-    @Component.Builder
-    interface Builder {
-        Injector build();
-
-        @BindsInstance
-        Builder provideContext(Context context);
-    }
+    @Binds
+    @IntoMap
+    @ViewModelKey(LoginViewModel.class)
+    ViewModel bindLoginViewModel(LoginViewModel loginViewModel);
 }

@@ -24,7 +24,13 @@ import androidx.lifecycle.ViewModel;
 
 import com.simonesestito.shopsqueue.model.dto.input.AuthResponse;
 
+import javax.inject.Inject;
+
 public class LoginViewModel extends ViewModel {
+    @Inject
+    public LoginViewModel() {
+    }
+
     // TODO Check if SharedPreferences contain an access token
     private MutableLiveData<AuthResponse> authStatus = new MutableLiveData<>(null);
 

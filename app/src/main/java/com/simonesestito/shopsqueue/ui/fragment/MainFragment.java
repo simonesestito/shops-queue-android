@@ -1,28 +1,24 @@
 package com.simonesestito.shopsqueue.ui.fragment;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.simonesestito.shopsqueue.R;
-import com.simonesestito.shopsqueue.lifecycle.viewmodel.MainViewModel;
 
+/**
+ * Main fragment
+ * It's responsible to redirect the user to the right navigation graph
+ * based on the current login status
+ */
 public class MainFragment extends Fragment {
-
-    private MainViewModel mViewModel;
-
-    public static MainFragment newInstance() {
-        return new MainFragment();
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -31,10 +27,16 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        // TODO: Use the ViewModel
-    }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        // FIXME: Example delayed navigation
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                NavHostFragment.findNavController(MainFragment.this)
+                        .navigate(MainFragmentDirections.actionMainFragmentToLoginGraph());
+            }
+        }, 1000);
+    }
 }

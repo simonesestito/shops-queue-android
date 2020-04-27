@@ -21,12 +21,14 @@ package com.simonesestito.shopsqueue.di;
 import android.content.Context;
 
 import com.simonesestito.shopsqueue.MainActivity;
+import com.simonesestito.shopsqueue.di.module.RetrofitModule;
 import com.simonesestito.shopsqueue.di.module.ViewModelModule;
 
 import dagger.BindsInstance;
 import dagger.Component;
 
 @Component(modules = {
+        RetrofitModule.class,
         ViewModelModule.class
 })
 public interface Injector {

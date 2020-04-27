@@ -66,4 +66,8 @@ dependencies {
     // Dagger
     implementation "com.google.dagger:dagger:$versions.dagger"
     annotationProcessor "com.google.dagger:dagger-compiler:$versions.dagger"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:converter-jackson:$versions.retrofit"
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
 }

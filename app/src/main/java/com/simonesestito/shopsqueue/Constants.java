@@ -16,15 +16,8 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-def versions = [:]
-versions.androidPlugin = '3.6.3'
+package com.simonesestito.shopsqueue;
 
-versions.navigation = '2.2.2'
-versions.lifecycle = '2.2.0'
-versions.appcompat = '1.1.0'
-versions.constraintlayout = '1.1.3'
-versions.material = '1.1.0'
-versions.dagger = '2.27'
-versions.retrofit = '2.8.1'
-
-ext.versions = versions
+public class Constants {
+    public static final String API_BASE_URL = "http://localhost:1234/";
+}

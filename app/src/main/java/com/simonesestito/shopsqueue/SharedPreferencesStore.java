@@ -18,8 +18,28 @@
 
 package com.simonesestito.shopsqueue;
 
-public class Constants {
-    public static final String API_BASE_URL = "http://localhost:1234/";
-    public static final String SHARED_PREFERENCES_FILE = BuildConfig.APPLICATION_ID + "_preferences";
-    public static final String SHARED_PREFERENCES_TOKEN_KEY = "api_access_token";
+import android.content.SharedPreferences;
+
+import androidx.annotation.Nullable;
+
+import javax.inject.Inject;
+
+public class SharedPreferencesStore {
+    private final SharedPreferences sharedPreferences;
+
+    @Inject
+    public SharedPreferencesStore(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+    }
+
+    @Nullable
+    public String getAccessToken() {
+        return sharedPreferences.getString(Constants.SHARED_PREFERENCES_TOKEN_KEY, null);
+    }
+
+    public void setAccessToken(@Nullable String accessToken) {
+        sharedPreferences.edit()
+                .putString(Constants.SHARED_PREFERENCES_TOKEN_KEY, accessToken)
+                .apply();
+    }
 }

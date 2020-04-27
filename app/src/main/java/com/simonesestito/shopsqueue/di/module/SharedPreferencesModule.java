@@ -16,31 +16,20 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.di;
+package com.simonesestito.shopsqueue.di.module;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
-import com.simonesestito.shopsqueue.MainActivity;
-import com.simonesestito.shopsqueue.di.module.RetrofitModule;
-import com.simonesestito.shopsqueue.di.module.SharedPreferencesModule;
-import com.simonesestito.shopsqueue.di.module.ViewModelModule;
+import com.simonesestito.shopsqueue.Constants;
 
-import dagger.BindsInstance;
-import dagger.Component;
+import dagger.Module;
+import dagger.Provides;
 
-@Component(modules = {
-        RetrofitModule.class,
-        SharedPreferencesModule.class,
-        ViewModelModule.class
-})
-public interface Injector {
-    void inject(MainActivity mainActivity);
-
-    @Component.Builder
-    interface Builder {
-        Injector build();
-
-        @BindsInstance
-        Builder provideContext(Context context);
+@Module
+public class SharedPreferencesModule {
+    @Provides
+    public SharedPreferences provideSharedPreferences(Context context) {
+        return context.getSharedPreferences(Constants.SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
     }
 }

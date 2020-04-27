@@ -18,10 +18,12 @@
 
 package com.simonesestito.shopsqueue.di.module;
 
+import com.simonesestito.shopsqueue.api.AuthorizationInterceptor;
 import com.simonesestito.shopsqueue.api.LoginService;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -30,9 +32,16 @@ import static com.simonesestito.shopsqueue.Constants.API_BASE_URL;
 @Module
 public class RetrofitModule {
     @Provides
-    Retrofit provideRetrofit() {
-        // TODO Add Authorization header interceptor
+    OkHttpClient provideOkHttp(AuthorizationInterceptor authorizationInterceptor) {
+        return new OkHttpClient.Builder()
+                .addInterceptor(authorizationInterceptor)
+                .build();
+    }
+
+    @Provides
+    Retrofit provideRetrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
+                .client(okHttpClient)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .baseUrl(API_BASE_URL)
                 .build();

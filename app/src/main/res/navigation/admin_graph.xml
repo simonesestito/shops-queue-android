@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/admin_graph"
+    app:startDestination="@id/adminFragment">
+    <fragment
+        android:id="@+id/adminFragment"
+        android:name="com.simonesestito.shopsqueue.ui.fragment.AdminFragment"
+        android:label="AdminFragment"
+        tools:layout="@layout/admin_fragment" />
+
+</navigation>

@@ -9,12 +9,10 @@
         android:id="@+id/mainFragment"
         android:name="com.simonesestito.shopsqueue.ui.fragment.MainFragment"
         android:label="main_fragment"
-        tools:layout="@layout/main_fragment" >
-        <action
-            android:id="@+id/action_mainFragment_to_login_graph"
-            app:destination="@id/login_graph" />
-    </fragment>
+        tools:layout="@layout/main_fragment" />
 
     <include app:graph="@navigation/login_graph" />
-
+    <include app:graph="@navigation/user_graph" />
+    <include app:graph="@navigation/owner_graph" />
+    <include app:graph="@navigation/admin_graph" />
 </navigation>

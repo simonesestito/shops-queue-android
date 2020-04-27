@@ -7,11 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.MainFragment">
 
-    <TextView
-        android:id="@+id/message"
+    <ProgressBar
+        style="@style/Widget.AppCompat.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MainFragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

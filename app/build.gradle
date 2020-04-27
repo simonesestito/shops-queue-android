@@ -62,4 +62,8 @@ dependencies {
     // Navigation libs
     implementation "androidx.navigation:navigation-fragment:$versions.navigation"
     implementation "androidx.navigation:navigation-ui:$versions.navigation"
+
+    // Dagger
+    implementation "com.google.dagger:dagger:$versions.dagger"
+    annotationProcessor "com.google.dagger:dagger-compiler:$versions.dagger"
 }

@@ -23,5 +23,6 @@ versions.navigation = '2.2.2'
 versions.lifecycle = '2.2.0'
 versions.appcompat = '1.1.0'
 versions.constraintlayout = '1.1.3'
+versions.material = '1.1.0'
 
 ext.versions = versions

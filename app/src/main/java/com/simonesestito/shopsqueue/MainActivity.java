@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.simonesestito.shopsqueue.ui.main.MainFragment;
+import com.simonesestito.shopsqueue.ui.fragment.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 

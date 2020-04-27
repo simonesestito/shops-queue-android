@@ -1,4 +1,4 @@
-package com.simonesestito.shopsqueue.ui.main;
+package com.simonesestito.shopsqueue.lifecycle.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 

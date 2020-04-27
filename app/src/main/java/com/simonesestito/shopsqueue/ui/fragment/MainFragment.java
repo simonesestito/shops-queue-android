@@ -1,7 +1,6 @@
-package com.simonesestito.shopsqueue.ui.main;
+package com.simonesestito.shopsqueue.ui.fragment;
 
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
 
@@ -14,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.simonesestito.shopsqueue.R;
+import com.simonesestito.shopsqueue.lifecycle.viewmodel.MainViewModel;
 
 public class MainFragment extends Fragment {
 

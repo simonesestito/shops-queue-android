@@ -16,19 +16,20 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.lifecycle.viewmodel;
+package com.simonesestito.shopsqueue.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.simonesestito.shopsqueue.model.dto.input.AuthResponse;
+import com.simonesestito.shopsqueue.api.LoginService;
+import com.simonesestito.shopsqueue.api.dto.AuthResponse;
 
 import javax.inject.Inject;
 
 public class LoginViewModel extends ViewModel {
     @Inject
-    public LoginViewModel() {
+    public LoginViewModel(LoginService loginService) {
     }
 
     // TODO Check if SharedPreferences contain an access token

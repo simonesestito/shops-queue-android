@@ -22,8 +22,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.simonesestito.shopsqueue.di.annotation.ViewModelKey;
-import com.simonesestito.shopsqueue.lifecycle.viewmodel.LoginViewModel;
-import com.simonesestito.shopsqueue.lifecycle.viewmodel.ViewModelFactory;
+import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
+import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
 import dagger.Binds;
 import dagger.Module;

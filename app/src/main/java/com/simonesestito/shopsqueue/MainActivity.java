@@ -27,8 +27,8 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
-import com.simonesestito.shopsqueue.lifecycle.viewmodel.LoginViewModel;
-import com.simonesestito.shopsqueue.lifecycle.viewmodel.ViewModelFactory;
+import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
+import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
 import javax.inject.Inject;
 

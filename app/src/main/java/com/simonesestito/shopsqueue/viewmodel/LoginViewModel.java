@@ -23,8 +23,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.simonesestito.shopsqueue.SharedPreferencesStore;
-import com.simonesestito.shopsqueue.api.LoginService;
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
+import com.simonesestito.shopsqueue.api.service.LoginService;
+import com.simonesestito.shopsqueue.model.HttpStatus;
 
 import javax.inject.Inject;
 
@@ -51,25 +52,21 @@ public class LoginViewModel extends ViewModel {
             // Validate token against the API
             // The token will be added to the request by an interceptor
             loginService.getCurrentUser()
-                    .thenAccept(user -> {
+                    .then(user -> {
                         AuthResponse authResponse = new AuthResponse();
                         authResponse.setAccessToken(savedToken);
                         authResponse.setUser(user);
                         authStatus.postValue(authResponse);
-                    }).exceptionally(e -> {
-                // TODO Handle network error
-                authStatus.postValue(null);
-                return null;
-            });
+                    })
+                    .onStatus(HttpStatus.HTTP_NOT_LOGGED_IN, () -> {
+                        authStatus.postValue(null);
+                    })
+                    // TODO handle network error
+                    .onError(Throwable::printStackTrace);
         }
     }
 
     public LiveData<AuthResponse> getAuthStatus() {
         return authStatus;
-    }
-
-    // FIXME: Remove this
-    public void setAuthStatus(AuthResponse authStatus) {
-        this.authStatus.postValue(authStatus);
     }
 }

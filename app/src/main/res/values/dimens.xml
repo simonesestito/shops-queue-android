@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2020 Simone Sestito
   ~ This file is part of Shops Queue.
   ~
@@ -17,11 +17,7 @@
   -->
 
 <resources>
-    <string name="app_name">Shops Queue</string>
-    <string name="input_email_hint">E-mail address</string>
-    <string name="input_password_hint">Password</string>
-    <string name="login_fragment_title">Login</string>
-    <string name="login_form_submit">Login</string>
-    <string name="form_field_required">Field required</string>
-    <string name="form_invalid_email_field">Invalid email address</string>
+    <dimen name="input_form_margin">24dp</dimen>
+    <dimen name="form_element_margin">8dp</dimen>
+    <dimen name="app_logo_login_form_size">80dp</dimen>
 </resources>

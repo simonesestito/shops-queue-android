@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ Copyright 2020 Simone Sestito
   ~ This file is part of Shops Queue.
   ~
@@ -16,13 +16,12 @@
   ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <dimen name="input_form_margin">24dp</dimen>
-    <dimen name="form_element_margin">8dp</dimen>
-
-    <!-- https://material.io/components/app-bars-top#specs -->
-    <dimen name="back_button_size">56dp</dimen>
-    <dimen name="back_button_padding">16dp</dimen>
-
-    <dimen name="app_logo_login_form_size">80dp</dimen>
-</resources>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M20,11H7.83l5.59,-5.59L12,4l-8,8 8,8 1.41,-1.41L7.83,13H20v-2z" />
+</vector>

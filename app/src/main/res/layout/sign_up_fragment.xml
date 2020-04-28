@@ -22,6 +22,17 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="@dimen/back_button_size"
+        android:layout_height="@dimen/back_button_size"
+        android:contentDescription="@string/back_button_description"
+        android:padding="@dimen/back_button_padding"
+        android:src="@drawable/ic_arrow_back_black_24dp"
+        android:tint="?colorControlNormal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
         android:id="@+id/appLogo"
         android:layout_width="@dimen/app_logo_login_form_size"
         android:layout_height="@dimen/app_logo_login_form_size"

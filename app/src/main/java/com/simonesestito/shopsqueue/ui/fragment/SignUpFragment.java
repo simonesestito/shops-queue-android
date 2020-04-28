@@ -64,6 +64,7 @@ public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getViewBinding().signUpButton.setOnClickListener(v -> onSignUpSubmit());
+        getViewBinding().backButton.setOnClickListener(v -> requireActivity().onBackPressed());
     }
 
     @SuppressWarnings("ConstantConditions")

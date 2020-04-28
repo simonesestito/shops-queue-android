@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
@@ -44,11 +45,7 @@ public class MainActivity extends AppCompatActivity {
         ShopsQueueApplication.getInjector().inject(this);
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-
-        // Sync the label of the current destination with the title of the Activity
-        navController.addOnDestinationChangedListener((controller, destination, args) -> {
-            setTitle(destination.getLabel());
-        });
+        NavigationUI.setupActionBarWithNavController(this, navController);
 
         new ViewModelProvider(this, factory)
                 .get(LoginViewModel.class)

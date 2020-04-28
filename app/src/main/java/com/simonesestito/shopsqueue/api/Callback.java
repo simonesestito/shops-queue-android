@@ -16,10 +16,12 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue;
+package com.simonesestito.shopsqueue.api;
 
-public class Constants {
-    public static final String API_BASE_URL = "http://192.168.1.100:1234/";
-    public static final String SHARED_PREFERENCES_FILE = BuildConfig.APPLICATION_ID + "_preferences";
-    public static final String SHARED_PREFERENCES_TOKEN_KEY = "api_access_token";
+
+/**
+ * Necessary since Consumer can't be used on API < 24
+ */
+public interface Callback<T> {
+    void onResult(T t);
 }

@@ -16,10 +16,12 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue;
+package com.simonesestito.shopsqueue.model;
 
-public class Constants {
-    public static final String API_BASE_URL = "http://192.168.1.100:1234/";
-    public static final String SHARED_PREFERENCES_FILE = BuildConfig.APPLICATION_ID + "_preferences";
-    public static final String SHARED_PREFERENCES_TOKEN_KEY = "api_access_token";
+public class HttpStatus {
+    public static final int HTTP_BAD_REQUEST = 400;
+    public static final int HTTP_NOT_LOGGED_IN = 401;
+    public static final int HTTP_FORBIDDEN = 403;
+    public static final int HTTP_NOT_FOUND = 404;
+    public static final int HTTP_CONFLICT = 409;
 }

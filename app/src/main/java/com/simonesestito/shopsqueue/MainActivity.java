@@ -19,6 +19,7 @@
 package com.simonesestito.shopsqueue;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
                     if (a == null) {
                         destinationGraph = R.id.login_graph;
+                        Log.d("AuthStatus", "null");
                     } else {
+                        Log.d("AuthStatus", a.getUser().getRole().toString());
                         switch (a.getUser().getRole()) {
                             case USER:
                                 destinationGraph = R.id.user_graph;

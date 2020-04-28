@@ -18,8 +18,9 @@
 
 package com.simonesestito.shopsqueue.di.module;
 
+import com.simonesestito.shopsqueue.api.ApiCallAdapter;
 import com.simonesestito.shopsqueue.api.AuthorizationInterceptor;
-import com.simonesestito.shopsqueue.api.LoginService;
+import com.simonesestito.shopsqueue.api.service.LoginService;
 
 import dagger.Module;
 import dagger.Provides;
@@ -43,6 +44,7 @@ public class RetrofitModule {
         return new Retrofit.Builder()
                 .client(okHttpClient)
                 .addConverterFactory(JacksonConverterFactory.create())
+                .addCallAdapterFactory(new ApiCallAdapter.Factory())
                 .baseUrl(API_BASE_URL)
                 .build();
     }

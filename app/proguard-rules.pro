@@ -20,6 +20,10 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep enum * { *; }
+-keep public class com.simonesestito.shopsqueue.api.dto.** {
+    public void set*(***);
+    public *** get*();
+}
 
 # Retrofit rules
 -keepattributes Signature, InnerClasses, EnclosingMethod

@@ -16,30 +16,23 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.api;
+package com.simonesestito.shopsqueue.api.service;
 
-import com.simonesestito.shopsqueue.api.dto.NewUser;
-import com.simonesestito.shopsqueue.api.dto.Page;
+import com.simonesestito.shopsqueue.api.ApiResponse;
+import com.simonesestito.shopsqueue.api.dto.AuthResponse;
 import com.simonesestito.shopsqueue.api.dto.User;
+import com.simonesestito.shopsqueue.api.dto.UserLogin;
 
-import java.util.concurrent.CompletableFuture;
-
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
 
-public interface UserService {
-    @POST("/users")
-    CompletableFuture<User> registerUser(NewUser newUser);
+public interface LoginService {
+    @POST("/auth/login")
+    ApiResponse<AuthResponse> login(UserLogin userLogin);
 
-    @GET("/users/{id}")
-    CompletableFuture<User> getUserById(@Path("id") int id);
+    @POST("/auth/logout")
+    ApiResponse<Void> logout();
 
-    @DELETE("/users/{id}")
-    CompletableFuture<Void> deleteUser(@Path("id") int id);
-
-    @GET("/users")
-    CompletableFuture<Page<User>> listUsers(@Query("page") int page);
+    @GET("/users/me")
+    ApiResponse<User> getCurrentUser();
 }

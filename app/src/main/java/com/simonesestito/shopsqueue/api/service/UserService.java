@@ -16,27 +16,30 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.api;
+package com.simonesestito.shopsqueue.api.service;
 
-import com.simonesestito.shopsqueue.api.dto.Shop;
+import com.simonesestito.shopsqueue.api.dto.NewUser;
+import com.simonesestito.shopsqueue.api.dto.Page;
+import com.simonesestito.shopsqueue.api.dto.User;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
-public interface FavouriteService {
-    @GET("/users/{userId}/favourites")
-    CompletableFuture<List<Shop>> getUserFavouriteShops(@Path("userId") int userId);
+public interface UserService {
+    @POST("/users")
+    CompletableFuture<User> registerUser(NewUser newUser);
 
-    @POST("/users/{userId}/favourites/{shopId}")
-    CompletableFuture<Void> addShopToUserFavourites(@Path("userId") int userId,
-                                                    @Path("shopId") int shopId);
+    @GET("/users/{id}")
+    CompletableFuture<User> getUserById(@Path("id") int id);
 
-    @DELETE("/users/{userId}/favourites/{shopId}")
-    CompletableFuture<Void> removeShopFromUserFavourites(@Path("userId") int userId,
-                                                         @Path("shopId") int shopId);
+    @DELETE("/users/{id}")
+    CompletableFuture<Void> deleteUser(@Path("id") int id);
+
+    @GET("/users")
+    CompletableFuture<Page<User>> listUsers(@Query("page") int page);
 }

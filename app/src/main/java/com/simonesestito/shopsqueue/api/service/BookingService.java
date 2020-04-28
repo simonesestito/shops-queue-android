@@ -16,24 +16,31 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.api;
+package com.simonesestito.shopsqueue.api.service;
 
-import com.simonesestito.shopsqueue.api.dto.AuthResponse;
-import com.simonesestito.shopsqueue.api.dto.User;
-import com.simonesestito.shopsqueue.api.dto.UserLogin;
+import com.simonesestito.shopsqueue.api.dto.Booking;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
-public interface LoginService {
-    @POST("/auth/login")
-    CompletableFuture<AuthResponse> login(UserLogin userLogin);
+public interface BookingService {
+    @POST("/shops/{shopId}/bookings")
+    CompletableFuture<Booking> addBookingToShop(@Path("shopId") int shopId);
 
-    @POST("/auth/logout")
-    CompletableFuture<Void> logout();
+    @GET("/shops/{shopId}/bookings")
+    CompletableFuture<List<Booking>> getBookingsByShopId(@Path("shopId") int shopId);
 
-    @GET("/users/me")
-    CompletableFuture<User> getCurrentUser();
+    @GET("/users/{userId}/bookings")
+    CompletableFuture<List<Booking>> getBookingsByUserId(@Path("userId") int userId);
+
+    @DELETE("/bookings/{id}")
+    CompletableFuture<Void> removeBooking(@Path("id") int bookingId);
+
+    @POST("/shops/{shopId}/bookings/next")
+    CompletableFuture<Booking> callNextUser(@Path("shopId") int shopId);
 }

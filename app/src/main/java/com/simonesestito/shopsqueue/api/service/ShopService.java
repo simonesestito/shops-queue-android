@@ -16,7 +16,7 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.api;
+package com.simonesestito.shopsqueue.api.service;
 
 import com.simonesestito.shopsqueue.api.dto.NewShop;
 import com.simonesestito.shopsqueue.api.dto.Page;

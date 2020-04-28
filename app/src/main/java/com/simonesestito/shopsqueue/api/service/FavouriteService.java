@@ -16,9 +16,9 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.api;
+package com.simonesestito.shopsqueue.api.service;
 
-import com.simonesestito.shopsqueue.api.dto.Booking;
+import com.simonesestito.shopsqueue.api.dto.Shop;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -28,19 +28,15 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-public interface BookingService {
-    @POST("/shops/{shopId}/bookings")
-    CompletableFuture<Booking> addBookingToShop(@Path("shopId") int shopId);
+public interface FavouriteService {
+    @GET("/users/{userId}/favourites")
+    CompletableFuture<List<Shop>> getUserFavouriteShops(@Path("userId") int userId);
 
-    @GET("/shops/{shopId}/bookings")
-    CompletableFuture<List<Booking>> getBookingsByShopId(@Path("shopId") int shopId);
+    @POST("/users/{userId}/favourites/{shopId}")
+    CompletableFuture<Void> addShopToUserFavourites(@Path("userId") int userId,
+                                                    @Path("shopId") int shopId);
 
-    @GET("/users/{userId}/bookings")
-    CompletableFuture<List<Booking>> getBookingsByUserId(@Path("userId") int userId);
-
-    @DELETE("/bookings/{id}")
-    CompletableFuture<Void> removeBooking(@Path("id") int bookingId);
-
-    @POST("/shops/{shopId}/bookings/next")
-    CompletableFuture<Booking> callNextUser(@Path("shopId") int shopId);
+    @DELETE("/users/{userId}/favourites/{shopId}")
+    CompletableFuture<Void> removeShopFromUserFavourites(@Path("userId") int userId,
+                                                         @Path("shopId") int shopId);
 }

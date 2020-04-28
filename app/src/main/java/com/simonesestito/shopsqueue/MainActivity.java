@@ -23,6 +23,7 @@ import android.os.Bundle;
 import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
@@ -34,6 +35,7 @@ import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity {
     @Inject ViewModelFactory factory;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,34 +43,42 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         ShopsQueueApplication.getInjector().inject(this);
 
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+        // Sync the label of the current destination with the title of the Activity
+        navController.addOnDestinationChangedListener((controller, destination, args) -> {
+            setTitle(destination.getLabel());
+        });
+
         new ViewModelProvider(this, factory)
                 .get(LoginViewModel.class)
                 .getAuthStatus()
-                .observe(this, (AuthResponse a) -> {
-                    @IdRes int destinationGraph = 0;
+                .observe(this, this::onNewAuthStatus);
+    }
 
-                    if (a == null) {
-                        destinationGraph = R.id.login_graph;
-                    } else {
-                        switch (a.getUser().getRole()) {
-                            case USER:
-                                destinationGraph = R.id.user_graph;
-                                break;
-                            case OWNER:
-                                destinationGraph = R.id.owner_graph;
-                                break;
-                            case ADMIN:
-                                destinationGraph = R.id.admin_graph;
-                                break;
-                        }
-                    }
+    private void onNewAuthStatus(AuthResponse authResponse) {
+        @IdRes int destinationGraph = 0;
 
-                    NavOptions navOptions = new NavOptions.Builder()
-                            .setPopUpTo(R.id.main_graph, true)
-                            .build();
+        if (authResponse == null) {
+            destinationGraph = R.id.login_graph;
+        } else {
+            switch (authResponse.getUser().getRole()) {
+                case USER:
+                    destinationGraph = R.id.user_graph;
+                    break;
+                case OWNER:
+                    destinationGraph = R.id.owner_graph;
+                    break;
+                case ADMIN:
+                    destinationGraph = R.id.admin_graph;
+                    break;
+            }
+        }
 
-                    Navigation.findNavController(this, R.id.nav_host_fragment)
-                            .navigate(destinationGraph, null, navOptions);
-                });
+        NavOptions navOptions = new NavOptions.Builder()
+                .setPopUpTo(R.id.main_graph, true)
+                .build();
+
+        navController.navigate(destinationGraph, null, navOptions);
     }
 }

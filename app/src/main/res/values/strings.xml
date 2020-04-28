@@ -24,4 +24,9 @@
     <string name="login_form_submit">Login</string>
     <string name="form_field_required">Field required</string>
     <string name="form_invalid_email_field">Invalid email address</string>
+    <string name="sign_up_form_submit">Sign up</string>
+    <string name="sign_up_fragment_title">Hello, new user!</string>
+    <string name="input_name_hint">Name</string>
+    <string name="input_surname_hint">Surname</string>
+    <string name="form_field_too_short">Field value too short</string>
 </resources>

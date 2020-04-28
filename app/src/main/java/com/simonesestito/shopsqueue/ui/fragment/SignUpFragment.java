@@ -28,17 +28,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
-import com.simonesestito.shopsqueue.databinding.LoginFragmentBinding;
+import com.simonesestito.shopsqueue.databinding.SignUpFragmentBinding;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
 import javax.inject.Inject;
 
-public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
+public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
+    private static final int MIN_FORM_FIELD_LENGTH = 3;
     @Inject ViewModelFactory viewModelFactory;
     private LoginViewModel loginViewModel;
 
@@ -56,26 +56,47 @@ public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
     }
 
     @Override
-    protected LoginFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
-        return LoginFragmentBinding.inflate(layoutInflater, container, false);
+    protected SignUpFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
+        return SignUpFragmentBinding.inflate(layoutInflater, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getViewBinding().loginButton.setOnClickListener(v -> onLoginSubmit());
-        getViewBinding().signUpButton.setOnClickListener(v ->
-                NavHostFragment.findNavController(this)
-                        .navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment()));
+        getViewBinding().signUpButton.setOnClickListener(v -> onSignUpSubmit());
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void onLoginSubmit() {
+    private void onSignUpSubmit() {
+        String name = getViewBinding().nameInputLayout.getEditText().getText().toString().trim();
+        String surname = getViewBinding().surnameInputLayout.getEditText().getText().toString().trim();
         String email = getViewBinding().emailInputLayout.getEditText().getText().toString().trim();
         String password = getViewBinding().passwordInputLayout.getEditText().getText().toString().trim();
 
         // FIXME: find a better validation solution
         boolean isInputValid = true;
+
+        // Validate name
+        if (name.isEmpty()) {
+            isInputValid = false;
+            getViewBinding().nameInputLayout.setError(getText(R.string.form_field_required));
+        } else if (name.length() < MIN_FORM_FIELD_LENGTH) {
+            isInputValid = false;
+            getViewBinding().nameInputLayout.setError(getText(R.string.form_field_too_short));
+        } else {
+            getViewBinding().nameInputLayout.setError("");
+        }
+
+        // Validate surname
+        if (surname.isEmpty()) {
+            isInputValid = false;
+            getViewBinding().surnameInputLayout.setError(getText(R.string.form_field_required));
+        } else if (surname.length() < MIN_FORM_FIELD_LENGTH) {
+            isInputValid = false;
+            getViewBinding().surnameInputLayout.setError(getText(R.string.form_field_too_short));
+        } else {
+            getViewBinding().surnameInputLayout.setError("");
+        }
 
         // Validate email
         if (email.isEmpty()) {
@@ -92,6 +113,9 @@ public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
         if (password.isEmpty()) {
             isInputValid = false;
             getViewBinding().passwordInputLayout.setError(getString(R.string.form_field_required));
+        } else if (password.length() < 8) {
+            isInputValid = false;
+            getViewBinding().passwordInputLayout.setError(getText(R.string.form_field_too_short));
         } else {
             getViewBinding().passwordInputLayout.setError("");
         }

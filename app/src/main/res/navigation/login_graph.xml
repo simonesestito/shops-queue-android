@@ -24,6 +24,15 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.simonesestito.shopsqueue.ui.fragment.LoginFragment"
-        android:label="LoginFragment"
-        tools:layout="@layout/login_fragment" />
+        android:label="@string/login_fragment_title"
+        tools:layout="@layout/login_fragment">
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.simonesestito.shopsqueue.ui.fragment.SignUpFragment"
+        android:label="@string/sign_up_fragment_title"
+        tools:layout="@layout/sign_up_fragment" />
 </navigation>

@@ -25,6 +25,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewbinding.ViewBinding;
 
@@ -33,9 +35,15 @@ import androidx.viewbinding.ViewBinding;
  * It uses ViewBinding
  */
 public abstract class AbstractAppFragment<T extends ViewBinding> extends Fragment {
+    private boolean isAppbarHidden = false;
     private T viewBinding;
 
     protected abstract T onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container);
+
+    @SuppressWarnings("WeakerAccess")
+    protected void requestToHideAppbar() {
+        isAppbarHidden = true;
+    }
 
     @Nullable
     @Override
@@ -44,6 +52,20 @@ public abstract class AbstractAppFragment<T extends ViewBinding> extends Fragmen
         return viewBinding.getRoot();
     }
 
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public void onStart() {
+        super.onStart();
+        AppCompatActivity activity = (AppCompatActivity) requireActivity();
+        ActionBar actionBar = activity.getSupportActionBar();
+        if (isAppbarHidden) {
+            actionBar.hide();
+        } else {
+            actionBar.show();
+        }
+    }
+
+    @SuppressWarnings("WeakerAccess")
     protected T getViewBinding() {
         return viewBinding;
     }

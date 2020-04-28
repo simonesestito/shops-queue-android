@@ -18,10 +18,10 @@
 
 package com.simonesestito.shopsqueue.api.service;
 
+import com.simonesestito.shopsqueue.api.ApiResponse;
 import com.simonesestito.shopsqueue.api.dto.Shop;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -30,13 +30,13 @@ import retrofit2.http.Path;
 
 public interface FavouriteService {
     @GET("/users/{userId}/favourites")
-    CompletableFuture<List<Shop>> getUserFavouriteShops(@Path("userId") int userId);
+    ApiResponse<List<Shop>> getUserFavouriteShops(@Path("userId") int userId);
 
     @POST("/users/{userId}/favourites/{shopId}")
-    CompletableFuture<Void> addShopToUserFavourites(@Path("userId") int userId,
-                                                    @Path("shopId") int shopId);
+    ApiResponse<Void> addShopToUserFavourites(@Path("userId") int userId,
+                                              @Path("shopId") int shopId);
 
     @DELETE("/users/{userId}/favourites/{shopId}")
-    CompletableFuture<Void> removeShopFromUserFavourites(@Path("userId") int userId,
-                                                         @Path("shopId") int shopId);
+    ApiResponse<Void> removeShopFromUserFavourites(@Path("userId") int userId,
+                                                   @Path("shopId") int shopId);
 }

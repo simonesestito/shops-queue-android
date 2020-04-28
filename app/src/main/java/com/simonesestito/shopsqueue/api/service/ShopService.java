@@ -18,12 +18,11 @@
 
 package com.simonesestito.shopsqueue.api.service;
 
+import com.simonesestito.shopsqueue.api.ApiResponse;
 import com.simonesestito.shopsqueue.api.dto.NewShop;
 import com.simonesestito.shopsqueue.api.dto.Page;
 import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.api.dto.ShopWithDistance;
-
-import java.util.concurrent.CompletableFuture;
 
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -34,19 +33,19 @@ import retrofit2.http.Query;
 
 public interface ShopService {
     @POST("/shops")
-    CompletableFuture<Shop> addNewShop(NewShop newShop);
+    ApiResponse<Shop> addNewShop(NewShop newShop);
 
     @GET("/shops/nearby")
-    CompletableFuture<Page<ShopWithDistance>> getShopsNearby(@Query("page") int page,
-                                                             @Query("lat") double latitude,
-                                                             @Query("lon") double longitude);
+    ApiResponse<Page<ShopWithDistance>> getShopsNearby(@Query("page") int page,
+                                                       @Query("lat") double latitude,
+                                                       @Query("lon") double longitude);
 
     @PUT("/shops/{id}")
-    CompletableFuture<Shop> updateShop(@Path("id") int id, NewShop newShop);
+    ApiResponse<Shop> updateShop(@Path("id") int id, NewShop newShop);
 
     @DELETE("/shops/{id}")
-    CompletableFuture<Void> deleteShop(@Path("id") int id);
+    ApiResponse<Void> deleteShop(@Path("id") int id);
 
     @GET("/shops")
-    CompletableFuture<Page<Shop>> getAllShops(@Query("page") int page);
+    ApiResponse<Page<Shop>> getAllShops(@Query("page") int page);
 }

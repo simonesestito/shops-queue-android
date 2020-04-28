@@ -18,11 +18,10 @@
 
 package com.simonesestito.shopsqueue.api.service;
 
+import com.simonesestito.shopsqueue.api.ApiResponse;
 import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.api.dto.Page;
 import com.simonesestito.shopsqueue.api.dto.User;
-
-import java.util.concurrent.CompletableFuture;
 
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -32,14 +31,14 @@ import retrofit2.http.Query;
 
 public interface UserService {
     @POST("/users")
-    CompletableFuture<User> registerUser(NewUser newUser);
+    ApiResponse<User> registerUser(NewUser newUser);
 
     @GET("/users/{id}")
-    CompletableFuture<User> getUserById(@Path("id") int id);
+    ApiResponse<User> getUserById(@Path("id") int id);
 
     @DELETE("/users/{id}")
-    CompletableFuture<Void> deleteUser(@Path("id") int id);
+    ApiResponse<Void> deleteUser(@Path("id") int id);
 
     @GET("/users")
-    CompletableFuture<Page<User>> listUsers(@Query("page") int page);
+    ApiResponse<Page<User>> listUsers(@Query("page") int page);
 }

@@ -16,7 +16,7 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.model.dto.input;
+package com.simonesestito.shopsqueue.api.dto;
 
 import androidx.annotation.Nullable;
 
@@ -27,40 +27,55 @@ public class User {
     private String name;
     private String surname;
     private String email;
-    private String role;
+    private UserRole role;
     @Nullable private Integer shopId;
-
-    public User(int id, String name, String surname, String email, String role, @Nullable Integer shopId) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.role = role;
-        this.shopId = shopId;
-    }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getSurname() {
         return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getEmail() {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public UserRole getRole() {
-        return UserRole.valueOf(role);
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     @Nullable
     public Integer getShopId() {
         return shopId;
+    }
+
+    public void setShopId(@Nullable Integer shopId) {
+        this.shopId = shopId;
     }
 }

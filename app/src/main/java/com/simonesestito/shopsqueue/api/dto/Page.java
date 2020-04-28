@@ -16,22 +16,43 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.model.dto.input;
+package com.simonesestito.shopsqueue.api.dto;
 
-public class AuthResponse {
-    private String accessToken;
-    private User user;
+public class Page<T> {
+    private int page;
+    private int totalPages;
+    private int totalItems;
+    private T data;
 
-    public AuthResponse(String accessToken, User user) {
-        this.accessToken = accessToken;
-        this.user = user;
+    public int getPage() {
+        return page;
     }
 
-    public String getAccessToken() {
-        return accessToken;
+    public void setPage(int page) {
+        this.page = page;
     }
 
-    public User getUser() {
-        return user;
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    public int getTotalItems() {
+        return totalItems;
+    }
+
+    public void setTotalItems(int totalItems) {
+        this.totalItems = totalItems;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
     }
 }

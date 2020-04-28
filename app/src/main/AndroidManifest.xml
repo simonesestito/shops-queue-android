@@ -20,6 +20,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.simonesestito.shopsqueue">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".ShopsQueueApplication"
         android:allowBackup="true"
@@ -28,7 +30,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="AllowBackup">
+        android:networkSecurityConfig="@xml/network_security_config"
+        tools:ignore="AllowBackup"
+        tools:targetApi="n">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -37,9 +37,6 @@ public interface UserService {
     @GET("/users/{id}")
     CompletableFuture<User> getUserById(@Path("id") int id);
 
-    @GET("/users/me")
-    CompletableFuture<User> getCurrentUser();
-
     @DELETE("/users/{id}")
     CompletableFuture<Void> deleteUser(@Path("id") int id);
 

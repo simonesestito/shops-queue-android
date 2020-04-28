@@ -19,10 +19,12 @@
 package com.simonesestito.shopsqueue.api;
 
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
+import com.simonesestito.shopsqueue.api.dto.User;
 import com.simonesestito.shopsqueue.api.dto.UserLogin;
 
 import java.util.concurrent.CompletableFuture;
 
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface LoginService {
@@ -31,4 +33,7 @@ public interface LoginService {
 
     @POST("/auth/logout")
     CompletableFuture<Void> logout();
+
+    @GET("/users/me")
+    CompletableFuture<User> getCurrentUser();
 }

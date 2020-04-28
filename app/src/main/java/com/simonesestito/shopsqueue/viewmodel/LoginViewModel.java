@@ -22,18 +22,47 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.simonesestito.shopsqueue.SharedPreferencesStore;
 import com.simonesestito.shopsqueue.api.LoginService;
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
 
 import javax.inject.Inject;
 
 public class LoginViewModel extends ViewModel {
+    private final LoginService loginService;
+    private final SharedPreferencesStore sharedPreferencesStore;
+
+    private MutableLiveData<AuthResponse> authStatus = new MutableLiveData<>();
+
     @Inject
-    public LoginViewModel(LoginService loginService) {
+    public LoginViewModel(LoginService loginService, SharedPreferencesStore sharedPreferencesStore) {
+        this.loginService = loginService;
+        this.sharedPreferencesStore = sharedPreferencesStore;
+        initAuthStatus();
     }
 
-    // TODO Check if SharedPreferences contain an access token
-    private MutableLiveData<AuthResponse> authStatus = new MutableLiveData<>(null);
+    private void initAuthStatus() {
+        // Check if a token can be found in SharedPreferences
+        String savedToken = sharedPreferencesStore.getAccessToken();
+        if (savedToken == null) {
+            // Not authenticated for sure
+            authStatus.setValue(null);
+        } else {
+            // Validate token against the API
+            // The token will be added to the request by an interceptor
+            loginService.getCurrentUser()
+                    .thenAccept(user -> {
+                        AuthResponse authResponse = new AuthResponse();
+                        authResponse.setAccessToken(savedToken);
+                        authResponse.setUser(user);
+                        authStatus.postValue(authResponse);
+                    }).exceptionally(e -> {
+                // TODO Handle network error
+                authStatus.postValue(null);
+                return null;
+            });
+        }
+    }
 
     public LiveData<AuthResponse> getAuthStatus() {
         return authStatus;

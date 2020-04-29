@@ -19,6 +19,8 @@
 package com.simonesestito.shopsqueue.api;
 
 import com.simonesestito.shopsqueue.util.ApiException;
+import com.simonesestito.shopsqueue.util.LiveRequest;
+import com.simonesestito.shopsqueue.util.Mapper;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -74,7 +76,24 @@ public class ApiResponse<T> {
         return this;
     }
 
-    public void onError(Callback<Throwable> onError) {
+    public ApiResponse<T> onError(Callback<Throwable> onError) {
         this.onErrorHandlers.add(onError);
+        return this;
+    }
+
+    public ApiResponse<T> postToLiveRequest(LiveRequest<T> liveRequest) {
+        return postToLiveRequest(liveRequest, e -> e);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public <R> ApiResponse<T> postToLiveRequest(LiveRequest<R> liveRequest, Mapper<T, R> mapper) {
+        onResultHandlers.add(data -> liveRequest.emitResult(mapper.map(data)));
+        onErrorHandlers.add(err -> {
+            if (err instanceof ApiException)
+                liveRequest.emitRequestError(((ApiException) err).getStatusCode());
+            else
+                liveRequest.emitNetworkError(err);
+        });
+        return this;
     }
 }

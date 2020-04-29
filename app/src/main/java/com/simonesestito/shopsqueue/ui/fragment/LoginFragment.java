@@ -19,7 +19,6 @@
 package com.simonesestito.shopsqueue.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +29,10 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.databinding.LoginFragmentBinding;
+import com.simonesestito.shopsqueue.util.ArrayUtils;
+import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -71,33 +71,16 @@ public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
 
     @SuppressWarnings("ConstantConditions")
     private void onLoginSubmit() {
-        String email = getViewBinding().emailInputLayout.getEditText().getText().toString().trim();
-        String password = getViewBinding().passwordInputLayout.getEditText().getText().toString().trim();
-
-        // FIXME: find a better validation solution
-        boolean isInputValid = true;
-
-        // Validate email
-        if (email.isEmpty()) {
-            isInputValid = false;
-            getViewBinding().emailInputLayout.setError(getString(R.string.form_field_required));
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            isInputValid = false;
-            getViewBinding().emailInputLayout.setError(getString(R.string.form_invalid_email_field));
-        } else {
-            getViewBinding().emailInputLayout.setError("");
-        }
-
-        // Validate password
-        if (password.isEmpty()) {
-            isInputValid = false;
-            getViewBinding().passwordInputLayout.setError(getString(R.string.form_field_required));
-        } else {
-            getViewBinding().passwordInputLayout.setError("");
-        }
+        boolean isInputValid = ArrayUtils.allTrue(
+                FormValidators.isEmail(getViewBinding().emailInputLayout),
+                FormValidators.isPassword(getViewBinding().passwordInputLayout)
+        );
 
         if (!isInputValid)
             return;
+
+        String email = getViewBinding().emailInputLayout.getEditText().getText().toString().trim();
+        String password = getViewBinding().passwordInputLayout.getEditText().getText().toString().trim();
 
         // TODO Execute login
         Toast.makeText(requireActivity(), "TODO", Toast.LENGTH_LONG).show();

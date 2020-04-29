@@ -30,4 +30,5 @@
     <string name="input_surname_hint">Surname</string>
     <string name="form_field_too_short">Field value too short</string>
     <string name="back_button_description">Back</string>
+    <string name="form_field_too_long">Field value too long</string>
 </resources>

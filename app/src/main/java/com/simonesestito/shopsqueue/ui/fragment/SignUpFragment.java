@@ -19,7 +19,6 @@
 package com.simonesestito.shopsqueue.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,16 +28,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.databinding.SignUpFragmentBinding;
+import com.simonesestito.shopsqueue.util.ArrayUtils;
+import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
 import javax.inject.Inject;
 
 public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
-    private static final int MIN_FORM_FIELD_LENGTH = 3;
     @Inject ViewModelFactory viewModelFactory;
     private LoginViewModel loginViewModel;
 
@@ -69,60 +68,20 @@ public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
 
     @SuppressWarnings("ConstantConditions")
     private void onSignUpSubmit() {
+        boolean isInputValid = ArrayUtils.allTrue(
+                FormValidators.isString(getViewBinding().nameInputLayout),
+                FormValidators.isString(getViewBinding().surnameInputLayout),
+                FormValidators.isEmail(getViewBinding().emailInputLayout),
+                FormValidators.isPassword(getViewBinding().passwordInputLayout)
+        );
+
+        if (!isInputValid)
+            return;
+
         String name = getViewBinding().nameInputLayout.getEditText().getText().toString().trim();
         String surname = getViewBinding().surnameInputLayout.getEditText().getText().toString().trim();
         String email = getViewBinding().emailInputLayout.getEditText().getText().toString().trim();
         String password = getViewBinding().passwordInputLayout.getEditText().getText().toString().trim();
-
-        // FIXME: find a better validation solution
-        boolean isInputValid = true;
-
-        // Validate name
-        if (name.isEmpty()) {
-            isInputValid = false;
-            getViewBinding().nameInputLayout.setError(getText(R.string.form_field_required));
-        } else if (name.length() < MIN_FORM_FIELD_LENGTH) {
-            isInputValid = false;
-            getViewBinding().nameInputLayout.setError(getText(R.string.form_field_too_short));
-        } else {
-            getViewBinding().nameInputLayout.setError("");
-        }
-
-        // Validate surname
-        if (surname.isEmpty()) {
-            isInputValid = false;
-            getViewBinding().surnameInputLayout.setError(getText(R.string.form_field_required));
-        } else if (surname.length() < MIN_FORM_FIELD_LENGTH) {
-            isInputValid = false;
-            getViewBinding().surnameInputLayout.setError(getText(R.string.form_field_too_short));
-        } else {
-            getViewBinding().surnameInputLayout.setError("");
-        }
-
-        // Validate email
-        if (email.isEmpty()) {
-            isInputValid = false;
-            getViewBinding().emailInputLayout.setError(getString(R.string.form_field_required));
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            isInputValid = false;
-            getViewBinding().emailInputLayout.setError(getString(R.string.form_invalid_email_field));
-        } else {
-            getViewBinding().emailInputLayout.setError("");
-        }
-
-        // Validate password
-        if (password.isEmpty()) {
-            isInputValid = false;
-            getViewBinding().passwordInputLayout.setError(getString(R.string.form_field_required));
-        } else if (password.length() < 8) {
-            isInputValid = false;
-            getViewBinding().passwordInputLayout.setError(getText(R.string.form_field_too_short));
-        } else {
-            getViewBinding().passwordInputLayout.setError("");
-        }
-
-        if (!isInputValid)
-            return;
 
         // TODO Execute login
         Toast.makeText(requireActivity(), "TODO", Toast.LENGTH_LONG).show();

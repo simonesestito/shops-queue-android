@@ -33,9 +33,9 @@ import com.simonesestito.shopsqueue.util.LiveRequest;
 import javax.inject.Inject;
 
 public class LoginViewModel extends ViewModel {
+    public final LiveRequest<AuthResponse> loginRequest = new LiveRequest<>();
     private final LoginService loginService;
     private final SharedPreferencesStore sharedPreferencesStore;
-    public final LiveRequest<AuthResponse> loginRequest = new LiveRequest<>();
     private MutableLiveData<User> authStatus = new MutableLiveData<>();
 
     @Inject

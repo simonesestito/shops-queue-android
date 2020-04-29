@@ -24,14 +24,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.autofill.AutofillManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.databinding.LoginFragmentBinding;
+import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.util.NavUtils;
@@ -55,6 +56,21 @@ public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         loginViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(LoginViewModel.class);
+        loginViewModel.loginRequest
+                .onSuccess(this, data -> {
+                    triggerAutofill();
+                })
+                .onRequestError(this, status -> {
+                    enableLogin();
+                    ErrorDialog.newInstance(getString(R.string.error_login_invalid))
+                            .show(getChildFragmentManager(), null);
+                })
+                .onNetworkError(this, e -> {
+                    enableLogin();
+                    ErrorDialog.newInstance(getString(R.string.error_network_offline))
+                            .show(getChildFragmentManager(), null);
+                    e.printStackTrace();
+                });
     }
 
     @Override
@@ -80,15 +96,36 @@ public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
         if (!isInputValid)
             return;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            AutofillManager autofillManager = requireContext().getSystemService(AutofillManager.class);
-            autofillManager.commit();
-        }
-
         String email = getViewBinding().emailInputLayout.getEditText().getText().toString().trim();
         String password = getViewBinding().passwordInputLayout.getEditText().getText().toString().trim();
 
-        // TODO Execute login
-        Toast.makeText(requireActivity(), "TODO", Toast.LENGTH_LONG).show();
+        loginViewModel.login(email, password);
+        disableLogin();
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void enableLogin() {
+        getViewBinding().loginButton.setVisibility(View.VISIBLE);
+        getViewBinding().signUpButton.setVisibility(View.VISIBLE);
+        getViewBinding().loadingLogin.setVisibility(View.GONE);
+        getViewBinding().emailInputLayout.getEditText().setEnabled(true);
+        getViewBinding().passwordInputLayout.getEditText().setEnabled(true);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void disableLogin() {
+        getViewBinding().loginButton.setVisibility(View.INVISIBLE);
+        getViewBinding().signUpButton.setVisibility(View.GONE);
+        getViewBinding().loadingLogin.setVisibility(View.VISIBLE);
+        getViewBinding().emailInputLayout.getEditText().setEnabled(false);
+        getViewBinding().passwordInputLayout.getEditText().setEnabled(false);
+    }
+
+    private void triggerAutofill() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            AutofillManager autofillManager = requireContext().getSystemService(AutofillManager.class);
+            if (autofillManager != null)
+                autofillManager.commit();
+        }
     }
 }

@@ -31,16 +31,19 @@ public class LiveRequest<T> extends LiveData<LiveRequest.Status> {
     private static final int TYPE_NETWORK_ERROR = 2;
     private static final int TYPE_REQUEST_ERROR = 3;
 
-    public void onSuccess(LifecycleOwner lifecycleOwner, Callback<T> observer) {
+    public LiveRequest<T> onSuccess(LifecycleOwner lifecycleOwner, Callback<T> observer) {
         observeStatus(TYPE_SUCCESS, lifecycleOwner, observer);
+        return this;
     }
 
-    public void onNetworkError(LifecycleOwner lifecycleOwner, Callback<Throwable> observer) {
+    public LiveRequest<T> onNetworkError(LifecycleOwner lifecycleOwner, Callback<Throwable> observer) {
         observeStatus(TYPE_NETWORK_ERROR, lifecycleOwner, observer);
+        return this;
     }
 
-    public void onRequestError(LifecycleOwner lifecycleOwner, Callback<Integer> observer) {
+    public LiveRequest<T> onRequestError(LifecycleOwner lifecycleOwner, Callback<Integer> observer) {
         observeStatus(TYPE_REQUEST_ERROR, lifecycleOwner, observer);
+        return this;
     }
 
     public void emitResult(T data) {

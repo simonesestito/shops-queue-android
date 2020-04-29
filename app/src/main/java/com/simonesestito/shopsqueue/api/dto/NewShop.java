@@ -25,6 +25,14 @@ public class NewShop {
     private String name;
     private String city;
 
+    public NewShop(double latitude, double longitude, String address, String name, String city) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.address = address;
+        this.name = name;
+        this.city = city;
+    }
+
     public double getLatitude() {
         return latitude;
     }

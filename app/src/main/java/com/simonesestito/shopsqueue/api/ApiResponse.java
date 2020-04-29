@@ -18,55 +18,63 @@
 
 package com.simonesestito.shopsqueue.api;
 
+import com.simonesestito.shopsqueue.util.ApiException;
+
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class ApiResponse<T> {
-    private Callback<T> onResponse;
-    private Map<Integer, Runnable> onErrorStatusHandlers;
-    private Callback<Throwable> onError;
+    private List<Callback<T>> onResultHandlers;
+    private Map<Integer, List<Runnable>> onErrorStatusHandlers;
+    private List<Callback<Throwable>> onErrorHandlers;
 
     ApiResponse() {
+        this.onResultHandlers = new LinkedList<>();
         this.onErrorStatusHandlers = new HashMap<>();
+        this.onErrorHandlers = new LinkedList<>();
     }
 
-    void onSuccess(T data) {
-        if (onResponse == null) {
-            throw new IllegalStateException("Undefined onResponse handler");
-        }
-
-        onResponse.onResult(data);
-    }
-
-    void onError(Throwable e) {
-        if (onError == null) {
-            throw new IllegalStateException("Undefined onResponse handler");
-        }
-
-        onError.onResult(e);
-    }
-
-    void onStatus(int status) {
-        Runnable handler = onErrorStatusHandlers.get(status);
-        if (handler == null) {
-            onError(new RuntimeException("Request failed with HTTP status " + status));
-        } else {
-            handler.run();
+    void emitResult(T data) {
+        for (Callback<T> handler : onResultHandlers) {
+            handler.onResult(data);
         }
     }
 
-    public ApiResponse<T> then(Callback<T> onResponse) {
-        this.onResponse = onResponse;
+    void emitError(Throwable e) {
+        // Check if this is an API error and there's a specific callback set
+        if (e instanceof ApiException) {
+            List<Runnable> statusCallbacks = onErrorStatusHandlers.get(((ApiException) e).getStatusCode());
+            if (statusCallbacks != null && !statusCallbacks.isEmpty()) {
+                for (Runnable statusCallback : statusCallbacks) {
+                    statusCallback.run();
+                }
+                return;
+            }
+        }
+
+        // Otherwise, fire the generic error handler
+        for (Callback<Throwable> handler : onErrorHandlers) {
+            handler.onResult(e);
+        }
+    }
+
+    public ApiResponse<T> onResult(Callback<T> onResult) {
+        this.onResultHandlers.add(onResult);
         return this;
     }
 
     public ApiResponse<T> onStatus(int status, Runnable onErrorStatus) {
-        onErrorStatusHandlers.put(status, onErrorStatus);
+        List<Runnable> callbacks = onErrorStatusHandlers.get(status);
+        if (callbacks == null)
+            callbacks = new LinkedList<>();
+        callbacks.add(onErrorStatus);
+        onErrorStatusHandlers.put(status, callbacks);
         return this;
     }
 
-    public ApiResponse<T> onError(Callback<Throwable> onError) {
-        this.onError = onError;
-        return this;
+    public void onError(Callback<Throwable> onError) {
+        this.onErrorHandlers.add(onError);
     }
 }

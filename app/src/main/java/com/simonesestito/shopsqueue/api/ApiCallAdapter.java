@@ -20,6 +20,8 @@ package com.simonesestito.shopsqueue.api;
 
 import android.util.Log;
 
+import com.simonesestito.shopsqueue.util.ApiException;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -49,15 +51,15 @@ public class ApiCallAdapter<T> implements CallAdapter<T, ApiResponse<T>> {
             @Override
             public void onResponse(Call<T> call, Response<T> response) {
                 if (response.isSuccessful()) {
-                    apiResponse.onSuccess(response.body());
+                    apiResponse.emitResult(response.body());
                 } else {
-                    apiResponse.onStatus(response.code());
+                    apiResponse.emitError(new ApiException(response.code()));
                 }
             }
 
             @Override
             public void onFailure(Call<T> call, Throwable t) {
-                apiResponse.onError(t);
+                apiResponse.emitError(t);
             }
         });
         return apiResponse;

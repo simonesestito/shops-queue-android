@@ -31,4 +31,8 @@
     <string name="form_field_too_short">Field value too short</string>
     <string name="back_button_description">Back</string>
     <string name="form_field_too_long">Field value too long</string>
+    <string name="ok_button">OK</string>
+    <string name="error_dialog_title">Error</string>
+    <string name="error_login_invalid">Invalid login</string>
+    <string name="error_network_offline">Check your Internet connection</string>
 </resources>

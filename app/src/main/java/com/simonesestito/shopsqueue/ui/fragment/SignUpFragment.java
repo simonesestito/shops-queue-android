@@ -18,10 +18,12 @@
 
 package com.simonesestito.shopsqueue.ui.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.autofill.AutofillManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -77,6 +79,11 @@ public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
 
         if (!isInputValid)
             return;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            AutofillManager autofillManager = requireContext().getSystemService(AutofillManager.class);
+            autofillManager.commit();
+        }
 
         String name = getViewBinding().nameInputLayout.getEditText().getText().toString().trim();
         String surname = getViewBinding().surnameInputLayout.getEditText().getText().toString().trim();

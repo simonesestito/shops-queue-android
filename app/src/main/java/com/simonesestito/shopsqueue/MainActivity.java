@@ -28,7 +28,7 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import com.simonesestito.shopsqueue.api.dto.AuthResponse;
+import com.simonesestito.shopsqueue.api.dto.User;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -53,13 +53,13 @@ public class MainActivity extends AppCompatActivity {
                 .observe(this, this::onNewAuthStatus);
     }
 
-    private void onNewAuthStatus(AuthResponse authResponse) {
+    private void onNewAuthStatus(User currentUser) {
         @IdRes int destinationGraph = 0;
 
-        if (authResponse == null) {
+        if (currentUser == null) {
             destinationGraph = R.id.login_graph;
         } else {
-            switch (authResponse.getUser().getRole()) {
+            switch (currentUser.getRole()) {
                 case USER:
                     destinationGraph = R.id.user_graph;
                     break;

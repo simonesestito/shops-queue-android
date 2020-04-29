@@ -32,8 +32,8 @@ import javax.inject.Inject;
 public class LoginViewModel extends ViewModel {
     private final LoginService loginService;
     private final SharedPreferencesStore sharedPreferencesStore;
-
-    private MutableLiveData<AuthResponse> authStatus = new MutableLiveData<>();
+    public final LiveRequest<AuthResponse> loginRequest = new LiveRequest<>();
+    private MutableLiveData<User> authStatus = new MutableLiveData<>();
 
     @Inject
     public LoginViewModel(LoginService loginService, SharedPreferencesStore sharedPreferencesStore) {
@@ -52,12 +52,7 @@ public class LoginViewModel extends ViewModel {
             // Validate token against the API
             // The token will be added to the request by an interceptor
             loginService.getCurrentUser()
-                    .then(user -> {
-                        AuthResponse authResponse = new AuthResponse();
-                        authResponse.setAccessToken(savedToken);
-                        authResponse.setUser(user);
-                        authStatus.postValue(authResponse);
-                    })
+                    .onResult(authStatus::setValue)
                     .onStatus(HttpStatus.HTTP_NOT_LOGGED_IN, () -> {
                         authStatus.postValue(null);
                     })

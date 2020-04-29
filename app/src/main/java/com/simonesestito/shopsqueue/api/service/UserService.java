@@ -23,6 +23,7 @@ import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.api.dto.Page;
 import com.simonesestito.shopsqueue.api.dto.User;
 
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -31,7 +32,7 @@ import retrofit2.http.Query;
 
 public interface UserService {
     @POST("/users")
-    ApiResponse<User> registerUser(NewUser newUser);
+    ApiResponse<User> registerUser(@Body NewUser newUser);
 
     @GET("/users/{id}")
     ApiResponse<User> getUserById(@Path("id") int id);

@@ -23,12 +23,13 @@ import com.simonesestito.shopsqueue.api.dto.AuthResponse;
 import com.simonesestito.shopsqueue.api.dto.User;
 import com.simonesestito.shopsqueue.api.dto.UserLogin;
 
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface LoginService {
     @POST("/auth/login")
-    ApiResponse<AuthResponse> login(UserLogin userLogin);
+    ApiResponse<AuthResponse> login(@Body UserLogin userLogin);
 
     @POST("/auth/logout")
     ApiResponse<Void> logout();

@@ -27,12 +27,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.databinding.LoginFragmentBinding;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
+import com.simonesestito.shopsqueue.util.NavUtils;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -65,8 +65,7 @@ public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
         super.onViewCreated(view, savedInstanceState);
         getViewBinding().loginButton.setOnClickListener(v -> onLoginSubmit());
         getViewBinding().signUpButton.setOnClickListener(v ->
-                NavHostFragment.findNavController(this)
-                        .navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment()));
+                NavUtils.navigate(this, LoginFragmentDirections.actionLoginFragmentToSignUpFragment()));
     }
 
     @SuppressWarnings("ConstantConditions")

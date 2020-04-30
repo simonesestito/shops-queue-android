@@ -60,7 +60,6 @@ public class LoginViewModel extends ViewModel {
                     .onStatus(HttpStatus.HTTP_NOT_LOGGED_IN, () -> {
                         authStatus.setValue(null);
                     })
-                    // TODO handle network error
                     .onError(Throwable::printStackTrace);
         }
     }

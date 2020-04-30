@@ -25,20 +25,28 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
-import com.simonesestito.shopsqueue.R;
+import com.simonesestito.shopsqueue.databinding.MainFragmentBinding;
+import com.simonesestito.shopsqueue.util.InternetUtils;
 
 /**
  * Main fragment
  * It shows a loading indicator until the activity navigates away
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends AbstractAppFragment<MainFragmentBinding> {
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.main_fragment, container, false);
+    protected MainFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
+        return MainFragmentBinding.inflate(layoutInflater, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (!InternetUtils.isOnline(requireContext())) {
+            // Show network error
+            getViewBinding().loadingProgress.setVisibility(View.GONE);
+            getViewBinding().networkError.setVisibility(View.VISIBLE);
+        }
     }
 }

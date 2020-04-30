@@ -17,7 +17,6 @@
  */
 
 def versions = [:]
-versions.androidPlugin = '3.6.3'
 
 versions.navigation = '2.2.2'
 versions.lifecycle = '2.2.0'

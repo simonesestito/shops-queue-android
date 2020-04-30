@@ -19,38 +19,72 @@
 package com.simonesestito.shopsqueue;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import com.simonesestito.shopsqueue.api.dto.User;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity {
     @Inject ViewModelFactory factory;
     private NavController navController;
+    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         ShopsQueueApplication.getInjector().inject(this);
+        loginViewModel = new ViewModelProvider(this, factory)
+                .get(LoginViewModel.class);
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController);
+        navController.addOnDestinationChangedListener((controller, destination, args) -> {
+            // Check if it's a root destination
+            NavGraph destinationGraph = destination.getParent();
+            boolean isRootDestination = destinationGraph != null &&
+                    destinationGraph.getStartDestination() == destination.getId();
+            // Update back button accordingly
+            Objects.requireNonNull(getSupportActionBar())
+                    .setDisplayHomeAsUpEnabled(!isRootDestination);
 
-        new ViewModelProvider(this, factory)
-                .get(LoginViewModel.class)
-                .getAuthStatus()
+            // Update activity title
+            setTitle(destination.getLabel());
+        });
+
+        loginViewModel.getAuthStatus()
                 .observe(this, this::onNewAuthStatus);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menuItemLogout) {
+            loginViewModel.logout();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private void onNewAuthStatus(User currentUser) {

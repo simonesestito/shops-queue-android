@@ -91,6 +91,13 @@ public class LoginViewModel extends ViewModel {
                 .onError(loginRequest::emitNetworkError);
     }
 
+    public void logout() {
+        this.sharedPreferencesStore.setAccessToken(null);
+        this.authStatus.setValue(null);
+        this.loginService.logout()
+                .onError(Throwable::printStackTrace);
+    }
+
     public LiveData<User> getAuthStatus() {
         return authStatus;
     }

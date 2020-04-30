@@ -18,8 +18,6 @@
 
 package com.simonesestito.shopsqueue.viewmodel;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.simonesestito.shopsqueue.SharedPreferencesStore;
@@ -29,6 +27,7 @@ import com.simonesestito.shopsqueue.api.dto.User;
 import com.simonesestito.shopsqueue.api.dto.UserLogin;
 import com.simonesestito.shopsqueue.api.service.LoginService;
 import com.simonesestito.shopsqueue.model.HttpStatus;
+import com.simonesestito.shopsqueue.util.EventLiveData;
 import com.simonesestito.shopsqueue.util.LiveRequest;
 
 import javax.inject.Inject;
@@ -37,7 +36,7 @@ public class LoginViewModel extends ViewModel {
     public final LiveRequest<AuthResponse> loginRequest = new LiveRequest<>();
     private final LoginService loginService;
     private final SharedPreferencesStore sharedPreferencesStore;
-    private MutableLiveData<User> authStatus = new MutableLiveData<>();
+    private EventLiveData<User> authStatus = new EventLiveData<>();
 
     @Inject
     public LoginViewModel(LoginService loginService, SharedPreferencesStore sharedPreferencesStore) {
@@ -51,15 +50,13 @@ public class LoginViewModel extends ViewModel {
         String savedToken = sharedPreferencesStore.getAccessToken();
         if (savedToken == null) {
             // Not authenticated for sure
-            authStatus.setValue(null);
+            authStatus.emit(null);
         } else {
             // Validate token against the API
             // The token will be added to the request by an interceptor
             loginService.getCurrentUser()
-                    .onResult(authStatus::setValue)
-                    .onStatus(HttpStatus.HTTP_NOT_LOGGED_IN, () -> {
-                        authStatus.setValue(null);
-                    })
+                    .onResult(authStatus::emit)
+                    .onStatus(HttpStatus.HTTP_NOT_LOGGED_IN, () -> authStatus.emit(null))
                     .onError(Throwable::printStackTrace);
         }
     }
@@ -72,7 +69,7 @@ public class LoginViewModel extends ViewModel {
         this.loginService.login(new UserLogin(email, password))
                 .onResult(auth -> {
                     sharedPreferencesStore.setAccessToken(auth.getAccessToken());
-                    authStatus.setValue(auth.getUser());
+                    authStatus.emit(auth.getUser());
                 }).postToLiveRequest(loginRequest);
     }
 
@@ -92,12 +89,12 @@ public class LoginViewModel extends ViewModel {
 
     public void logout() {
         this.sharedPreferencesStore.setAccessToken(null);
-        this.authStatus.setValue(null);
+        this.authStatus.emit(null);
         this.loginService.logout()
                 .onError(Throwable::printStackTrace);
     }
 
-    public LiveData<User> getAuthStatus() {
+    public EventLiveData<User> getAuthStatus() {
         return authStatus;
     }
 }

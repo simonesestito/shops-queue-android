@@ -19,14 +19,13 @@
 package com.simonesestito.shopsqueue.util;
 
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
 
 import com.simonesestito.shopsqueue.api.Callback;
 
 /**
  * Wrap the response of a request inside a LiveData object
  */
-public class LiveRequest<T> extends LiveData<LiveRequest.Status> {
+public class LiveRequest<T> extends EventLiveData<LiveRequest.Status> {
     private static final int TYPE_SUCCESS = 1;
     private static final int TYPE_NETWORK_ERROR = 2;
     private static final int TYPE_REQUEST_ERROR = 3;
@@ -47,15 +46,15 @@ public class LiveRequest<T> extends LiveData<LiveRequest.Status> {
     }
 
     public void emitResult(T data) {
-        postValue(new Status(TYPE_SUCCESS, data));
+        emit(new Status(TYPE_SUCCESS, data));
     }
 
     public void emitNetworkError(Throwable error) {
-        postValue(new Status(TYPE_NETWORK_ERROR, error));
+        emit(new Status(TYPE_NETWORK_ERROR, error));
     }
 
     public void emitRequestError(int status) {
-        postValue(new Status(TYPE_REQUEST_ERROR, status));
+        emit(new Status(TYPE_REQUEST_ERROR, status));
     }
 
     /**
@@ -64,10 +63,12 @@ public class LiveRequest<T> extends LiveData<LiveRequest.Status> {
      */
     @SuppressWarnings("unchecked")
     private <D> void observeStatus(int type, LifecycleOwner lifecycleOwner, Callback<D> callback) {
-        observe(lifecycleOwner, status -> {
+        observeUnhandled(lifecycleOwner, status -> {
             if (status.type == type) {
                 callback.onResult((D) status.data);
+                return true;
             }
+            return false;
         });
     }
 

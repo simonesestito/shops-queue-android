@@ -32,7 +32,7 @@ public interface LoginService {
     @POST("/auth/login")
     ApiResponse<AuthResponse> login(@Body UserLogin userLogin);
 
-    @POST("/auth/logout")
+    @GET("/auth/logout")
     ApiResponse<Void> logout();
 
     @GET("/users/me")

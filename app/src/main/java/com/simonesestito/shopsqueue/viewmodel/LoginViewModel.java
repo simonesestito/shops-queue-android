@@ -88,9 +88,9 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void logout() {
-        this.sharedPreferencesStore.setAccessToken(null);
         this.authStatus.emit(null);
         this.loginService.logout()
+                .onResult(aVoid -> this.sharedPreferencesStore.setAccessToken(null))
                 .onError(Throwable::printStackTrace);
     }
 

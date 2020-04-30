@@ -20,7 +20,11 @@ package com.simonesestito.shopsqueue.di.module;
 
 import com.simonesestito.shopsqueue.api.ApiCallAdapter;
 import com.simonesestito.shopsqueue.api.AuthorizationInterceptor;
+import com.simonesestito.shopsqueue.api.service.BookingService;
+import com.simonesestito.shopsqueue.api.service.FavouriteService;
 import com.simonesestito.shopsqueue.api.service.LoginService;
+import com.simonesestito.shopsqueue.api.service.ShopService;
+import com.simonesestito.shopsqueue.api.service.UserService;
 
 import dagger.Module;
 import dagger.Provides;
@@ -50,7 +54,27 @@ public class RetrofitModule {
     }
 
     @Provides
+    BookingService provideBookingService(Retrofit retrofit) {
+        return retrofit.create(BookingService.class);
+    }
+
+    @Provides
+    FavouriteService provideFavouriteService(Retrofit retrofit) {
+        return retrofit.create(FavouriteService.class);
+    }
+
+    @Provides
     LoginService provideLoginService(Retrofit retrofit) {
         return retrofit.create(LoginService.class);
+    }
+
+    @Provides
+    ShopService provideShopService(Retrofit retrofit) {
+        return retrofit.create(ShopService.class);
+    }
+
+    @Provides
+    UserService provideUserService(Retrofit retrofit) {
+        return retrofit.create(UserService.class);
     }
 }

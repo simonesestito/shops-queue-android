@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.simonesestito.shopsqueue.SharedPreferencesStore;
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
+import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.api.dto.User;
 import com.simonesestito.shopsqueue.api.dto.UserLogin;
 import com.simonesestito.shopsqueue.api.service.LoginService;
@@ -57,7 +58,7 @@ public class LoginViewModel extends ViewModel {
             loginService.getCurrentUser()
                     .onResult(authStatus::setValue)
                     .onStatus(HttpStatus.HTTP_NOT_LOGGED_IN, () -> {
-                        authStatus.postValue(null);
+                        authStatus.setValue(null);
                     })
                     // TODO handle network error
                     .onError(Throwable::printStackTrace);
@@ -66,7 +67,6 @@ public class LoginViewModel extends ViewModel {
 
     /**
      * Do a login request.
-     *
      * @see LoginViewModel#loginRequest
      */
     public void login(String email, String password) {

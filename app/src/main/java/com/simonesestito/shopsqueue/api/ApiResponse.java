@@ -18,6 +18,9 @@
 
 package com.simonesestito.shopsqueue.api;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.simonesestito.shopsqueue.util.ApiException;
 import com.simonesestito.shopsqueue.util.LiveRequest;
 import com.simonesestito.shopsqueue.util.Mapper;
@@ -28,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ApiResponse<T> {
+    private Handler uiHandler = new Handler(Looper.getMainLooper());
     private List<Callback<T>> onResultHandlers;
     private Map<Integer, List<Runnable>> onErrorStatusHandlers;
     private List<Callback<Throwable>> onErrorHandlers;
@@ -40,7 +44,7 @@ public class ApiResponse<T> {
 
     void emitResult(T data) {
         for (Callback<T> handler : onResultHandlers) {
-            handler.onResult(data);
+            uiHandler.post(() -> handler.onResult(data));
         }
     }
 
@@ -50,7 +54,7 @@ public class ApiResponse<T> {
             List<Runnable> statusCallbacks = onErrorStatusHandlers.get(((ApiException) e).getStatusCode());
             if (statusCallbacks != null && !statusCallbacks.isEmpty()) {
                 for (Runnable statusCallback : statusCallbacks) {
-                    statusCallback.run();
+                    uiHandler.post(statusCallback);
                 }
                 return;
             }
@@ -58,7 +62,7 @@ public class ApiResponse<T> {
 
         // Otherwise, fire the generic error handler
         for (Callback<Throwable> handler : onErrorHandlers) {
-            handler.onResult(e);
+            uiHandler.post(() -> handler.onResult(e));
         }
     }
 

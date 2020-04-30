@@ -43,8 +43,6 @@ public class ErrorDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         String message = requireArguments().getString(EXTRA_MESSAGE);
-
-        // TODO Improve dialog design
         return new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.error_dialog_title)
                 .setMessage(message)

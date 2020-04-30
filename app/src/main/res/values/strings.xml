@@ -35,4 +35,5 @@
     <string name="error_dialog_title">Error</string>
     <string name="error_login_invalid">Invalid login</string>
     <string name="error_network_offline">Check your Internet connection</string>
+    <string name="form_sign_up_duplicate_email">E-mail address already used</string>
 </resources>

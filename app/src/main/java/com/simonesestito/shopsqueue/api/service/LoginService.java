@@ -20,6 +20,7 @@ package com.simonesestito.shopsqueue.api.service;
 
 import com.simonesestito.shopsqueue.api.ApiResponse;
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
+import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.api.dto.User;
 import com.simonesestito.shopsqueue.api.dto.UserLogin;
 
@@ -36,4 +37,7 @@ public interface LoginService {
 
     @GET("/users/me")
     ApiResponse<User> getCurrentUser();
+
+    @POST("/users")
+    ApiResponse<User> registerUser(@Body NewUser newUser);
 }

@@ -57,15 +57,15 @@ public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
         super.onActivityCreated(savedInstanceState);
         loginViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(LoginViewModel.class);
         loginViewModel.loginRequest
-                .onSuccess(this, data -> {
+                .onSuccess(getViewLifecycleOwner(), data -> {
                     triggerAutofill();
                 })
-                .onRequestError(this, status -> {
+                .onRequestError(getViewLifecycleOwner(), status -> {
                     enableLogin();
                     ErrorDialog.newInstance(getString(R.string.error_login_invalid))
                             .show(getChildFragmentManager(), null);
                 })
-                .onNetworkError(this, e -> {
+                .onNetworkError(getViewLifecycleOwner(), e -> {
                     enableLogin();
                     ErrorDialog.newInstance(getString(R.string.error_network_offline))
                             .show(getChildFragmentManager(), null);

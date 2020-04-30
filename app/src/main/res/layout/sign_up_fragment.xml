@@ -68,7 +68,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="personGivenName" />
+            android:autofillHints="personGivenName"
+            android:inputType="textCapWords" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -86,7 +87,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="personFamilyName" />
+            android:autofillHints="personFamilyName"
+            android:inputType="textCapWords" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -136,5 +138,15 @@
         android:text="@string/sign_up_form_submit"
         app:layout_constraintEnd_toEndOf="@id/passwordInputLayout"
         app:layout_constraintTop_toBottomOf="@id/passwordInputLayout" />
+
+    <ProgressBar
+        android:id="@+id/loadingSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/signUpButton"
+        app:layout_constraintEnd_toEndOf="@id/signUpButton"
+        app:layout_constraintStart_toStartOf="@id/signUpButton"
+        app:layout_constraintTop_toTopOf="@id/signUpButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

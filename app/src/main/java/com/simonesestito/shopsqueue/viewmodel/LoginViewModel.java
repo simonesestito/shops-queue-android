@@ -77,6 +77,20 @@ public class LoginViewModel extends ViewModel {
                 }).postToLiveRequest(loginRequest);
     }
 
+    /**
+     * Register a new user.
+     * If the registration is successful, login too.
+     *
+     * @see LoginViewModel#loginRequest
+     */
+    public void signUpAndLogin(NewUser newUser) {
+        this.loginService.registerUser(newUser)
+                .onResult(u -> this.login(newUser.getEmail(), newUser.getPassword()))
+                .onStatus(HttpStatus.HTTP_CONFLICT, () ->
+                        loginRequest.emitRequestError(HttpStatus.HTTP_CONFLICT))
+                .onError(loginRequest::emitNetworkError);
+    }
+
     public LiveData<User> getAuthStatus() {
         return authStatus;
     }

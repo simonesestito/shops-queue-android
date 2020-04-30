@@ -95,6 +95,7 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
     protected void onOnline() {
         super.onOnline();
         getViewBinding().ownerCallNextUser.setEnabled(true);
+        ownerViewModel.refreshBookings();
     }
 
     private void onNewQueue(List<Booking> bookings) {

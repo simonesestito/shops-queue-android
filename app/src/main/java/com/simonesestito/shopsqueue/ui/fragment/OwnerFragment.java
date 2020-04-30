@@ -35,6 +35,8 @@ import com.simonesestito.shopsqueue.databinding.OwnerFragmentBinding;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
@@ -78,6 +80,25 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
 
         ownerViewModel.getCurrentCalledUser()
                 .observe(getViewLifecycleOwner(), this::onNewBooking);
+
+        ownerViewModel.getQueue()
+                .observe(getViewLifecycleOwner(), this::onNewQueue);
+    }
+
+    @Override
+    protected void onOffline() {
+        super.onOffline();
+        getViewBinding().ownerCallNextUser.setEnabled(false);
+    }
+
+    @Override
+    protected void onOnline() {
+        super.onOnline();
+        getViewBinding().ownerCallNextUser.setEnabled(true);
+    }
+
+    private void onNewQueue(List<Booking> bookings) {
+        // TODO
     }
 
     private void updateShopInfo(Shop shop) {

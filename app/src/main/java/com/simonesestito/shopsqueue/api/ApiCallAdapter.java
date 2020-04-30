@@ -18,8 +18,6 @@
 
 package com.simonesestito.shopsqueue.api;
 
-import android.util.Log;
-
 import com.simonesestito.shopsqueue.util.ApiException;
 
 import java.lang.annotation.Annotation;
@@ -72,7 +70,6 @@ public class ApiCallAdapter<T> implements CallAdapter<T, ApiResponse<T>> {
                 return null;
             }
             Type parameterType = getParameterUpperBound(0, (ParameterizedType) returnType);
-            Log.d("ApiCallAdapter", getRawType(parameterType).getCanonicalName());
             return new ApiCallAdapter<>(parameterType);
         }
     }

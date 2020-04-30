@@ -27,12 +27,16 @@ import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.api.service.BookingService;
 import com.simonesestito.shopsqueue.api.service.ShopService;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.inject.Inject;
 
 public class OwnerViewModel extends ViewModel {
     private final ShopService shopService;
     private final BookingService bookingService;
     private final MutableLiveData<Shop> currentShop = new MutableLiveData<>();
+    private final MutableLiveData<List<Booking>> queue = new MutableLiveData<>();
     private final MutableLiveData<Booking> currentUser = new MutableLiveData<>(null);
 
     @Inject
@@ -43,16 +47,47 @@ public class OwnerViewModel extends ViewModel {
     }
 
     private void init() {
-        this.shopService.getOwnShop()
-                .onResult(currentShop::setValue)
+        shopService.getOwnShop()
+                .onResult(shop -> {
+                    currentShop.setValue(shop);
+                    refreshBookings();
+                })
                 .onError(err -> {
                     currentShop.setValue(null);
                     err.printStackTrace();
                 });
     }
 
+    public void refreshBookings() {
+        Shop currentShopSnapshot = this.currentShop.getValue();
+        if (currentShopSnapshot == null) {
+            currentUser.setValue(null);
+            return;
+        }
+
+        queue.setValue(null);
+        bookingService.getBookingsByShopId(currentShopSnapshot.getId())
+                .onResult(queue::setValue)
+                .onError(err -> {
+                    err.printStackTrace();
+                    queue.setValue(Collections.emptyList());
+                });
+    }
+
     public void callNextUser() {
-        // TODO
+        Shop currentShopSnapshot = this.currentShop.getValue();
+        if (currentShopSnapshot == null) {
+            currentUser.setValue(null);
+            return;
+        }
+
+        bookingService.callNextUser(currentShopSnapshot.getId())
+                .onResult(currentUser::setValue)
+                .onError(err -> {
+                    refreshBookings();
+                    err.printStackTrace();
+                    currentUser.setValue(null);
+                });
     }
 
     public LiveData<Shop> getCurrentShop() {
@@ -61,5 +96,9 @@ public class OwnerViewModel extends ViewModel {
 
     public LiveData<Booking> getCurrentCalledUser() {
         return currentUser;
+    }
+
+    public LiveData<List<Booking>> getQueue() {
+        return queue;
     }
 }

@@ -24,7 +24,7 @@
     <fragment
         android:id="@+id/ownerFragment"
         android:name="com.simonesestito.shopsqueue.ui.fragment.OwnerFragment"
-        android:label="OwnerFragment"
+        android:label="@string/owner_fragment_title"
         tools:layout="@layout/owner_fragment" />
 
 </navigation>

@@ -18,16 +18,94 @@
 
 package com.simonesestito.shopsqueue.ui.fragment;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.simonesestito.shopsqueue.ShopsQueueApplication;
+import com.simonesestito.shopsqueue.api.dto.Booking;
+import com.simonesestito.shopsqueue.api.dto.Shop;
+import com.simonesestito.shopsqueue.databinding.OwnerCurrentCalledUserBinding;
 import com.simonesestito.shopsqueue.databinding.OwnerFragmentBinding;
+import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
+import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
+
+import javax.inject.Inject;
 
 public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
+    @Inject ViewModelFactory viewModelFactory;
+    private OwnerViewModel ownerViewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ShopsQueueApplication.getInjector().inject(this);
+    }
+
     @Override
     protected OwnerFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return OwnerFragmentBinding.inflate(layoutInflater, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getViewBinding().ownerCallNextUser.setOnClickListener(v -> {
+            v.setEnabled(false);
+            ownerViewModel.callNextUser();
+        });
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ownerViewModel = new ViewModelProvider(this, viewModelFactory).get(OwnerViewModel.class);
+
+        ownerViewModel.getCurrentShop().observe(getViewLifecycleOwner(), shop -> {
+            getViewBinding().ownerShopLoading.hide();
+
+            if (shop == null) {
+                showShopError();
+            } else {
+                updateShopInfo(shop);
+            }
+        });
+
+        ownerViewModel.getCurrentCalledUser()
+                .observe(getViewLifecycleOwner(), this::onNewBooking);
+    }
+
+    private void updateShopInfo(Shop shop) {
+        hideShopError();
+        requireActivity().setTitle(shop.getName());
+    }
+
+    private void showShopError() {
+        getViewBinding().ownerLayoutGroup.setVisibility(View.INVISIBLE);
+        getViewBinding().ownerShopError.setVisibility(View.VISIBLE);
+    }
+
+    private void hideShopError() {
+        getViewBinding().ownerLayoutGroup.setVisibility(View.VISIBLE);
+        getViewBinding().ownerShopError.setVisibility(View.INVISIBLE);
+    }
+
+    private void onNewBooking(Booking booking) {
+        getViewBinding().ownerCallNextUser.setEnabled(true);
+        OwnerCurrentCalledUserBinding calledUserView = getViewBinding().ownerCurrentCalledUser;
+        if (booking == null) {
+            calledUserView.ownerLatestUserCalled.setVisibility(View.INVISIBLE);
+            calledUserView.ownerNoLatestUserMessage.setVisibility(View.VISIBLE);
+        } else {
+            calledUserView.ownerLatestUserCalled.setVisibility(View.VISIBLE);
+            calledUserView.ownerNoLatestUserMessage.setVisibility(View.GONE);
+
+            calledUserView.ownerLatestUserCalledName.setText(booking.getUser().getName());
+        }
     }
 }

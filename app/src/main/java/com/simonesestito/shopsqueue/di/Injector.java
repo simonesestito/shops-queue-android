@@ -25,6 +25,7 @@ import com.simonesestito.shopsqueue.di.module.RetrofitModule;
 import com.simonesestito.shopsqueue.di.module.SharedPreferencesModule;
 import com.simonesestito.shopsqueue.di.module.ViewModelModule;
 import com.simonesestito.shopsqueue.ui.fragment.LoginFragment;
+import com.simonesestito.shopsqueue.ui.fragment.OwnerFragment;
 import com.simonesestito.shopsqueue.ui.fragment.SignUpFragment;
 
 import dagger.BindsInstance;
@@ -41,6 +42,8 @@ public interface Injector {
     void inject(LoginFragment loginFragment);
 
     void inject(SignUpFragment signUpFragment);
+
+    void inject(OwnerFragment ownerFragment);
 
     @Component.Builder
     interface Builder {

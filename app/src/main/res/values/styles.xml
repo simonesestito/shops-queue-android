@@ -18,10 +18,13 @@
 
 <resources>
 
-    <style name="Widget.App.CardView.Outlined" parent="Widget.MaterialComponents.CardView">
+    <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">@dimen/cardview_radius</item>
+    </style>
+
+    <style name="Widget.App.CardView.Outlined">
         <item name="cardElevation">0dp</item>
         <item name="strokeWidth">1dp</item>
         <item name="strokeColor">@color/stroke_color</item>
     </style>
-
 </resources>

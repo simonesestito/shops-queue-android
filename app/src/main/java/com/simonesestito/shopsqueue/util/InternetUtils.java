@@ -36,6 +36,7 @@ public class InternetUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return connectivityManager.getActiveNetwork() != null;
         } else {
+            //noinspection deprecation
             return connectivityManager.getActiveNetworkInfo() != null;
         }
     }

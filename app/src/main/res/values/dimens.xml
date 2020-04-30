@@ -26,4 +26,7 @@
 
     <dimen name="app_logo_login_form_size">80dp</dimen>
     <dimen name="error_big_icon_size">36dp</dimen>
+    <dimen name="activity_content_margin">12dp</dimen>
+    <dimen name="cardview_content_margin">16dp</dimen>
+    <dimen name="cardview_radius">8dp</dimen>
 </resources>

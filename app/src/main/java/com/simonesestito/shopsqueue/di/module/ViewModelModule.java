@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.simonesestito.shopsqueue.di.annotation.ViewModelKey;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
+import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
 import dagger.Binds;
@@ -38,4 +39,9 @@ public interface ViewModelModule {
     @IntoMap
     @ViewModelKey(LoginViewModel.class)
     ViewModel bindLoginViewModel(LoginViewModel loginViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(OwnerViewModel.class)
+    ViewModel bindOwnerViewModel(OwnerViewModel ownerViewModel);
 }

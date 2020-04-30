@@ -19,13 +19,60 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_content_margin">
 
-    <TextView
-        android:id="@+id/textView"
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/ownerShopLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Owner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/ownerCurrentCalledUser"
+        layout="@layout/owner_current_called_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/form_element_margin"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/ownerNextUsers"
+        layout="@layout/owner_next_users_queue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/form_element_margin"
+        app:layout_constraintTop_toBottomOf="@id/ownerCurrentCalledUser" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/ownerCallNextUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/form_element_margin"
+        android:text="@string/owner_call_next_user"
+        app:icon="@drawable/ic_person_add_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/ownerLayoutGroup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="ownerCurrentCalledUser,ownerNextUsers,ownerCallNextUser" />
+
+    <TextView
+        android:id="@+id/ownerShopError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/error_fetch_shop_info"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:textColor="?colorError"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

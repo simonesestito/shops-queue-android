@@ -37,4 +37,9 @@
     <string name="error_network_offline">Check your Internet connection</string>
     <string name="form_sign_up_duplicate_email">E-mail address already used</string>
     <string name="menu_item_logout">Logout</string>
+    <string name="owner_latest_user_called_title">Latest customer called:</string>
+    <string name="owner_no_user_called">No user has been called</string>
+    <string name="owner_call_next_user">Call next customer</string>
+    <string name="error_fetch_shop_info">An error occurred fetching the current shop</string>
+    <string name="owner_fragment_title">Shop\'s Owner</string>
 </resources>

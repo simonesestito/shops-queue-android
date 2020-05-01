@@ -59,11 +59,9 @@ public class OwnerViewModel extends ViewModel {
     }
 
     public void refreshBookings() {
-        Shop currentShopSnapshot = this.currentShop.getValue();
-        if (currentShopSnapshot == null) {
-            currentUser.setValue(null);
+        Shop currentShopSnapshot = currentShop.getValue();
+        if (currentShopSnapshot == null)
             return;
-        }
 
         queue.setValue(null);
         bookingService.getBookingsByShopId(currentShopSnapshot.getId())
@@ -82,7 +80,10 @@ public class OwnerViewModel extends ViewModel {
         }
 
         bookingService.callNextUser(currentShopSnapshot.getId())
-                .onResult(currentUser::setValue)
+                .onResult(user -> {
+                    currentUser.setValue(user);
+                    refreshBookings();
+                })
                 .onError(err -> {
                     refreshBookings();
                     err.printStackTrace();

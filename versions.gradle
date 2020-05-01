@@ -25,5 +25,6 @@ versions.constraintlayout = '1.1.3'
 versions.material = '1.1.0'
 versions.dagger = '2.27'
 versions.retrofit = '2.8.1'
+versions.swiperefresh = '1.0.0'
 
 ext.versions = versions

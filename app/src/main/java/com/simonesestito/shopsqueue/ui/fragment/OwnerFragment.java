@@ -58,9 +58,12 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getViewBinding().ownerCallNextUser.setOnClickListener(v -> {
+            getViewBinding().ownerQueueRefreshLayout.setRefreshing(true);
             v.setEnabled(false);
             ownerViewModel.callNextUser();
         });
+        getViewBinding().ownerQueueRefreshLayout
+                .setOnRefreshListener(() -> ownerViewModel.refreshBookings());
     }
 
     @Override
@@ -69,8 +72,6 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
         ownerViewModel = new ViewModelProvider(this, viewModelFactory).get(OwnerViewModel.class);
 
         ownerViewModel.getCurrentShop().observe(getViewLifecycleOwner(), shop -> {
-            getViewBinding().ownerShopLoading.hide();
-
             if (shop == null) {
                 showShopError();
             } else {
@@ -82,7 +83,10 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
                 .observe(getViewLifecycleOwner(), this::onNewBooking);
 
         ownerViewModel.getQueue()
-                .observe(getViewLifecycleOwner(), this::onNewQueue);
+                .observe(getViewLifecycleOwner(), queue -> {
+                    if (queue != null)
+                        onNewQueue(queue);
+                });
     }
 
     @Override
@@ -99,6 +103,7 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
 
     private void onNewQueue(List<Booking> bookings) {
         getViewBinding().ownerCallNextUser.setEnabled(true);
+        getViewBinding().ownerQueueRefreshLayout.setRefreshing(false);
 
         // TODO
     }
@@ -119,7 +124,6 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
     }
 
     private void onNewBooking(Booking booking) {
-        getViewBinding().ownerCallNextUser.setEnabled(true);
         OwnerCurrentCalledUserBinding calledUserView = getViewBinding().ownerCurrentCalledUser;
         if (booking == null) {
             calledUserView.ownerLatestUserCalled.setVisibility(View.INVISIBLE);

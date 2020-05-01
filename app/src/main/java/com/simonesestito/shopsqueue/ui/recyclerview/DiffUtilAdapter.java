@@ -18,6 +18,7 @@
 
 package com.simonesestito.shopsqueue.ui.recyclerview;
 
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
@@ -25,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.simonesestito.shopsqueue.model.Identifiable;
 
+import java.util.List;
 import java.util.Objects;
 
 public abstract class DiffUtilAdapter<T extends Identifiable, VH extends RecyclerView.ViewHolder>
@@ -43,5 +45,23 @@ public abstract class DiffUtilAdapter<T extends Identifiable, VH extends Recycle
                 return oldItem.getId() == newItem.getId();
             }
         });
+    }
+
+    public List<T> getDataSet() {
+        return listDiffer.getCurrentList();
+    }
+
+    @Override
+    public int getItemCount() {
+        return getDataSet().size();
+    }
+
+    public T getItemAt(int index) {
+        return getDataSet().get(index);
+    }
+
+    @MainThread
+    public void updateDataSet(List<T> newList) {
+        listDiffer.submitList(newList);
     }
 }

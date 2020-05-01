@@ -17,17 +17,12 @@
   -->
 
 <resources>
-    <dimen name="input_form_margin">24dp</dimen>
-    <dimen name="form_element_margin">8dp</dimen>
 
-    <!-- https://material.io/components/app-bars-top#specs -->
-    <dimen name="back_button_size">56dp</dimen>
-    <dimen name="back_button_padding">16dp</dimen>
+    <style name="TextAppearance.App.Overline" parent="TextAppearance.MaterialComponents.Overline">
+        <item name="android:textSize">12sp</item>
+    </style>
 
-    <dimen name="app_logo_login_form_size">80dp</dimen>
-    <dimen name="error_big_icon_size">36dp</dimen>
-    <dimen name="activity_content_margin">12dp</dimen>
-    <dimen name="cardview_content_margin">16dp</dimen>
-    <dimen name="cardview_radius">8dp</dimen>
-    <dimen name="cardview_elevation">4dp</dimen>
+    <style name="TextAppearance.App.Overline.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

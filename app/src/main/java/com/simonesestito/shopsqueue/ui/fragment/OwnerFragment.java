@@ -32,16 +32,20 @@ import com.simonesestito.shopsqueue.api.dto.Booking;
 import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.databinding.OwnerCurrentCalledUserBinding;
 import com.simonesestito.shopsqueue.databinding.OwnerFragmentBinding;
+import com.simonesestito.shopsqueue.databinding.OwnerNextUsersQueueBinding;
+import com.simonesestito.shopsqueue.ui.recyclerview.OwnerBookingsAdapter;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
 public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
     @Inject ViewModelFactory viewModelFactory;
     private OwnerViewModel ownerViewModel;
+    private OwnerNextUsersQueueBinding queueBinding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +61,9 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // ViewBinding bug with included <merge> layouts
+        queueBinding = OwnerNextUsersQueueBinding.bind(view);
+
         getViewBinding().ownerCallNextUser.setOnClickListener(v -> {
             getViewBinding().ownerQueueRefreshLayout.setRefreshing(true);
             v.setEnabled(false);
@@ -64,6 +71,8 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
         });
         getViewBinding().ownerQueueRefreshLayout
                 .setOnRefreshListener(() -> ownerViewModel.refreshBookings());
+
+        queueBinding.ownerNextUsers.setAdapter(new OwnerBookingsAdapter());
     }
 
     @Override
@@ -105,7 +114,17 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
         getViewBinding().ownerCallNextUser.setEnabled(true);
         getViewBinding().ownerQueueRefreshLayout.setRefreshing(false);
 
-        // TODO
+        OwnerBookingsAdapter adapter = (OwnerBookingsAdapter)
+                Objects.requireNonNull(queueBinding.ownerNextUsers.getAdapter());
+        adapter.updateDataSet(bookings);
+
+        if (bookings.isEmpty()) {
+            queueBinding.ownerNextUsers.setVisibility(View.GONE);
+            queueBinding.ownerNextUsersEmpty.setVisibility(View.VISIBLE);
+        } else {
+            queueBinding.ownerNextUsers.setVisibility(View.VISIBLE);
+            queueBinding.ownerNextUsersEmpty.setVisibility(View.GONE);
+        }
     }
 
     private void updateShopInfo(Shop shop) {

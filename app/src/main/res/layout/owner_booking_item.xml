@@ -19,7 +19,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.App.CardView"
+    style="@style/Widget.App.CardView.Outlined"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -28,39 +28,36 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/cardview_content_margin">
 
-        <TextView
-            android:id="@+id/ownerLatestUserCalledTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/owner_latest_user_called_title"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/ownerLatestUserCalledName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            app:layout_constraintTop_toBottomOf="@id/ownerLatestUserCalledTitle"
-            tools:text="John Scott" />
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/ownerLatestUserCalled"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:constraint_referenced_ids="ownerLatestUserCalledName,ownerLatestUserCalledTitle" />
-
-        <TextView
-            android:id="@+id/ownerNoLatestUserMessage"
+        <ImageView
+            android:id="@+id/bookingItemIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/owner_no_user_called"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            android:textColor="?colorError"
+            android:src="@drawable/ic_perm_identity_black_24dp"
+            android:tint="?colorSecondary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/bookingItemUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/cardview_content_margin"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            app:layout_constraintStart_toEndOf="@id/bookingItemIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="John" />
+
+        <TextView
+            android:id="@+id/bookingItemDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/form_element_margin"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/bookingItemUserName"
+            app:layout_constraintTop_toBottomOf="@id/bookingItemUserName"
+            tools:text="In queue since 12:00" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

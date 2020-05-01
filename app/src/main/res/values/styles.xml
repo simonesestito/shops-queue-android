@@ -20,6 +20,8 @@
 
     <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardCornerRadius">@dimen/cardview_radius</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardElevation">@dimen/cardview_elevation</item>
     </style>
 
     <style name="Widget.App.CardView.Outlined">

@@ -16,8 +16,34 @@
   ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <!-- TODO: Add next bookings -->
-</androidx.appcompat.widget.LinearLayoutCompat>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/ownerNextUsersTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_content_margin"
+        android:text="@string/owner_next_users_title"
+        android:textAppearance="@style/TextAppearance.App.Overline.Bold"
+        app:layout_constraintTop_toBottomOf="@id/ownerCurrentCalledUser" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ownerNextUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/form_element_margin"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/ownerNextUsersTitle" />
+
+    <TextView
+        android:id="@+id/ownerNextUsersEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/owner_next_users_empty_view"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</merge>

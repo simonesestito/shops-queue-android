@@ -18,14 +18,17 @@
 
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.App" parent="Theme.MaterialComponents.DayNight">
+    <style name="Base.Theme.App" parent="Theme.MaterialComponents.DayNight">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/green_500</item>
-        <item name="colorPrimaryVariant">@color/green_100</item>
         <item name="colorOnSecondary">@color/white</item>
         <item name="colorPrimaryDark">@color/green_700</item>
         <item name="colorSecondary">@color/green_500</item>
         <item name="colorError">@color/red_a400</item>
         <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
+    </style>
+
+    <style name="Theme.App" parent="Base.Theme.App">
+        <item name="colorPrimaryVariant">@color/green_100</item>
     </style>
 </resources>

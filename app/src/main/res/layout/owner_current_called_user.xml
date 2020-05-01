@@ -52,7 +52,6 @@
         android:gravity="center"
         android:text="@string/owner_no_user_called"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        android:textColor="?colorError"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -38,6 +38,13 @@ public class AuthorizationInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
+        try {
+            // TODO: Test only, remove me after development
+            Thread.sleep(800);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         Request request = chain.request();
         String accessToken = sharedPreferencesStore.getAccessToken();
 

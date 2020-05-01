@@ -31,11 +31,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
+import com.simonesestito.shopsqueue.api.dto.AuthResponse;
 import com.simonesestito.shopsqueue.databinding.LoginFragmentBinding;
+import com.simonesestito.shopsqueue.model.HttpStatus;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
+import com.simonesestito.shopsqueue.util.ApiException;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.util.NavUtils;
+import com.simonesestito.shopsqueue.util.livedata.Resource;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -56,21 +60,16 @@ public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         loginViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(LoginViewModel.class);
-        loginViewModel.loginRequest
-                .onSuccess(getViewLifecycleOwner(), data -> {
-                    triggerAutofill();
-                })
-                .onRequestError(getViewLifecycleOwner(), status -> {
-                    enableLogin();
-                    ErrorDialog.newInstance(getString(R.string.error_login_invalid))
-                            .show(getChildFragmentManager(), null);
-                })
-                .onNetworkError(getViewLifecycleOwner(), e -> {
-                    enableLogin();
-                    ErrorDialog.newInstance(getString(R.string.error_network_offline))
-                            .show(getChildFragmentManager(), null);
-                    e.printStackTrace();
-                });
+        loginViewModel.getLoginRequest().observe(getViewLifecycleOwner(), event -> {
+            enableLogin();
+            if (event.isSuccessful()) {
+                triggerAutofill();
+            } else if (event.isInProgress()) {
+                disableLogin();
+            } else if (event.getError() != null && !event.hasBeenHandled()) {
+                handleError(event);
+            }
+        });
     }
 
     @Override
@@ -100,7 +99,26 @@ public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
         String password = getViewBinding().passwordInputLayout.getEditText().getText().toString().trim();
 
         loginViewModel.login(email, password);
-        disableLogin();
+    }
+
+    private void handleError(Resource<AuthResponse> event) {
+        Throwable error = event.getError();
+        if (error == null)
+            return;
+
+        if (!(error instanceof ApiException)) {
+            ErrorDialog.newInstance(getString(R.string.error_network_offline))
+                    .show(getChildFragmentManager(), null);
+            event.handle();
+            return;
+        }
+
+        ApiException apiException = (ApiException) error;
+        if (apiException.getStatusCode() == HttpStatus.HTTP_NOT_LOGGED_IN) {
+            ErrorDialog.newInstance(getString(R.string.error_login_invalid))
+                    .show(getChildFragmentManager(), null);
+            event.handle();
+        }
     }
 
     @SuppressWarnings("ConstantConditions")

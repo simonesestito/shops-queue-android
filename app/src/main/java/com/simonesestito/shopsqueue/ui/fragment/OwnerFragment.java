@@ -27,12 +27,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.Booking;
 import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.databinding.OwnerCurrentCalledUserBinding;
 import com.simonesestito.shopsqueue.databinding.OwnerFragmentBinding;
 import com.simonesestito.shopsqueue.databinding.OwnerNextUsersQueueBinding;
+import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.OwnerBookingsAdapter;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
@@ -64,15 +66,14 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
         // ViewBinding bug with included <merge> layouts
         queueBinding = OwnerNextUsersQueueBinding.bind(view);
 
-        getViewBinding().ownerCallNextUser.setOnClickListener(v -> {
-            getViewBinding().ownerQueueRefreshLayout.setRefreshing(true);
-            v.setEnabled(false);
-            ownerViewModel.callNextUser();
-        });
+        getViewBinding().ownerCallNextUser.
+                setOnClickListener(v -> ownerViewModel.callNextUser());
+
         getViewBinding().ownerQueueRefreshLayout
                 .setOnRefreshListener(() -> ownerViewModel.refreshBookings());
 
         queueBinding.ownerNextUsers.setAdapter(new OwnerBookingsAdapter());
+        getViewBinding().ownerQueueRefreshLayout.setRefreshing(true);
     }
 
     @Override
@@ -88,8 +89,20 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
             }
         });
 
-        ownerViewModel.getCurrentCalledUser()
-                .observe(getViewLifecycleOwner(), this::onNewBooking);
+        ownerViewModel.getCurrentCalledUser().observe(getViewLifecycleOwner(), event -> {
+            if (event.isInProgress()) {
+                getViewBinding().ownerQueueRefreshLayout.setRefreshing(true);
+                getViewBinding().ownerCallNextUser.setEnabled(false);
+                getViewBinding().ownerCurrentCalledUser.ownerLatestUserCalled.setVisibility(View.INVISIBLE);
+            } else if (!event.isSuccessful()) {
+                ErrorDialog.newInstance(getString(R.string.error_network_offline))
+                        .show(getChildFragmentManager(), null);
+                onOffline();
+                event.handle();
+            }
+
+            onNewBooking(event.getData());
+        });
 
         ownerViewModel.getQueue()
                 .observe(getViewLifecycleOwner(), queue -> {
@@ -142,7 +155,7 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
         getViewBinding().ownerShopError.setVisibility(View.INVISIBLE);
     }
 
-    private void onNewBooking(Booking booking) {
+    private void onNewBooking(@Nullable Booking booking) {
         OwnerCurrentCalledUserBinding calledUserView = getViewBinding().ownerCurrentCalledUser;
         if (booking == null) {
             calledUserView.ownerLatestUserCalled.setVisibility(View.INVISIBLE);

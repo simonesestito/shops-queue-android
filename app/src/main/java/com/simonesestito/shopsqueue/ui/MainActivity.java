@@ -68,9 +68,12 @@ public class MainActivity extends AppCompatActivity {
             setTitle(destination.getLabel());
         });
 
-        loginViewModel.getAuthStatus().observeUnhandled(this, user -> {
-            onNewAuthStatus(user);
-            return true;
+        loginViewModel.getAuthStatus().observeUnhandled(this, event -> {
+            if (event.isSuccessful()) {
+                onNewAuthStatus(event.getData());
+                return true;
+            }
+            return false;
         });
     }
 

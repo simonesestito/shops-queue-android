@@ -31,11 +31,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
+import com.simonesestito.shopsqueue.api.dto.AuthResponse;
 import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.databinding.SignUpFragmentBinding;
+import com.simonesestito.shopsqueue.model.HttpStatus;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
+import com.simonesestito.shopsqueue.util.ApiException;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
+import com.simonesestito.shopsqueue.util.livedata.Resource;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -56,22 +60,16 @@ public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         loginViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(LoginViewModel.class);
-        loginViewModel.loginRequest
-                .onSuccess(getViewLifecycleOwner(), data -> {
-                    triggerAutofill();
-                })
-                .onRequestError(getViewLifecycleOwner(), status -> {
-                    enableSignUp();
-                    getViewBinding().emailInputLayout.setError(
-                            getString(R.string.form_sign_up_duplicate_email)
-                    );
-                })
-                .onNetworkError(getViewLifecycleOwner(), e -> {
-                    enableSignUp();
-                    ErrorDialog.newInstance(getString(R.string.error_network_offline))
-                            .show(getChildFragmentManager(), null);
-                    e.printStackTrace();
-                });
+        loginViewModel.getLoginRequest().observe(getViewLifecycleOwner(), event -> {
+            enableSignUp();
+            if (event.isSuccessful()) {
+                triggerAutofill();
+            } else if (event.isInProgress()) {
+                disableSignUp();
+            } else if (event.getError() != null && !event.hasBeenHandled()) {
+                handleError(event);
+            }
+        });
     }
 
     @Override
@@ -98,11 +96,6 @@ public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
         if (!isInputValid)
             return;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            AutofillManager autofillManager = requireContext().getSystemService(AutofillManager.class);
-            autofillManager.commit();
-        }
-
         String name = getViewBinding().nameInputLayout.getEditText().getText().toString().trim();
         String surname = getViewBinding().surnameInputLayout.getEditText().getText().toString().trim();
         String email = getViewBinding().emailInputLayout.getEditText().getText().toString().trim();
@@ -112,6 +105,27 @@ public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
         loginViewModel.signUpAndLogin(newUser);
         disableSignUp();
     }
+
+    private void handleError(Resource<AuthResponse> event) {
+        Throwable error = event.getError();
+        if (error == null)
+            return;
+
+        if (!(error instanceof ApiException)) {
+            ErrorDialog.newInstance(getString(R.string.error_network_offline))
+                    .show(getChildFragmentManager(), null);
+            event.handle();
+            return;
+        }
+
+        ApiException apiException = (ApiException) error;
+        if (apiException.getStatusCode() == HttpStatus.HTTP_CONFLICT) {
+            ErrorDialog.newInstance(getString(R.string.error_sign_up_duplicate_email))
+                    .show(getChildFragmentManager(), null);
+            event.handle();
+        }
+    }
+
 
     @SuppressWarnings("ConstantConditions")
     private void enableSignUp() {

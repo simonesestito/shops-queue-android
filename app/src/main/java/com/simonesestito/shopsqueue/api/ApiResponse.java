@@ -22,8 +22,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.simonesestito.shopsqueue.util.ApiException;
-import com.simonesestito.shopsqueue.util.LiveRequest;
-import com.simonesestito.shopsqueue.util.Mapper;
+import com.simonesestito.shopsqueue.util.functional.Callback;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -33,7 +32,7 @@ import java.util.Map;
 public class ApiResponse<T> {
     private Handler uiHandler = new Handler(Looper.getMainLooper());
     private List<Callback<T>> onResultHandlers;
-    private Map<Integer, List<Runnable>> onErrorStatusHandlers;
+    private Map<Integer, List<Callback<ApiException>>> onErrorStatusHandlers;
     private List<Callback<Throwable>> onErrorHandlers;
 
     ApiResponse() {
@@ -51,10 +50,11 @@ public class ApiResponse<T> {
     void emitError(Throwable e) {
         // Check if this is an API error and there's a specific callback set
         if (e instanceof ApiException) {
-            List<Runnable> statusCallbacks = onErrorStatusHandlers.get(((ApiException) e).getStatusCode());
+            int status = ((ApiException) e).getStatusCode();
+            List<Callback<ApiException>> statusCallbacks = onErrorStatusHandlers.get(status);
             if (statusCallbacks != null && !statusCallbacks.isEmpty()) {
-                for (Runnable statusCallback : statusCallbacks) {
-                    uiHandler.post(statusCallback);
+                for (Callback<ApiException> statusCallback : statusCallbacks) {
+                    uiHandler.post(() -> statusCallback.onResult((ApiException) e));
                 }
                 return;
             }
@@ -71,8 +71,8 @@ public class ApiResponse<T> {
         return this;
     }
 
-    public ApiResponse<T> onStatus(int status, Runnable onErrorStatus) {
-        List<Runnable> callbacks = onErrorStatusHandlers.get(status);
+    public ApiResponse<T> onStatus(int status, Callback<ApiException> onErrorStatus) {
+        List<Callback<ApiException>> callbacks = onErrorStatusHandlers.get(status);
         if (callbacks == null)
             callbacks = new LinkedList<>();
         callbacks.add(onErrorStatus);
@@ -82,22 +82,6 @@ public class ApiResponse<T> {
 
     public ApiResponse<T> onError(Callback<Throwable> onError) {
         this.onErrorHandlers.add(onError);
-        return this;
-    }
-
-    public ApiResponse<T> postToLiveRequest(LiveRequest<T> liveRequest) {
-        return postToLiveRequest(liveRequest, e -> e);
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public <R> ApiResponse<T> postToLiveRequest(LiveRequest<R> liveRequest, Mapper<T, R> mapper) {
-        onResultHandlers.add(data -> liveRequest.emitResult(mapper.map(data)));
-        onErrorHandlers.add(err -> {
-            if (err instanceof ApiException)
-                liveRequest.emitRequestError(((ApiException) err).getStatusCode());
-            else
-                liveRequest.emitNetworkError(err);
-        });
         return this;
     }
 }

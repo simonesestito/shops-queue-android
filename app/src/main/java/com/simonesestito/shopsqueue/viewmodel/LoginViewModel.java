@@ -27,16 +27,15 @@ import com.simonesestito.shopsqueue.api.dto.User;
 import com.simonesestito.shopsqueue.api.dto.UserLogin;
 import com.simonesestito.shopsqueue.api.service.LoginService;
 import com.simonesestito.shopsqueue.model.HttpStatus;
-import com.simonesestito.shopsqueue.util.EventLiveData;
-import com.simonesestito.shopsqueue.util.LiveRequest;
+import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
 import javax.inject.Inject;
 
 public class LoginViewModel extends ViewModel {
-    public final LiveRequest<AuthResponse> loginRequest = new LiveRequest<>();
     private final LoginService loginService;
     private final SharedPreferencesStore sharedPreferencesStore;
-    private EventLiveData<User> authStatus = new EventLiveData<>();
+    private final LiveResource<User> authStatus = new LiveResource<>();
+    private final LiveResource<AuthResponse> loginRequest = new LiveResource<>();
 
     @Inject
     public LoginViewModel(LoginService loginService, SharedPreferencesStore sharedPreferencesStore) {
@@ -50,14 +49,18 @@ public class LoginViewModel extends ViewModel {
         String savedToken = sharedPreferencesStore.getAccessToken();
         if (savedToken == null) {
             // Not authenticated for sure
-            authStatus.emit(null);
+            authStatus.emitResult(null);
         } else {
             // Validate token against the API
             // The token will be added to the request by an interceptor
+            authStatus.emitLoading();
             loginService.getCurrentUser()
-                    .onResult(authStatus::emit)
-                    .onStatus(HttpStatus.HTTP_NOT_LOGGED_IN, () -> authStatus.emit(null))
-                    .onError(Throwable::printStackTrace);
+                    .onResult(authStatus::emitResult)
+                    .onStatus(HttpStatus.HTTP_NOT_LOGGED_IN, e -> authStatus.emitResult(null))
+                    .onError(e -> {
+                        e.printStackTrace();
+                        authStatus.emitError(e);
+                    });
         }
     }
 
@@ -66,11 +69,13 @@ public class LoginViewModel extends ViewModel {
      * @see LoginViewModel#loginRequest
      */
     public void login(String email, String password) {
+        loginRequest.emitLoading();
         this.loginService.login(new UserLogin(email, password))
                 .onResult(auth -> {
+                    loginRequest.emitResult(auth);
                     sharedPreferencesStore.setAccessToken(auth.getAccessToken());
-                    authStatus.emit(auth.getUser());
-                }).postToLiveRequest(loginRequest);
+                    authStatus.emitResult(auth.getUser());
+                }).onError(loginRequest::emitError);
     }
 
     /**
@@ -80,21 +85,24 @@ public class LoginViewModel extends ViewModel {
      * @see LoginViewModel#loginRequest
      */
     public void signUpAndLogin(NewUser newUser) {
+        loginRequest.emitLoading();
         this.loginService.registerUser(newUser)
                 .onResult(u -> this.login(newUser.getEmail(), newUser.getPassword()))
-                .onStatus(HttpStatus.HTTP_CONFLICT, () ->
-                        loginRequest.emitRequestError(HttpStatus.HTTP_CONFLICT))
-                .onError(loginRequest::emitNetworkError);
+                .onError(loginRequest::emitError);
     }
 
     public void logout() {
-        this.authStatus.emit(null);
+        this.authStatus.emitResult(null);
         this.loginService.logout()
                 .onResult(aVoid -> this.sharedPreferencesStore.setAccessToken(null))
                 .onError(Throwable::printStackTrace);
     }
 
-    public EventLiveData<User> getAuthStatus() {
+    public LiveResource<User> getAuthStatus() {
         return authStatus;
+    }
+
+    public LiveResource<AuthResponse> getLoginRequest() {
+        return loginRequest;
     }
 }

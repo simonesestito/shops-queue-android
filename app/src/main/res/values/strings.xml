@@ -35,7 +35,7 @@
     <string name="error_dialog_title">Error</string>
     <string name="error_login_invalid">Invalid login</string>
     <string name="error_network_offline">Check your Internet connection</string>
-    <string name="form_sign_up_duplicate_email">E-mail address already used</string>
+    <string name="error_sign_up_duplicate_email">E-mail address already used</string>
     <string name="menu_item_logout">Logout</string>
     <string name="owner_latest_user_called_title">Latest customer called:</string>
     <string name="owner_no_user_called">No user has been called</string>

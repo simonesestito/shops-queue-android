@@ -26,6 +26,7 @@ import com.simonesestito.shopsqueue.api.dto.Booking;
 import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.api.service.BookingService;
 import com.simonesestito.shopsqueue.api.service.ShopService;
+import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +38,7 @@ public class OwnerViewModel extends ViewModel {
     private final BookingService bookingService;
     private final MutableLiveData<Shop> currentShop = new MutableLiveData<>();
     private final MutableLiveData<List<Booking>> queue = new MutableLiveData<>();
-    private final MutableLiveData<Booking> currentUser = new MutableLiveData<>(null);
+    private final LiveResource<Booking> currentUser = new LiveResource<>();
 
     @Inject
     OwnerViewModel(ShopService shopService, BookingService bookingService) {
@@ -75,19 +76,19 @@ public class OwnerViewModel extends ViewModel {
     public void callNextUser() {
         Shop currentShopSnapshot = this.currentShop.getValue();
         if (currentShopSnapshot == null) {
-            currentUser.setValue(null);
-            return;
+            throw new IllegalStateException("Calling next user before having retrieved shop info");
         }
 
+        currentUser.emitLoading();
         bookingService.callNextUser(currentShopSnapshot.getId())
                 .onResult(user -> {
-                    currentUser.setValue(user);
+                    currentUser.emitResult(user);
                     refreshBookings();
                 })
                 .onError(err -> {
                     refreshBookings();
                     err.printStackTrace();
-                    currentUser.setValue(null);
+                    currentUser.emitError(err);
                 });
     }
 
@@ -95,7 +96,7 @@ public class OwnerViewModel extends ViewModel {
         return currentShop;
     }
 
-    public LiveData<Booking> getCurrentCalledUser() {
+    public LiveResource<Booking> getCurrentCalledUser() {
         return currentUser;
     }
 

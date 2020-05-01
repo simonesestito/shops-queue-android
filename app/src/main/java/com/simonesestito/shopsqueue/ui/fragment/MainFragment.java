@@ -23,17 +23,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.databinding.MainFragmentBinding;
-import com.simonesestito.shopsqueue.util.InternetUtils;
+import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
+import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
+
+import javax.inject.Inject;
 
 /**
  * Main fragment
  * It shows a loading indicator until the activity navigates away
  */
 public class MainFragment extends AbstractAppFragment<MainFragmentBinding> {
+    @Inject ViewModelFactory viewModelFactory;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ShopsQueueApplication.getInjector().inject(this);
+    }
 
     @Override
     protected MainFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
@@ -41,12 +52,16 @@ public class MainFragment extends AbstractAppFragment<MainFragmentBinding> {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (!InternetUtils.isOnline(requireContext())) {
-            // Show network error
-            getViewBinding().loadingProgress.setVisibility(View.GONE);
-            getViewBinding().networkError.setVisibility(View.VISIBLE);
-        }
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        LoginViewModel loginViewModel = new ViewModelProvider(requireActivity(), viewModelFactory)
+                .get(LoginViewModel.class);
+        loginViewModel.getAuthStatus().observe(getViewLifecycleOwner(), event -> {
+            if (!event.isSuccessful() && !event.isInProgress()) {
+                // Show network error
+                getViewBinding().loadingProgress.setVisibility(View.GONE);
+                getViewBinding().networkError.setVisibility(View.VISIBLE);
+            }
+        });
     }
 }

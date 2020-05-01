@@ -25,6 +25,7 @@ import com.simonesestito.shopsqueue.di.module.SharedPreferencesModule;
 import com.simonesestito.shopsqueue.di.module.ViewModelModule;
 import com.simonesestito.shopsqueue.ui.MainActivity;
 import com.simonesestito.shopsqueue.ui.fragment.LoginFragment;
+import com.simonesestito.shopsqueue.ui.fragment.MainFragment;
 import com.simonesestito.shopsqueue.ui.fragment.OwnerFragment;
 import com.simonesestito.shopsqueue.ui.fragment.SignUpFragment;
 
@@ -38,6 +39,8 @@ import dagger.Component;
 })
 public interface Injector {
     void inject(MainActivity mainActivity);
+
+    void inject(MainFragment mainFragment);
 
     void inject(LoginFragment loginFragment);
 

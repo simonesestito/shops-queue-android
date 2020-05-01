@@ -43,6 +43,7 @@
         android:id="@+id/ownerLatestUserCalled"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="invisible"
         app:constraint_referenced_ids="ownerLatestUserCalledName,ownerLatestUserCalledTitle" />
 
     <TextView

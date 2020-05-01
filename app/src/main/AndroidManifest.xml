@@ -34,7 +34,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         tools:ignore="AllowBackup"
         tools:targetApi="n">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

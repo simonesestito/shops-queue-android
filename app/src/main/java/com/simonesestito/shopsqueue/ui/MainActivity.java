@@ -16,7 +16,7 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue;
+package com.simonesestito.shopsqueue.ui;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,6 +31,8 @@ import androidx.navigation.NavGraph;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
+import com.simonesestito.shopsqueue.R;
+import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.User;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;

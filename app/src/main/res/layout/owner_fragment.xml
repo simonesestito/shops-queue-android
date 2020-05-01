@@ -26,15 +26,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/activity_content_margin">
+        android:orientation="vertical">
 
         <include
             android:id="@+id/ownerCurrentCalledUser"
             layout="@layout/owner_current_called_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/form_element_margin"
             app:layout_constraintTop_toTopOf="parent" />
 
         <include layout="@layout/owner_next_users_queue" />

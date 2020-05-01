@@ -21,6 +21,7 @@
     <style name="Theme.App" parent="Theme.MaterialComponents.DayNight">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/green_500</item>
+        <item name="colorPrimaryVariant">@color/green_100</item>
         <item name="colorOnSecondary">@color/white</item>
         <item name="colorPrimaryDark">@color/green_700</item>
         <item name="colorSecondary">@color/green_500</item>

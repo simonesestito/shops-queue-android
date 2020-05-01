@@ -20,9 +20,12 @@ package com.simonesestito.shopsqueue.api.dto;
 
 import androidx.annotation.Nullable;
 
+import com.simonesestito.shopsqueue.model.Identifiable;
 import com.simonesestito.shopsqueue.model.UserRole;
 
-public class User {
+import java.util.Objects;
+
+public class User implements Identifiable {
     private int id;
     private String name;
     private String surname;
@@ -77,5 +80,18 @@ public class User {
 
     public void setShopId(@Nullable Integer shopId) {
         this.shopId = shopId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return getId() == user.getId() &&
+                getName().equals(user.getName()) &&
+                getSurname().equals(user.getSurname()) &&
+                getEmail().equals(user.getEmail()) &&
+                getRole() == user.getRole() &&
+                Objects.equals(getShopId(), user.getShopId());
     }
 }

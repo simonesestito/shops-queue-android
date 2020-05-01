@@ -18,13 +18,20 @@
 
 package com.simonesestito.shopsqueue.api.dto;
 
+import com.simonesestito.shopsqueue.model.Identifiable;
+
 import java.util.Date;
 
-public class Booking {
+public class Booking implements Identifiable {
     private int bookingId;
     private Date createdAt;
     private User user;
     private Shop shop;
+
+    @Override
+    public int getId() {
+        return getBookingId();
+    }
 
     public int getBookingId() {
         return bookingId;
@@ -56,5 +63,16 @@ public class Booking {
 
     public void setShop(Shop shop) {
         this.shop = shop;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Booking)) return false;
+        Booking booking = (Booking) o;
+        return getBookingId() == booking.getBookingId() &&
+                getCreatedAt().equals(booking.getCreatedAt()) &&
+                getUser().equals(booking.getUser()) &&
+                getShop().equals(booking.getShop());
     }
 }

@@ -18,7 +18,9 @@
 
 package com.simonesestito.shopsqueue.api.dto;
 
-public class Shop {
+import com.simonesestito.shopsqueue.model.Identifiable;
+
+public class Shop implements Identifiable {
     private int id;
     private double longitude;
     private double latitude;
@@ -81,5 +83,19 @@ public class Shop {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Shop)) return false;
+        Shop shop = (Shop) o;
+        return getId() == shop.getId() &&
+                Double.compare(shop.getLongitude(), getLongitude()) == 0 &&
+                Double.compare(shop.getLatitude(), getLatitude()) == 0 &&
+                getCount() == shop.getCount() &&
+                getAddress().equals(shop.getAddress()) &&
+                getName().equals(shop.getName()) &&
+                getCity().equals(shop.getCity());
     }
 }

@@ -16,25 +16,8 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.api.dto;
+package com.simonesestito.shopsqueue.model;
 
-public class ShopWithDistance extends Shop {
-    private double distance; // KMs
-
-    public double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ShopWithDistance)) return false;
-        if (!super.equals(o)) return false;
-        ShopWithDistance that = (ShopWithDistance) o;
-        return Double.compare(that.getDistance(), getDistance()) == 0;
-    }
+public interface Identifiable {
+    int getId();
 }

@@ -16,8 +16,13 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.util;
+package com.simonesestito.shopsqueue.util.functional;
 
-public interface Mapper<T, R> {
-    R map(T t);
+public interface Handler<T> {
+    /**
+     * Handle the data
+     *
+     * @return True if the data has been handled, false otherwise
+     */
+    boolean handle(T data);
 }

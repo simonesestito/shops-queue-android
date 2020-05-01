@@ -16,7 +16,7 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.api;
+package com.simonesestito.shopsqueue.util.functional;
 
 
 /**

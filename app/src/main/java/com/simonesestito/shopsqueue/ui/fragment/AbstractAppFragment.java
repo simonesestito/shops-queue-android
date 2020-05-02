@@ -33,6 +33,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewbinding.ViewBinding;
 
@@ -115,8 +116,8 @@ public abstract class AbstractAppFragment<T extends ViewBinding> extends Fragmen
     @Override
     public void onResume() {
         super.onResume();
-        ConnectivityManager connectivityManager = requireContext()
-                .getSystemService(ConnectivityManager.class);
+        ConnectivityManager connectivityManager = ContextCompat.getSystemService(requireContext(),
+                ConnectivityManager.class);
         if (connectivityManager != null) {
             NetworkRequest networkRequest = new NetworkRequest.Builder()
                     .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
@@ -138,8 +139,8 @@ public abstract class AbstractAppFragment<T extends ViewBinding> extends Fragmen
     @Override
     public void onPause() {
         super.onPause();
-        ConnectivityManager connectivityManager = requireContext()
-                .getSystemService(ConnectivityManager.class);
+        ConnectivityManager connectivityManager = ContextCompat.getSystemService(requireContext(),
+                ConnectivityManager.class);
         if (connectivityManager != null) {
             connectivityManager.unregisterNetworkCallback(callback);
         }

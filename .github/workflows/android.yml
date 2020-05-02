@@ -16,9 +16,19 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Gradle
-      run: bash ./gradlew build
+      run: bash ./gradlew assembleRelease
+    - name: Sign APK
+      uses: r0adkll/sign-android-release@v1
+      with:
+        releaseDirectory: app/build/outputs/apk/release/
+        signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+        alias: ${{ secrets.KEYSTORE_ALIAS }}
+        keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+        keyPassword: ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
+    - name: Rename signed APK
+      run: mv app/build/outputs/apk/release/app-release-unsigned-signed.apk app-release.apk
     - name: Upload APK
       uses: actions/upload-artifact@v2
       with:
         name: app
-        path: app/build/outputs/apk/debug/app-debug.apk
+        path: app-release.apk

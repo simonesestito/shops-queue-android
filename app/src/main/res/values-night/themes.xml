@@ -20,5 +20,7 @@
 
     <style name="Theme.App" parent="Base.Theme.App">
         <item name="colorPrimaryVariant">@color/green_900</item>
+        <item name="colorSurface">@color/dark_gray</item>
+        <item name="android:colorBackground">@color/dark_gray</item>
     </style>
 </resources>

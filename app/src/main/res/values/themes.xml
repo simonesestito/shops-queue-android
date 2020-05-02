@@ -17,9 +17,9 @@
   -->
 
 <resources>
-    <!-- Base application theme. -->
+    <!-- Organize themes following the conventions of AppCompat library -->
+
     <style name="Base.Theme.App" parent="Theme.MaterialComponents.DayNight">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/green_500</item>
         <item name="colorSecondary">@color/green_500</item>
         <item name="colorOnSecondary">@color/white</item>
@@ -29,7 +29,9 @@
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
     </style>
 
-    <style name="Theme.App" parent="Base.Theme.App">
+    <style name="Base.Theme.App.Light">
         <item name="colorPrimaryVariant">@color/green_100</item>
     </style>
+
+    <style name="Theme.App" parent="Base.Theme.App.Light" />
 </resources>

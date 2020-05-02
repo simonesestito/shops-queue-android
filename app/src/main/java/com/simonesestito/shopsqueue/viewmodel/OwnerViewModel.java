@@ -18,89 +18,79 @@
 
 package com.simonesestito.shopsqueue.viewmodel;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.simonesestito.shopsqueue.api.dto.Booking;
 import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.api.service.BookingService;
 import com.simonesestito.shopsqueue.api.service.ShopService;
+import com.simonesestito.shopsqueue.model.ShopOwnerDetails;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
-
-import java.util.Collections;
-import java.util.List;
 
 import javax.inject.Inject;
 
 public class OwnerViewModel extends ViewModel {
     private final ShopService shopService;
     private final BookingService bookingService;
-    private final MutableLiveData<Shop> currentShop = new MutableLiveData<>();
-    private final MutableLiveData<List<Booking>> queue = new MutableLiveData<>();
-    private final LiveResource<Booking> currentUser = new LiveResource<>();
+    // Full data exposed to the UI
+    private final LiveResource<ShopOwnerDetails> shopData = new LiveResource<>();
+    // Cached data, internal in the ViewModel
+    private Shop currentShop;
+    private Booking latestCustomer;
 
     @Inject
     OwnerViewModel(ShopService shopService, BookingService bookingService) {
         this.shopService = shopService;
         this.bookingService = bookingService;
-        init();
+        loadAllData();
     }
 
-    private void init() {
+    public void loadAllData() {
+        shopData.emitLoading();
+
+        // Load shop info
         shopService.getOwnShop()
+                // Then, load bookings
                 .onResult(shop -> {
-                    currentShop.setValue(shop);
+                    currentShop = shop;
                     refreshBookings();
                 })
                 .onError(err -> {
-                    currentShop.setValue(null);
+                    shopData.emitError(err);
                     err.printStackTrace();
                 });
     }
 
     public void refreshBookings() {
-        Shop currentShopSnapshot = currentShop.getValue();
-        if (currentShopSnapshot == null)
+        if (currentShop == null)
             return;
 
-        queue.setValue(null);
-        bookingService.getBookingsByShopId(currentShopSnapshot.getId())
-                .onResult(queue::setValue)
+        shopData.emitLoading();
+        bookingService.getBookingsByShopId(currentShop.getId())
+                .onResult(bookings -> shopData.emitResult(new ShopOwnerDetails(
+                        currentShop, latestCustomer, bookings
+                )))
                 .onError(err -> {
                     err.printStackTrace();
-                    queue.setValue(Collections.emptyList());
+                    shopData.emitError(err);
                 });
     }
 
     public void callNextUser() {
-        Shop currentShopSnapshot = this.currentShop.getValue();
-        if (currentShopSnapshot == null) {
-            throw new IllegalStateException("Calling next user before having retrieved shop info");
-        }
-
-        currentUser.emitLoading();
-        bookingService.callNextUser(currentShopSnapshot.getId())
+        shopData.emitLoading();
+        bookingService.callNextUser(currentShop.getId())
                 .onResult(user -> {
-                    currentUser.emitResult(user);
+                    latestCustomer = user;
                     refreshBookings();
                 })
                 .onError(err -> {
+                    latestCustomer = null;
                     refreshBookings();
                     err.printStackTrace();
-                    currentUser.emitError(err);
                 });
     }
 
-    public LiveData<Shop> getCurrentShop() {
-        return currentShop;
-    }
-
-    public LiveResource<Booking> getCurrentCalledUser() {
-        return currentUser;
-    }
-
-    public LiveData<List<Booking>> getQueue() {
-        return queue;
+    public LiveResource<ShopOwnerDetails> getShopData() {
+        return shopData;
     }
 }

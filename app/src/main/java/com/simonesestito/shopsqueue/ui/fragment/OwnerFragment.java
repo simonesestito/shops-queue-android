@@ -30,10 +30,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.Booking;
-import com.simonesestito.shopsqueue.api.dto.Shop;
-import com.simonesestito.shopsqueue.databinding.OwnerCurrentCalledUserBinding;
 import com.simonesestito.shopsqueue.databinding.OwnerFragmentBinding;
 import com.simonesestito.shopsqueue.databinding.OwnerNextUsersQueueBinding;
+import com.simonesestito.shopsqueue.model.ShopOwnerDetails;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.OwnerBookingsAdapter;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
@@ -73,7 +72,6 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
                 .setOnRefreshListener(() -> ownerViewModel.refreshBookings());
 
         queueBinding.ownerNextUsers.setAdapter(new OwnerBookingsAdapter());
-        getViewBinding().ownerQueueRefreshLayout.setRefreshing(true);
     }
 
     @Override
@@ -81,34 +79,19 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
         super.onActivityCreated(savedInstanceState);
         ownerViewModel = new ViewModelProvider(this, viewModelFactory).get(OwnerViewModel.class);
 
-        ownerViewModel.getCurrentShop().observe(getViewLifecycleOwner(), shop -> {
-            if (shop == null) {
-                showShopError();
-            } else {
-                updateShopInfo(shop);
-            }
-        });
-
-        ownerViewModel.getCurrentCalledUser().observe(getViewLifecycleOwner(), event -> {
+        ownerViewModel.getShopData().observe(getViewLifecycleOwner(), event -> {
             if (event.isInProgress()) {
-                getViewBinding().ownerQueueRefreshLayout.setRefreshing(true);
-                getViewBinding().ownerCallNextUser.setEnabled(false);
-                getViewBinding().ownerCurrentCalledUser.ownerLatestUserCalled.setVisibility(View.INVISIBLE);
-            } else if (!event.isSuccessful()) {
-                ErrorDialog.newInstance(getString(R.string.error_network_offline))
-                        .show(getChildFragmentManager(), null);
-                onOffline();
-                event.handle();
+                onProgress();
+            } else if (event.isSuccessful()) {
+                onData(Objects.requireNonNull(event.getData()));
+            } else {
+                getViewBinding().ownerQueueRefreshLayout.setRefreshing(false);
+                if (!event.hasBeenHandled()) {
+                    ErrorDialog.newInstance(getString(R.string.error_network_offline))
+                            .show(getChildFragmentManager(), null);
+                }
             }
-
-            onNewBooking(event.getData());
         });
-
-        ownerViewModel.getQueue()
-                .observe(getViewLifecycleOwner(), queue -> {
-                    if (queue != null)
-                        onNewQueue(queue);
-                });
     }
 
     @Override
@@ -123,48 +106,37 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
         ownerViewModel.refreshBookings();
     }
 
-    private void onNewQueue(List<Booking> bookings) {
+    private void onProgress() {
+        getViewBinding().ownerQueueRefreshLayout.setRefreshing(true);
+        getViewBinding().ownerCallNextUser.setEnabled(false);
+        getViewBinding().ownerShopError.setVisibility(View.GONE);
+        queueBinding.ownerNextUsersEmpty.setVisibility(View.GONE);
+    }
+
+    private void onData(ShopOwnerDetails data) {
         getViewBinding().ownerCallNextUser.setEnabled(true);
         getViewBinding().ownerQueueRefreshLayout.setRefreshing(false);
+        requireActivity().setTitle(data.getShop().getName());
 
-        OwnerBookingsAdapter adapter = (OwnerBookingsAdapter)
-                Objects.requireNonNull(queueBinding.ownerNextUsers.getAdapter());
-        adapter.updateDataSet(bookings);
+        Booking booking = data.getCurrentUser();
+        if (booking == null) {
+            getViewBinding().ownerCurrentCalledUser.ownerLatestUserCalled.setVisibility(View.INVISIBLE);
+            getViewBinding().ownerCurrentCalledUser.ownerNoLatestUserMessage.setVisibility(View.VISIBLE);
+        } else {
+            getViewBinding().ownerCurrentCalledUser.ownerLatestUserCalled.setVisibility(View.VISIBLE);
+            getViewBinding().ownerCurrentCalledUser.ownerNoLatestUserMessage.setVisibility(View.GONE);
+            getViewBinding().ownerCurrentCalledUser.ownerLatestUserCalledName
+                    .setText(booking.getUser().getName());
+        }
 
-        if (bookings.isEmpty()) {
-            queueBinding.ownerNextUsers.setVisibility(View.GONE);
+        List<Booking> queue = data.getQueue();
+        if (queue.isEmpty()) {
             queueBinding.ownerNextUsersEmpty.setVisibility(View.VISIBLE);
         } else {
-            queueBinding.ownerNextUsers.setVisibility(View.VISIBLE);
             queueBinding.ownerNextUsersEmpty.setVisibility(View.GONE);
         }
-    }
-
-    private void updateShopInfo(Shop shop) {
-        hideShopError();
-        requireActivity().setTitle(shop.getName());
-    }
-
-    private void showShopError() {
-        getViewBinding().ownerLayoutGroup.setVisibility(View.INVISIBLE);
-        getViewBinding().ownerShopError.setVisibility(View.VISIBLE);
-    }
-
-    private void hideShopError() {
-        getViewBinding().ownerLayoutGroup.setVisibility(View.VISIBLE);
-        getViewBinding().ownerShopError.setVisibility(View.INVISIBLE);
-    }
-
-    private void onNewBooking(@Nullable Booking booking) {
-        OwnerCurrentCalledUserBinding calledUserView = getViewBinding().ownerCurrentCalledUser;
-        if (booking == null) {
-            calledUserView.ownerLatestUserCalled.setVisibility(View.INVISIBLE);
-            calledUserView.ownerNoLatestUserMessage.setVisibility(View.VISIBLE);
-        } else {
-            calledUserView.ownerLatestUserCalled.setVisibility(View.VISIBLE);
-            calledUserView.ownerNoLatestUserMessage.setVisibility(View.GONE);
-
-            calledUserView.ownerLatestUserCalledName.setText(booking.getUser().getName());
-        }
+        OwnerBookingsAdapter adapter = (OwnerBookingsAdapter) queueBinding.ownerNextUsers.getAdapter();
+        Objects.requireNonNull(adapter);
+        adapter.updateDataSet(queue);
     }
 }

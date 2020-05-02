@@ -39,7 +39,8 @@ public interface ShopService {
     @GET("/shops/nearby")
     ApiResponse<Page<ShopWithDistance>> getShopsNearby(@Query("page") int page,
                                                        @Query("lat") double latitude,
-                                                       @Query("lon") double longitude);
+                                                       @Query("lon") double longitude,
+                                                       @Query("query") String name);
 
     @GET("/shops/me")
     ApiResponse<Shop> getOwnShop();
@@ -54,5 +55,5 @@ public interface ShopService {
     ApiResponse<Void> deleteShop(@Path("id") int id);
 
     @GET("/shops")
-    ApiResponse<Page<Shop>> getAllShops(@Query("page") int page);
+    ApiResponse<Page<Shop>> getAllShops(@Query("page") int page, @Query("query") String name);
 }

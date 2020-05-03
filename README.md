@@ -1,6 +1,6 @@
 # Shops Queue (Android app)
 
-![Android CI](https://github.com/simonesestito/shops-queue-android/workflows/Android%20CI/badge.svg)
+[![Android CI](https://github.com/simonesestito/shops-queue-android/workflows/Android%20CI/badge.svg)](https://github.com/simonesestito/shops-queue-android/actions?query=workflow%3A%22Android+CI%22)
 
 This repository is part of the **Shops Queue** project.
 

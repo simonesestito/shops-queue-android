@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.simonesestito.shopsqueue.di.annotation.ViewModelKey;
+import com.simonesestito.shopsqueue.viewmodel.AdminUsersViewModel;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
@@ -44,4 +45,9 @@ public interface ViewModelModule {
     @IntoMap
     @ViewModelKey(OwnerViewModel.class)
     ViewModel bindOwnerViewModel(OwnerViewModel ownerViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AdminUsersViewModel.class)
+    ViewModel bindAdminUserViewModel(AdminUsersViewModel adminUsersViewModel);
 }

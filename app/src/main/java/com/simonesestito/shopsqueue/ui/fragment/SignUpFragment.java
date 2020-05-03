@@ -64,7 +64,7 @@ public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
             enableSignUp();
             if (event.isSuccessful()) {
                 triggerAutofill();
-            } else if (event.isInProgress()) {
+            } else if (event.isLoading()) {
                 disableSignUp();
             } else if (event.getError() != null && !event.hasBeenHandled()) {
                 handleError(event);

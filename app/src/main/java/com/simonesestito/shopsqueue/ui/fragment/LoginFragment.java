@@ -64,7 +64,7 @@ public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
             enableLogin();
             if (event.isSuccessful()) {
                 triggerAutofill();
-            } else if (event.isInProgress()) {
+            } else if (event.isLoading()) {
                 disableLogin();
             } else if (event.getError() != null && !event.hasBeenHandled()) {
                 handleError(event);

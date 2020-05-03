@@ -57,7 +57,7 @@ public class MainFragment extends AbstractAppFragment<MainFragmentBinding> {
         LoginViewModel loginViewModel = new ViewModelProvider(requireActivity(), viewModelFactory)
                 .get(LoginViewModel.class);
         loginViewModel.getAuthStatus().observe(getViewLifecycleOwner(), event -> {
-            if (!event.isSuccessful() && !event.isInProgress()) {
+            if (!event.isSuccessful() && !event.isLoading()) {
                 // Show network error
                 getViewBinding().loadingProgress.setVisibility(View.GONE);
                 getViewBinding().networkError.setVisibility(View.VISIBLE);

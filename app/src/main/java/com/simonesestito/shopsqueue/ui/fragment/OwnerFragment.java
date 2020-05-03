@@ -87,7 +87,7 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
         ownerViewModel = new ViewModelProvider(this, viewModelFactory).get(OwnerViewModel.class);
 
         ownerViewModel.getShopData().observe(getViewLifecycleOwner(), event -> {
-            if (event.isInProgress()) {
+            if (event.isLoading()) {
                 onProgress();
             } else if (event.isSuccessful()) {
                 onData(Objects.requireNonNull(event.getData()));

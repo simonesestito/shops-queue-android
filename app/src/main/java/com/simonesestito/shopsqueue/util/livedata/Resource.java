@@ -23,7 +23,7 @@ import androidx.annotation.Nullable;
 public class Resource<T> {
     private boolean handled;
     private boolean isSuccessful;
-    private boolean isInProgress;
+    private boolean isLoading;
     @Nullable private T data;
     @Nullable private Throwable error;
 
@@ -45,7 +45,7 @@ public class Resource<T> {
 
     public static <T> Resource<T> loading() {
         Resource<T> resource = new Resource<>();
-        resource.isInProgress = true;
+        resource.isLoading = true;
         return resource;
     }
 
@@ -61,8 +61,12 @@ public class Resource<T> {
         return isSuccessful;
     }
 
-    public boolean isInProgress() {
-        return isInProgress;
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    public boolean isFailed() {
+        return !isSuccessful && !isLoading;
     }
 
     @Nullable

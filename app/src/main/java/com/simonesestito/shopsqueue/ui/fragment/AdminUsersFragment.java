@@ -18,16 +18,63 @@
 
 package com.simonesestito.shopsqueue.ui.fragment;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.simonesestito.shopsqueue.R;
+import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.databinding.AdminUsersFragmentBinding;
+import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
+import com.simonesestito.shopsqueue.viewmodel.AdminUsersViewModel;
+import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
+
+import javax.inject.Inject;
 
 public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBinding> {
+    @Inject ViewModelFactory viewModelFactory;
+    private AdminUsersViewModel adminUsersViewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ShopsQueueApplication.getInjector().inject(this);
+    }
+
     @Override
     protected AdminUsersFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return AdminUsersFragmentBinding.inflate(layoutInflater, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // TODO
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        adminUsersViewModel = new ViewModelProvider(this, viewModelFactory)
+                .get(AdminUsersViewModel.class);
+
+        adminUsersViewModel.getUsers().observe(getViewLifecycleOwner(), event -> {
+            getViewBinding().adminUsersRefresh.setRefreshing(event.isLoading());
+
+            if (event.isFailed() && !event.hasBeenHandled()) {
+                event.handle();
+                ErrorDialog.newInstance(getString(R.string.error_network_offline))
+                        .show(getChildFragmentManager(), null);
+            }
+
+            if (event.isSuccessful()) {
+                // TODO
+            }
+        });
     }
 }

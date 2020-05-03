@@ -57,6 +57,10 @@ public class User implements Identifiable {
         this.surname = surname;
     }
 
+    public String getFullName() {
+        return name + " " + surname;
+    }
+
     public String getEmail() {
         return email;
     }

@@ -41,7 +41,7 @@ public class AdminUsersAdapter extends DiffUtilAdapter<User, AdminUsersAdapter.V
     @Override
     public void onBindViewHolder(@NonNull AdminUsersAdapter.ViewHolder holder, int position) {
         User user = getItemAt(position);
-        holder.view.userItemName.setText(user.getName());
+        holder.view.userItemName.setText(user.getFullName());
         holder.view.userItemEmail.setText(user.getEmail());
 
         @DrawableRes int roleIcon;

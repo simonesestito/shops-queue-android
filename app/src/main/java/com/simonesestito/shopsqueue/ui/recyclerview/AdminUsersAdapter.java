@@ -47,7 +47,7 @@ public class AdminUsersAdapter extends DiffUtilAdapter<User, AdminUsersAdapter.V
         @DrawableRes int roleIcon;
         switch (user.getRole()) {
             case USER:
-                roleIcon = R.drawable.ic_person_add_black_24dp;
+                roleIcon = R.drawable.ic_person_black_24dp;
                 break;
             case ADMIN:
                 roleIcon = R.drawable.ic_work_black_24dp;

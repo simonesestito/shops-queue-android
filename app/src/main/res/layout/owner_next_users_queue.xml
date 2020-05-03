@@ -29,6 +29,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ownerCurrentCalledUser" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/ownerCancelAll"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/activity_content_margin"
+        android:text="@string/bookings_cancel_all"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ownerNextUsersTitle" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ownerNextUsers"
         android:layout_width="match_parent"
@@ -36,7 +46,7 @@
         android:clipToPadding="true"
         android:padding="@dimen/form_element_margin"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/ownerNextUsersTitle" />
+        app:layout_constraintTop_toBottomOf="@id/ownerCancelAll" />
 
     <TextView
         android:id="@+id/ownerNextUsersEmpty"

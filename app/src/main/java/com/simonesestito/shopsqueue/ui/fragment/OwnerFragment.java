@@ -18,6 +18,8 @@
 
 package com.simonesestito.shopsqueue.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +35,7 @@ import com.simonesestito.shopsqueue.api.dto.Booking;
 import com.simonesestito.shopsqueue.databinding.OwnerFragmentBinding;
 import com.simonesestito.shopsqueue.databinding.OwnerNextUsersQueueBinding;
 import com.simonesestito.shopsqueue.model.ShopOwnerDetails;
+import com.simonesestito.shopsqueue.ui.dialog.ConfirmDialog;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.OwnerBookingsAdapter;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
@@ -44,6 +47,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
+    private static final int REQUEST_CANCEL_ALL = 1;
     @Inject ViewModelFactory viewModelFactory;
     private OwnerViewModel ownerViewModel;
     private OwnerNextUsersQueueBinding queueBinding;
@@ -72,6 +76,9 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
                 .setOnRefreshListener(() -> ownerViewModel.refreshBookings());
 
         queueBinding.ownerNextUsers.setAdapter(new OwnerBookingsAdapter());
+        queueBinding.ownerCancelAll.setOnClickListener(v ->
+                ConfirmDialog.showForResult(this, REQUEST_CANCEL_ALL,
+                        getString(R.string.owner_cancel_all_message)));
     }
 
     @Override
@@ -92,6 +99,13 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
                 }
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CANCEL_ALL && resultCode == Activity.RESULT_OK)
+            ownerViewModel.cancelAllBookings();
     }
 
     @Override

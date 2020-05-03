@@ -90,6 +90,18 @@ public class OwnerViewModel extends ViewModel {
                 });
     }
 
+    public void cancelAllBookings() {
+        shopData.emitLoading();
+        bookingService.deleteBookingsByShop(currentShop.getId())
+                .onResult(v -> {
+                    refreshBookings();
+                })
+                .onError(err -> {
+                    refreshBookings();
+                    err.printStackTrace();
+                });
+    }
+
     public LiveResource<ShopOwnerDetails> getShopData() {
         return shopData;
     }

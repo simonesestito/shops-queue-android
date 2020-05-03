@@ -18,7 +18,12 @@
 
 package com.simonesestito.shopsqueue.util;
 
+import android.content.Context;
+
 import androidx.annotation.StringRes;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -34,5 +39,22 @@ public class ViewUtils {
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             tab.setText(tabLayout.getContext().getString(tabs[position]));
         }).attach();
+    }
+
+    /**
+     * Add a divider between items of a RecyclerView.
+     * It must use {@link androidx.recyclerview.widget.LinearLayoutManager}
+     */
+    public static void addDivider(RecyclerView recyclerView) {
+        Context context = recyclerView.getContext();
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (!(layoutManager instanceof LinearLayoutManager)) {
+            return;
+        }
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+        int orientation = linearLayoutManager.getOrientation();
+
+        DividerItemDecoration decoration = new DividerItemDecoration(context, orientation);
+        recyclerView.addItemDecoration(decoration);
     }
 }

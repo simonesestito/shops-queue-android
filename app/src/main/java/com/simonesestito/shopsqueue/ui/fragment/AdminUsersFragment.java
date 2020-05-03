@@ -32,6 +32,7 @@ import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.databinding.AdminUsersFragmentBinding;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.AdminUsersAdapter;
+import com.simonesestito.shopsqueue.util.ViewUtils;
 import com.simonesestito.shopsqueue.viewmodel.AdminUsersViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -58,6 +59,7 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         AdminUsersAdapter adapter = new AdminUsersAdapter();
+        ViewUtils.addDivider(getViewBinding().adminUsersList);
         getViewBinding().adminUsersList.setAdapter(adapter);
         getViewBinding().adminUsersRefresh
                 .setOnRefreshListener(() -> viewModel.refreshUsers());

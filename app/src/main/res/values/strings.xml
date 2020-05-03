@@ -50,4 +50,6 @@
     <string name="confirm_no_button">No</string>
     <string name="confirm_yes_button">Yes</string>
     <string name="owner_cancel_all_message">All the bookings will be cancelled</string>
+    <string name="admin_tab_users">Users</string>
+    <string name="admin_tab_shops">Shops</string>
 </resources>

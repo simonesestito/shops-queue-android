@@ -18,16 +18,33 @@
 
 package com.simonesestito.shopsqueue.ui.fragment;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.databinding.AdminFragmentBinding;
+import com.simonesestito.shopsqueue.ui.viewpager.AdminTabsAdapter;
+import com.simonesestito.shopsqueue.util.ViewUtils;
 
 public class AdminFragment extends AbstractAppFragment<AdminFragmentBinding> {
     @Override
     protected AdminFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return AdminFragmentBinding.inflate(layoutInflater, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getViewBinding().adminViewPager.setAdapter(new AdminTabsAdapter(this));
+        ViewUtils.setupTabsWithViewPager(
+                getViewBinding().adminTabs,
+                getViewBinding().adminViewPager,
+                new int[]{R.string.admin_tab_users, R.string.admin_tab_shops}
+        );
     }
 }

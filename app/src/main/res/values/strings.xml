@@ -45,4 +45,9 @@
     <string name="booking_item_created_at_date">In queue since %s</string>
     <string name="owner_next_users_empty_view">There isn\'t any user in the queue.\nYou can try to refresh this page.</string>
     <string name="owner_next_users_title">Next customers in the queue:</string>
+    <string name="bookings_cancel_all">Cancel all</string>
+    <string name="confirm_dialog_title">Are you sure?</string>
+    <string name="confirm_no_button">No</string>
+    <string name="confirm_yes_button">Yes</string>
+    <string name="owner_cancel_all_message">All the bookings will be cancelled</string>
 </resources>

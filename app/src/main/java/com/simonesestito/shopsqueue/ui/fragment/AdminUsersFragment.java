@@ -31,14 +31,17 @@ import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.databinding.AdminUsersFragmentBinding;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
+import com.simonesestito.shopsqueue.ui.recyclerview.AdminUsersAdapter;
 import com.simonesestito.shopsqueue.viewmodel.AdminUsersViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
 public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBinding> {
     @Inject ViewModelFactory viewModelFactory;
-    private AdminUsersViewModel adminUsersViewModel;
+    private AdminUsersViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,26 +57,28 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // TODO
+        AdminUsersAdapter adapter = new AdminUsersAdapter();
+        getViewBinding().adminUsersList.setAdapter(adapter);
+        getViewBinding().adminUsersRefresh
+                .setOnRefreshListener(() -> viewModel.refreshUsers());
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        adminUsersViewModel = new ViewModelProvider(this, viewModelFactory)
+        viewModel = new ViewModelProvider(this, viewModelFactory)
                 .get(AdminUsersViewModel.class);
 
-        adminUsersViewModel.getUsers().observe(getViewLifecycleOwner(), event -> {
+        viewModel.getUsers().observe(getViewLifecycleOwner(), event -> {
             getViewBinding().adminUsersRefresh.setRefreshing(event.isLoading());
 
             if (event.isFailed() && !event.hasBeenHandled()) {
                 event.handle();
                 ErrorDialog.newInstance(getString(R.string.error_network_offline))
                         .show(getChildFragmentManager(), null);
-            }
-
-            if (event.isSuccessful()) {
-                // TODO
+            } else if (event.isSuccessful()) {
+                AdminUsersAdapter adapter = (AdminUsersAdapter) getViewBinding().adminUsersList.getAdapter();
+                Objects.requireNonNull(adapter).updateDataSet(event.getData());
             }
         });
     }

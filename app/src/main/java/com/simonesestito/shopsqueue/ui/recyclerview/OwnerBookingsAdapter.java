@@ -57,10 +57,10 @@ public class OwnerBookingsAdapter extends DiffUtilAdapter<Booking, OwnerBookings
         view.bookingItemDate.setText(displayTime);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         private final OwnerBookingItemBinding ownerBookingItemBinding;
 
-        public ViewHolder(OwnerBookingItemBinding ownerBookingItemBinding) {
+        ViewHolder(OwnerBookingItemBinding ownerBookingItemBinding) {
             super(ownerBookingItemBinding.getRoot());
             this.ownerBookingItemBinding = ownerBookingItemBinding;
         }

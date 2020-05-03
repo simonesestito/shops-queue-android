@@ -26,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.simonesestito.shopsqueue.model.Identifiable;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -63,5 +65,10 @@ public abstract class DiffUtilAdapter<T extends Identifiable, VH extends Recycle
     @MainThread
     public void updateDataSet(List<T> newList) {
         listDiffer.submitList(newList);
+    }
+
+    @MainThread
+    public void updateDataSet(Collection<T> newList) {
+        this.updateDataSet(new ArrayList<>(newList));
     }
 }

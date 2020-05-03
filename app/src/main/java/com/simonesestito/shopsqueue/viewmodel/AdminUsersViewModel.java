@@ -18,6 +18,8 @@
 
 package com.simonesestito.shopsqueue.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -39,17 +41,19 @@ public class AdminUsersViewModel extends ViewModel {
     private Set<User> lastUsers = new LinkedHashSet<>();
 
     @Inject
-    public AdminUsersViewModel(UserService userService) {
+    AdminUsersViewModel(UserService userService) {
         this.userService = userService;
-        init();
+        refreshUsers();
     }
 
-    private void init() {
+    public void refreshUsers() {
         users.emitLoading();
         int nextPage = lastPage == null ? 0 : lastPage.getPage() + 1;
         userService.listUsers(nextPage, "")
                 .onResult(newPage -> {
                     lastPage = newPage;
+                    Log.wtf("Adapter", newPage.getData().size() + "");
+                    Log.wtf("Adapter", "" + newPage.getTotalItems());
                     lastUsers.addAll(newPage.getData());
                     users.emitResult(lastUsers);
                 })

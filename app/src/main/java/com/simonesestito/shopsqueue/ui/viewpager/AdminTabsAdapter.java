@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.simonesestito.shopsqueue.ui.fragment.AbstractAppFragment;
 import com.simonesestito.shopsqueue.ui.fragment.AdminShopsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.AdminUsersFragment;
 
@@ -33,14 +34,23 @@ public class AdminTabsAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
+        AbstractAppFragment fragment;
         switch (position) {
             case 0:
-                return new AdminUsersFragment();
+                fragment = new AdminUsersFragment();
+                break;
             case 1:
-                return new AdminShopsFragment();
+                fragment = new AdminShopsFragment();
+                break;
             default:
                 throw new IllegalArgumentException("Unknown index: " + position);
         }
+
+        // They are below tabs, so the container's appbar
+        // // must have elevation equal to zero
+        fragment.requestUnelevatedAppbar();
+
+        return fragment;
     }
 
     @Override

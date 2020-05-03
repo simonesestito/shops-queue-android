@@ -33,6 +33,12 @@ import com.simonesestito.shopsqueue.util.ViewUtils;
 
 public class AdminFragment extends AbstractAppFragment<AdminFragmentBinding> {
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestUnelevatedAppbar();
+    }
+
+    @Override
     protected AdminFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return AdminFragmentBinding.inflate(layoutInflater, container, false);
     }

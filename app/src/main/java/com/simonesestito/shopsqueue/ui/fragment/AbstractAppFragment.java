@@ -37,7 +37,10 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewbinding.ViewBinding;
 
+import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.util.InternetUtils;
+
+import java.util.Objects;
 
 /**
  * Base class for app fragments
@@ -46,6 +49,7 @@ import com.simonesestito.shopsqueue.util.InternetUtils;
 public abstract class AbstractAppFragment<T extends ViewBinding> extends Fragment {
     private static final String LATEST_INTERNET_CHECK = "internet_check";
     private boolean isAppbarHidden = false;
+    private boolean isAppbarElevated = true;
     private ConnectivityManager.NetworkCallback callback;
     private Handler uiThread = new Handler(Looper.getMainLooper());
     private boolean latestInternetCheck = true;
@@ -56,6 +60,10 @@ public abstract class AbstractAppFragment<T extends ViewBinding> extends Fragmen
     @SuppressWarnings("WeakerAccess")
     protected void requestToHideAppbar() {
         isAppbarHidden = true;
+    }
+
+    public void requestUnelevatedAppbar() {
+        isAppbarElevated = false;
     }
 
     @Override
@@ -100,16 +108,23 @@ public abstract class AbstractAppFragment<T extends ViewBinding> extends Fragmen
             latestInternetCheck = savedInstanceState.getBoolean(LATEST_INTERNET_CHECK, true);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public void onStart() {
         super.onStart();
         AppCompatActivity activity = (AppCompatActivity) requireActivity();
         ActionBar actionBar = activity.getSupportActionBar();
+        Objects.requireNonNull(actionBar);
+
         if (isAppbarHidden) {
             actionBar.hide();
         } else {
             actionBar.show();
+        }
+
+        if (isAppbarElevated) {
+            actionBar.setElevation(activity.getResources().getDimension(R.dimen.default_appbar_elevation));
+        } else {
+            actionBar.setElevation(0f);
         }
     }
 

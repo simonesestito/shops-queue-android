@@ -23,6 +23,7 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/adminTabs"
+        android:elevation="@dimen/default_appbar_elevation"
         style="@style/Widget.MaterialComponents.TabLayout.PrimarySurface"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

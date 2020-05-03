@@ -92,10 +92,12 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void logout() {
-        this.authStatus.emitResult(null);
         this.loginService.logout()
-                .onResult(aVoid -> this.sharedPreferencesStore.setAccessToken(null))
+                .onResult(v -> {
+                })
                 .onError(Throwable::printStackTrace);
+        this.sharedPreferencesStore.setAccessToken(null);
+        this.authStatus.emitResult(null);
     }
 
     public LiveResource<User> getAuthStatus() {

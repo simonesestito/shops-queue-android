@@ -43,4 +43,7 @@ public interface BookingService {
 
     @POST("/shops/{shopId}/bookings/next")
     ApiResponse<Booking> callNextUser(@Path("shopId") int shopId);
+
+    @DELETE("/shops/{shopId}/bookings")
+    ApiResponse<Void> deleteBookingsByShop(@Path("shopId") int shopId);
 }

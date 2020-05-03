@@ -41,7 +41,9 @@
     <string name="owner_no_user_called">No user has been called</string>
     <string name="owner_call_next_user">Call next customer</string>
     <string name="error_fetch_shop_info">An error occurred fetching the current shop</string>
-    <string name="owner_fragment_title">Shop\'s Owner</string>
+    <string name="user_fragment_title">@string/app_name</string>
+    <string name="owner_fragment_title">Shop Owner</string>
+    <string name="admin_fragment_title">Administration panel</string>
     <string name="booking_item_created_at_date">In queue since %s</string>
     <string name="owner_next_users_empty_view">There isn\'t any user in the queue.\nYou can try to refresh this page.</string>
     <string name="owner_next_users_title">Next customers in the queue:</string>

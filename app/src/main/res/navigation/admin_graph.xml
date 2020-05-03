@@ -24,7 +24,7 @@
     <fragment
         android:id="@+id/adminFragment"
         android:name="com.simonesestito.shopsqueue.ui.fragment.AdminFragment"
-        android:label="AdminFragment"
+        android:label="@string/admin_fragment_title"
         tools:layout="@layout/admin_fragment" />
 
 </navigation>

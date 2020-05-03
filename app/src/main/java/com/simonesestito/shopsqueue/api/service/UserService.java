@@ -22,11 +22,13 @@ import com.simonesestito.shopsqueue.api.ApiResponse;
 import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.api.dto.Page;
 import com.simonesestito.shopsqueue.api.dto.User;
+import com.simonesestito.shopsqueue.api.dto.UserUpdate;
 
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -47,4 +49,8 @@ public interface UserService {
     @GET("/users")
     ApiResponse<Page<User>> listOwners(@Query("page") int page,
                                        @Query("shopId") int shopId);
+
+    @PUT("/users/{id}")
+    ApiResponse<User> updateUser(@Path("id") String id,
+                                 @Body UserUpdate update);
 }

@@ -76,7 +76,7 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBi
             }
         });
         adapter.setItemClickListener(user ->
-                NavUtils.navigate(this, AdminFragmentDirections.adminEditUser(user.getId())));
+                NavUtils.navigate(this, AdminFragmentDirections.adminEditUser().setUserId(user.getId())));
         getViewBinding().adminUsersList.setAdapter(adapter);
         ViewUtils.addDivider(getViewBinding().adminUsersList);
 
@@ -84,7 +84,7 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBi
                 .setOnRefreshListener(() -> viewModel.refreshUsers());
 
         getViewBinding().adminUsersAdd.setOnClickListener(v ->
-                NavUtils.navigate(this, AdminFragmentDirections.adminCreateNewUser()));
+                NavUtils.navigate(this, AdminFragmentDirections.adminEditUser()));
     }
 
     @Override
@@ -120,5 +120,11 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBi
                 viewModel.deleteUser(userId);
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.refreshUsers();
     }
 }

@@ -20,8 +20,9 @@ package com.simonesestito.shopsqueue.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 
+import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.api.dto.Shop;
-import com.simonesestito.shopsqueue.api.dto.User;
+import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.api.dto.UserUpdate;
 import com.simonesestito.shopsqueue.api.service.UserService;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
@@ -29,7 +30,7 @@ import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 import javax.inject.Inject;
 
 public class AdminUserEditViewModel extends ViewModel {
-    private final LiveResource<User> liveUser = new LiveResource<>();
+    private final LiveResource<UserDetails> liveUser = new LiveResource<>();
     private final UserService userService;
     public Shop pickedShop;
 
@@ -58,11 +59,18 @@ public class AdminUserEditViewModel extends ViewModel {
     public void updateUser(int liveUserId, UserUpdate liveUserUpdate) {
         liveUser.emitLoading();
         userService.updateUser(liveUserId, liveUserUpdate)
-                .onResult(liveUser::emitResult)
+                .onResult(user -> liveUser.emitResult(null))
                 .onError(liveUser::emitError);
     }
 
-    public LiveResource<User> getLiveUser() {
+    public void saveNewUser(NewUser newUser) {
+        liveUser.emitLoading();
+        userService.addNewUser(newUser)
+                .onResult(user -> liveUser.emitResult(null))
+                .onError(liveUser::emitError);
+    }
+
+    public LiveResource<UserDetails> getLiveUser() {
         return liveUser;
     }
 

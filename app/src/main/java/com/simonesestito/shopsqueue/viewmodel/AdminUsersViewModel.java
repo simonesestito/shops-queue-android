@@ -22,7 +22,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.simonesestito.shopsqueue.api.dto.Page;
-import com.simonesestito.shopsqueue.api.dto.User;
+import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.api.service.UserService;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 import com.simonesestito.shopsqueue.util.livedata.Resource;
@@ -34,9 +34,9 @@ import javax.inject.Inject;
 
 public class AdminUsersViewModel extends ViewModel {
     private final UserService userService;
-    private final LiveResource<Set<User>> users = new LiveResource<>();
-    private Page<User> lastPage;
-    private Set<User> lastUsers = new LinkedHashSet<>();
+    private final LiveResource<Set<UserDetails>> users = new LiveResource<>();
+    private Page<UserDetails> lastPage;
+    private Set<UserDetails> lastUsers = new LinkedHashSet<>();
 
     @Inject
     AdminUsersViewModel(UserService userService) {
@@ -45,6 +45,9 @@ public class AdminUsersViewModel extends ViewModel {
     }
 
     public void refreshUsers() {
+        if (users.getValue() != null && users.getValue().isLoading())
+            return;
+
         users.emitLoading();
         userService.listUsers(0)
                 .onResult(newPage -> {
@@ -90,7 +93,7 @@ public class AdminUsersViewModel extends ViewModel {
                 });
     }
 
-    public LiveData<Resource<Set<User>>> getUsers() {
+    public LiveData<Resource<Set<UserDetails>>> getUsers() {
         return users;
     }
 }

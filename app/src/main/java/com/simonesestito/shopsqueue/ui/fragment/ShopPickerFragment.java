@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.simonesestito.shopsqueue.R;
@@ -61,11 +62,15 @@ public class ShopPickerFragment extends AbstractAppFragment<ShopPickerBinding> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         AdminShopsAdapter adapter = new AdminShopsAdapter();
-        adapter.setItemClickListener(shop ->
-                NavHostFragment.findNavController(this)
-                        .getPreviousBackStackEntry()
-                        .getSavedStateHandle()
-                        .set(PICKED_SHOP_KEY, shop));
+        adapter.setItemClickListener(shop -> {
+            NavBackStackEntry backStackEntry = NavHostFragment
+                    .findNavController(this)
+                    .getPreviousBackStackEntry();
+            Objects.requireNonNull(backStackEntry)
+                    .getSavedStateHandle()
+                    .set(PICKED_SHOP_KEY, shop);
+            requireActivity().onBackPressed();
+        });
         getViewBinding().adminShopsList.setAdapter(adapter);
 
         ViewUtils.addDivider(getViewBinding().adminShopsList);

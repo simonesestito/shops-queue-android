@@ -18,9 +18,23 @@
 
 package com.simonesestito.shopsqueue.api.dto;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.simonesestito.shopsqueue.model.Identifiable;
 
-public class Shop implements Identifiable {
+public class Shop implements Identifiable, Parcelable {
+    public static final Creator<Shop> CREATOR = new Creator<Shop>() {
+        @Override
+        public Shop createFromParcel(Parcel in) {
+            return new Shop(in);
+        }
+
+        @Override
+        public Shop[] newArray(int size) {
+            return new Shop[size];
+        }
+    };
     private int id;
     private double longitude;
     private double latitude;
@@ -28,6 +42,19 @@ public class Shop implements Identifiable {
     private String name;
     private String city;
     private int count; // Queue length
+
+    public Shop() {
+    }
+
+    protected Shop(Parcel in) {
+        id = in.readInt();
+        longitude = in.readDouble();
+        latitude = in.readDouble();
+        address = in.readString();
+        name = in.readString();
+        city = in.readString();
+        count = in.readInt();
+    }
 
     public int getId() {
         return id;
@@ -37,6 +64,7 @@ public class Shop implements Identifiable {
         this.id = id;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public double getLongitude() {
         return longitude;
     }
@@ -45,6 +73,7 @@ public class Shop implements Identifiable {
         this.longitude = longitude;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public double getLatitude() {
         return latitude;
     }
@@ -69,6 +98,7 @@ public class Shop implements Identifiable {
         this.name = name;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public String getCity() {
         return city;
     }
@@ -97,5 +127,21 @@ public class Shop implements Identifiable {
                 getAddress().equals(shop.getAddress()) &&
                 getName().equals(shop.getName()) &&
                 getCity().equals(shop.getCity());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeDouble(longitude);
+        dest.writeDouble(latitude);
+        dest.writeString(address);
+        dest.writeString(name);
+        dest.writeString(city);
+        dest.writeInt(count);
     }
 }

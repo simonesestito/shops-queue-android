@@ -29,10 +29,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.api.dto.User;
+import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.databinding.AdminUsersItemBinding;
 
 
-public class AdminUsersAdapter extends DiffUtilAdapter<User, AdminUsersAdapter.ViewHolder> {
+public class AdminUsersAdapter extends DiffUtilAdapter<UserDetails, AdminUsersAdapter.ViewHolder> {
     private MenuItemListener menuItemListener;
 
     @NonNull

@@ -64,4 +64,5 @@
     <string name="shop_queue_count">People in queue: %d</string>
     <string name="new_user_title">Add new user</string>
     <string name="user_edit_save">Save user</string>
+    <string name="input_shop_for_owner">Shop</string>
 </resources>

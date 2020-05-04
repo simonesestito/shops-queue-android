@@ -19,6 +19,7 @@
 package com.simonesestito.shopsqueue.api.service;
 
 import com.simonesestito.shopsqueue.api.ApiResponse;
+import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.api.dto.Page;
 import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.api.dto.UserUpdate;
@@ -26,6 +27,7 @@ import com.simonesestito.shopsqueue.api.dto.UserUpdate;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -33,6 +35,9 @@ import retrofit2.http.Query;
 public interface UserService {
     @GET("/users/{id}")
     ApiResponse<UserDetails> getUserById(@Path("id") int id);
+
+    @POST("/users")
+    ApiResponse<UserDetails> addNewUser(@Body NewUser newUser);
 
     @DELETE("/users/{id}")
     ApiResponse<Void> deleteUser(@Path("id") int id);

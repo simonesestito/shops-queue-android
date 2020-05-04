@@ -19,6 +19,9 @@
 package com.simonesestito.shopsqueue.util;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -29,6 +32,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.simonesestito.shopsqueue.util.functional.Callback;
 
 public class ViewUtils {
     /**
@@ -37,9 +41,9 @@ public class ViewUtils {
      * @param tabs Titles of the tabs
      */
     public static void setupTabsWithViewPager(TabLayout tabLayout, ViewPager2 viewPager, @StringRes int[] tabs) {
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            tab.setText(tabLayout.getContext().getString(tabs[position]));
-        }).attach();
+        new TabLayoutMediator(tabLayout, viewPager,
+                (tab, position) -> tab.setText(tabLayout.getContext().getString(tabs[position]))
+        ).attach();
     }
 
     /**
@@ -84,6 +88,20 @@ public class ViewUtils {
                         && firstVisibleItemPosition >= 0) {
                     callback.run();
                 }
+            }
+        });
+    }
+
+    public static void setSpinnerListener(Spinner spinner, Callback<Integer> callback) {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                callback.onResult(spinner.getSelectedItemPosition());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                callback.onResult(0);
             }
         });
     }

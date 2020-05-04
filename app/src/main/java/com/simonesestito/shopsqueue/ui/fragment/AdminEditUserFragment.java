@@ -30,34 +30,37 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
+import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.api.dto.Shop;
-import com.simonesestito.shopsqueue.api.dto.User;
+import com.simonesestito.shopsqueue.api.dto.UserDetails;
+import com.simonesestito.shopsqueue.api.dto.UserUpdate;
 import com.simonesestito.shopsqueue.databinding.AdminUserEditBinding;
 import com.simonesestito.shopsqueue.model.HttpStatus;
+import com.simonesestito.shopsqueue.model.UserRole;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
+import com.simonesestito.shopsqueue.ui.recyclerview.UserRoleSpinnerAdapter;
 import com.simonesestito.shopsqueue.util.ApiException;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.util.NavUtils;
+import com.simonesestito.shopsqueue.util.ViewUtils;
 import com.simonesestito.shopsqueue.viewmodel.AdminUserEditViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
-import java.util.Objects;
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
-public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBinding> {
+public class AdminEditUserFragment extends AbstractAppFragment<AdminUserEditBinding> {
     @Inject ViewModelFactory viewModelFactory;
     private AdminUserEditViewModel viewModel;
-    private AdminUserEditFragmentArgs args;
+    private AdminEditUserFragmentArgs args;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ShopsQueueApplication.getInjector().inject(this);
-        args = AdminUserEditFragmentArgs.fromBundle(requireArguments());
-        NavUtils.<Shop>listenForResult(this, ShopPickerFragment.PICKED_SHOP_KEY,
-                shop -> viewModel.pickedShop = shop);
+        args = AdminEditUserFragmentArgs.fromBundle(requireArguments());
     }
 
     @Override
@@ -69,6 +72,17 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getViewBinding().userSaveEdit.setOnClickListener(v -> onSaveUser());
+        getViewBinding().shopInput.setOnClickListener(v ->
+                NavUtils.navigate(this, AdminEditUserFragmentDirections.adminNewUserPickShop()));
+
+        UserRoleSpinnerAdapter roleAdapter = new UserRoleSpinnerAdapter(requireContext());
+        getViewBinding().adminUserRole.setAdapter(roleAdapter);
+
+        ViewUtils.setSpinnerListener(getViewBinding().adminUserRole, index -> {
+            UserRole clickedRole = UserRole.values()[index];
+            int shopVisibility = clickedRole.equals(UserRole.OWNER) ? View.VISIBLE : View.GONE;
+            getViewBinding().shopInputLayout.setVisibility(shopVisibility);
+        });
     }
 
     @Override
@@ -76,43 +90,78 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
         super.onActivityCreated(savedInstanceState);
         viewModel = new ViewModelProvider(this, viewModelFactory).get(AdminUserEditViewModel.class);
 
-        viewModel.loadUser(args.getUserId());
+        if (args.getUserId() == 0)
+            showData(null);
+        else
+            viewModel.loadUser(args.getUserId());
 
         viewModel.getLiveUser().observe(getViewLifecycleOwner(), event -> {
             if (event.isLoading()) {
                 getViewBinding().contentLoading.setVisibility(View.VISIBLE);
                 getViewBinding().userForm.setVisibility(View.GONE);
                 getViewBinding().userSaveEdit.setEnabled(false);
-            } else if (event.isSuccessful()) {
+            } else {
                 getViewBinding().contentLoading.setVisibility(View.GONE);
                 getViewBinding().userForm.setVisibility(View.VISIBLE);
                 getViewBinding().userSaveEdit.setEnabled(true);
+            }
 
-                User data = Objects.requireNonNull(event.getData());
-                requireActivity().setTitle(data.getFullName());
+            if (event.isFailed() && !event.hasBeenHandled()) {
+                event.handle();
+                handleError(event.getError());
+            }
 
-                if (!event.hasBeenHandled()) {
+            if (event.isSuccessful()) {
+                if (event.getData() == null) {
+                    // Successful update request
+                    requireActivity().onBackPressed();
+                } else if (!event.hasBeenHandled()) {
+                    // Data fetched
                     event.handle();
-                    populateView(data);
-                }
-            } else if (event.isFailed()) {
-                getViewBinding().userSaveEdit.setEnabled(false);
-                getViewBinding().contentLoading.setVisibility(View.GONE);
-                if (!event.hasBeenHandled()) {
-                    event.handle();
-                    handleError(event.getError());
+                    showData(event.getData());
                 }
             }
         });
     }
 
-    private void populateView(User user) {
-        getViewBinding().emailInput.setText(user.getEmail());
-        getViewBinding().nameInput.setText(user.getName());
-        getViewBinding().surnameInput.setText(user.getSurname());
+    @Override
+    public void onResume() {
+        super.onResume();
+        Shop pickedShop = NavUtils.getFragmentResult(this, ShopPickerFragment.PICKED_SHOP_KEY);
+        if (pickedShop != null) {
+            onShopPicked(pickedShop);
+        }
+    }
 
-        // TODO Shop ID
-        // TODO User role
+    private void showData(@Nullable UserDetails user) {
+        getViewBinding().contentLoading.setVisibility(View.GONE);
+
+        if (user != null) {
+            requireActivity().setTitle(user.getFullName());
+            getViewBinding().nameInput.setText(user.getName());
+            getViewBinding().surnameInput.setText(user.getSurname());
+            getViewBinding().emailInput.setText(user.getEmail());
+
+            int roleIndex = Arrays.asList(UserRole.values()).indexOf(user.getRole());
+            getViewBinding().adminUserRole.setSelection(roleIndex);
+
+            Shop shop = user.getShop();
+            viewModel.pickedShop = shop;
+            if (shop == null) {
+                getViewBinding().shopInputLayout.setVisibility(View.GONE);
+                getViewBinding().shopInput.setText("");
+            } else {
+                getViewBinding().shopInputLayout.setVisibility(View.VISIBLE);
+                getViewBinding().shopInput.setText(shop.getName());
+            }
+        } else {
+            requireActivity().setTitle(getString(R.string.new_user_title));
+        }
+    }
+
+    private void onShopPicked(Shop shop) {
+        viewModel.pickedShop = shop;
+        getViewBinding().shopInput.setText(shop.getName());
     }
 
     private void handleError(Throwable error) {
@@ -120,8 +169,6 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
 
         if (!(error instanceof ApiException)) {
             errorMessage = R.string.error_network_offline;
-        } else if (((ApiException) error).getStatusCode() == HttpStatus.HTTP_NOT_FOUND) {
-            errorMessage = R.string.error_result_not_found;
         } else if (((ApiException) error).getStatusCode() == HttpStatus.HTTP_CONFLICT) {
             errorMessage = R.string.error_sign_up_duplicate_email;
         } else {
@@ -137,11 +184,22 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
     @SuppressWarnings("ConstantConditions")
     private void onSaveUser() {
         // Validate input
+        UserRole role = UserRole.values()[getViewBinding().adminUserRole.getSelectedItemPosition()];
+        boolean shopValid = !role.equals(UserRole.OWNER) || viewModel.pickedShop != null;
+        if (!shopValid) {
+            getViewBinding().shopInputLayout.setError(getString(R.string.form_field_required));
+        }
+
+        boolean isPasswordValid = args.getUserId() == 0
+                ? FormValidators.isPassword(getViewBinding().passwordInputLayout)
+                : FormValidators.optional(getViewBinding().passwordInputLayout, FormValidators::isPassword);
+
         boolean isInputValid = ArrayUtils.allTrue(
                 FormValidators.isString(getViewBinding().nameInputLayout),
                 FormValidators.isString(getViewBinding().surnameInputLayout),
                 FormValidators.isEmail(getViewBinding().emailInputLayout),
-                FormValidators.optional(getViewBinding().passwordInputLayout, FormValidators::isPassword)
+                isPasswordValid,
+                shopValid
         );
 
         if (!isInputValid)
@@ -151,10 +209,17 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
         String surname = getViewBinding().surnameInputLayout.getEditText().getText().toString().trim();
         String email = getViewBinding().emailInputLayout.getEditText().getText().toString().trim();
         String password = getViewBinding().passwordInputLayout.getEditText().getText().toString().trim();
+        Integer shopId = role.equals(UserRole.OWNER) ? viewModel.pickedShop.getId() : null;
 
-        // TODO Shop ID
-        // TODO User role
+        if (password.isEmpty())
+            password = null;
 
-        // TODO UserUpdate userUpdate = new UserUpdate()
+        if (args.getUserId() == 0) {
+            NewUser newUser = new NewUser(name, surname, email, password, shopId, role);
+            viewModel.saveNewUser(newUser);
+        } else {
+            UserUpdate userUpdate = new UserUpdate(name, surname, email, password, shopId, role);
+            viewModel.updateUser(args.getUserId(), userUpdate);
+        }
     }
 }

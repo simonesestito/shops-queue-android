@@ -46,7 +46,7 @@ public class AdminUsersViewModel extends ViewModel {
 
     public void refreshUsers() {
         users.emitLoading();
-        userService.listUsers(0, "" /* TODO */)
+        userService.listUsers(0)
                 .onResult(newPage -> {
                     lastPage = newPage;
                     lastUsers.clear();
@@ -68,7 +68,7 @@ public class AdminUsersViewModel extends ViewModel {
 
         users.emitLoading();
         int nextPage = lastPage == null ? 0 : lastPage.getPage() + 1;
-        userService.listUsers(nextPage, "" /* TODO */)
+        userService.listUsers(nextPage)
                 .onResult(newPage -> {
                     lastPage = newPage;
                     lastUsers.addAll(newPage.getData());

@@ -55,5 +55,5 @@ public interface ShopService {
     ApiResponse<Void> deleteShop(@Path("id") int id);
 
     @GET("/shops")
-    ApiResponse<Page<Shop>> getAllShops(@Query("page") int page, @Query("query") String name);
+    ApiResponse<Page<Shop>> getAllShops(@Query("page") int page/*, @Query("query") String name*/);
 }

@@ -43,8 +43,7 @@ public interface UserService {
     ApiResponse<Void> deleteUser(@Path("id") int id);
 
     @GET("/users")
-    ApiResponse<Page<User>> listUsers(@Query("page") int page,
-                                      @Query("query") String name);
+    ApiResponse<Page<User>> listUsers(@Query("page") int page/*, @Query("query") String name*/);
 
     @GET("/users")
     ApiResponse<Page<User>> listOwners(@Query("page") int page,

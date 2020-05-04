@@ -154,11 +154,15 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
     @SuppressWarnings("ConstantConditions")
     private void onSaveUser() {
         // Validate input
+        boolean passwordValid = args.getUserId() == 0
+                ? FormValidators.isPassword(getViewBinding().passwordInputLayout)
+                : FormValidators.optional(getViewBinding().passwordInputLayout, FormValidators::isPassword);
+
         boolean isInputValid = ArrayUtils.allTrue(
                 FormValidators.isString(getViewBinding().nameInputLayout),
                 FormValidators.isString(getViewBinding().surnameInputLayout),
                 FormValidators.isEmail(getViewBinding().emailInputLayout),
-                FormValidators.optional(getViewBinding().passwordInputLayout, FormValidators::isPassword)
+                passwordValid
         );
 
         if (!isInputValid)
@@ -173,5 +177,6 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
         // TODO User role
 
         // TODO UserUpdate userUpdate = new UserUpdate()
+        // TODO NewUser
     }
 }

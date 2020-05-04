@@ -20,6 +20,7 @@ package com.simonesestito.shopsqueue.ui.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,13 +33,19 @@ import com.simonesestito.shopsqueue.R;
 
 public class ConfirmDialog extends DialogFragment {
     private static final String EXTRA_MESSAGE = "message";
+    private static final String EXTRA_RESULT_DATA = "result_data";
 
     public static void showForResult(Fragment fragment, int requestCode, String message) {
+        showForResult(fragment, requestCode, message, null);
+    }
+
+    public static void showForResult(Fragment fragment, int requestCode, String message, @Nullable Bundle resultData) {
         ConfirmDialog dialog = new ConfirmDialog();
         dialog.setTargetFragment(fragment, requestCode);
 
         Bundle args = new Bundle();
         args.putString(EXTRA_MESSAGE, message);
+        args.putBundle(EXTRA_RESULT_DATA, resultData);
         dialog.setArguments(args);
 
         dialog.show(fragment.getParentFragmentManager(), null);
@@ -58,7 +65,15 @@ public class ConfirmDialog extends DialogFragment {
     private void onResult(boolean confirmation) {
         int result = confirmation ? Activity.RESULT_OK : Activity.RESULT_CANCELED;
         Fragment target = getTargetFragment();
+
+        Bundle data = requireArguments().getBundle(EXTRA_RESULT_DATA);
+        Intent resultIntent = null;
+        if (data != null) {
+            resultIntent = new Intent();
+            resultIntent.putExtras(data);
+        }
+
         if (target != null)
-            target.onActivityResult(getTargetRequestCode(), result, null);
+            target.onActivityResult(getTargetRequestCode(), result, resultIntent);
     }
 }

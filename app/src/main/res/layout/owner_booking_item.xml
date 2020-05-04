@@ -30,8 +30,8 @@
 
         <ImageView
             android:id="@+id/bookingItemIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/list_item_image_size"
+            android:layout_height="@dimen/list_item_image_size"
             android:src="@drawable/ic_person_black_24dp"
             android:tint="?colorSecondary"
             app:layout_constraintBottom_toBottomOf="parent"

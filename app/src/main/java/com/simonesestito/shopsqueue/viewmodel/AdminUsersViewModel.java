@@ -18,8 +18,6 @@
 
 package com.simonesestito.shopsqueue.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -48,18 +46,41 @@ public class AdminUsersViewModel extends ViewModel {
 
     public void refreshUsers() {
         users.emitLoading();
-        int nextPage = lastPage == null ? 0 : lastPage.getPage() + 1;
-        userService.listUsers(nextPage, "")
+        userService.listUsers(0, "" /* TODO */)
                 .onResult(newPage -> {
                     lastPage = newPage;
-                    Log.wtf("Adapter", newPage.getData().size() + "");
-                    Log.wtf("Adapter", "" + newPage.getTotalItems());
+                    lastUsers.clear();
                     lastUsers.addAll(newPage.getData());
                     users.emitResult(lastUsers);
                 })
                 .onError(err -> {
                     err.printStackTrace();
                     users.emitError(err);
+                });
+    }
+
+    public void loadNextPage() {
+        users.emitLoading();
+        int nextPage = lastPage == null ? 0 : lastPage.getPage() + 1;
+        userService.listUsers(nextPage, "" /* TODO */)
+                .onResult(newPage -> {
+                    lastPage = newPage;
+                    lastUsers.addAll(newPage.getData());
+                    users.emitResult(lastUsers);
+                })
+                .onError(err -> {
+                    err.printStackTrace();
+                    users.emitError(err);
+                });
+    }
+
+    public void deleteUser(int userId) {
+        users.emitLoading();
+        userService.deleteUser(userId)
+                .onResult(aVoid -> refreshUsers())
+                .onError(err -> {
+                    err.printStackTrace();
+                    refreshUsers();
                 });
     }
 

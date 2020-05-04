@@ -94,6 +94,10 @@ public class AdminUsersAdapter extends DiffUtilAdapter<User, AdminUsersAdapter.V
         this.menuItemListener = menuItemListener;
     }
 
+    public interface MenuItemListener {
+        void onClick(MenuItem menuItem, int userId);
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         private final AdminUsersItemBinding view;
 

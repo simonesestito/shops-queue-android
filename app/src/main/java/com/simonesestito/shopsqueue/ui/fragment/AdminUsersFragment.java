@@ -18,6 +18,8 @@
 
 package com.simonesestito.shopsqueue.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +32,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.databinding.AdminUsersFragmentBinding;
+import com.simonesestito.shopsqueue.ui.dialog.ConfirmDialog;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.AdminUsersAdapter;
 import com.simonesestito.shopsqueue.util.ViewUtils;
@@ -41,6 +44,8 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBinding> {
+    private static final int REQUEST_DELETE_USER = 1;
+    private static final String EXTRA_CLICKED_USER_ID = "userId";
     @Inject ViewModelFactory viewModelFactory;
     private AdminUsersViewModel viewModel;
 
@@ -59,8 +64,20 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         AdminUsersAdapter adapter = new AdminUsersAdapter();
-        ViewUtils.addDivider(getViewBinding().adminUsersList);
+        adapter.setMenuItemListener((menuItem, userId) -> {
+            if (menuItem.getItemId() == R.id.deleteUserMenuAction) {
+                Bundle data = new Bundle();
+                data.putInt(EXTRA_CLICKED_USER_ID, userId);
+                ConfirmDialog.showForResult(this,
+                        REQUEST_DELETE_USER,
+                        getString(R.string.user_delete_confirm_message),
+                        data);
+            }
+        });
         getViewBinding().adminUsersList.setAdapter(adapter);
+
+        ViewUtils.addDivider(getViewBinding().adminUsersList);
+
         getViewBinding().adminUsersRefresh
                 .setOnRefreshListener(() -> viewModel.refreshUsers());
     }
@@ -83,5 +100,18 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBi
                 Objects.requireNonNull(adapter).updateDataSet(event.getData());
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_DELETE_USER
+                && resultCode == Activity.RESULT_OK
+                && data != null) {
+            int userId = data.getIntExtra(EXTRA_CLICKED_USER_ID, 0);
+            if (userId > 0) {
+                viewModel.deleteUser(userId);
+            }
+        }
     }
 }

@@ -21,7 +21,7 @@ package com.simonesestito.shopsqueue.api.service;
 import com.simonesestito.shopsqueue.api.ApiResponse;
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
 import com.simonesestito.shopsqueue.api.dto.NewUser;
-import com.simonesestito.shopsqueue.api.dto.User;
+import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.api.dto.UserLogin;
 
 import retrofit2.http.Body;
@@ -36,8 +36,8 @@ public interface LoginService {
     ApiResponse<Void> logout();
 
     @GET("/users/me")
-    ApiResponse<User> getCurrentUser();
+    ApiResponse<UserDetails> getCurrentUser();
 
     @POST("/users")
-    ApiResponse<User> registerUser(@Body NewUser newUser);
+    ApiResponse<UserDetails> registerUser(@Body NewUser newUser);
 }

@@ -18,23 +18,17 @@
 
 package com.simonesestito.shopsqueue.api.dto;
 
-public class AuthResponse {
-    private String accessToken;
-    private UserDetails user;
+import androidx.annotation.Nullable;
 
-    public String getAccessToken() {
-        return accessToken;
+public class UserDetails extends User {
+    @Nullable private Shop shop;
+
+    @Nullable
+    public Shop getShop() {
+        return shop;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    public UserDetails getUser() {
-        return user;
-    }
-
-    public void setUser(UserDetails user) {
-        this.user = user;
+    public void setShop(@Nullable Shop shop) {
+        this.shop = shop;
     }
 }

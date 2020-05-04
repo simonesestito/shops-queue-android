@@ -19,37 +19,32 @@
 package com.simonesestito.shopsqueue.api.service;
 
 import com.simonesestito.shopsqueue.api.ApiResponse;
-import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.api.dto.Page;
-import com.simonesestito.shopsqueue.api.dto.User;
+import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.api.dto.UserUpdate;
 
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface UserService {
-    @POST("/users")
-    ApiResponse<User> registerUser(@Body NewUser newUser);
-
     @GET("/users/{id}")
-    ApiResponse<User> getUserById(@Path("id") int id);
+    ApiResponse<UserDetails> getUserById(@Path("id") int id);
 
     @DELETE("/users/{id}")
     ApiResponse<Void> deleteUser(@Path("id") int id);
 
     @GET("/users")
-    ApiResponse<Page<User>> listUsers(@Query("page") int page/*, @Query("query") String name*/);
+    ApiResponse<Page<UserDetails>> listUsers(@Query("page") int page/*, @Query("query") String name*/);
 
     @GET("/users")
-    ApiResponse<Page<User>> listOwners(@Query("page") int page,
-                                       @Query("shopId") int shopId);
+    ApiResponse<Page<UserDetails>> listOwners(@Query("page") int page,
+                                              @Query("shopId") int shopId);
 
     @PUT("/users/{id}")
-    ApiResponse<User> updateUser(@Path("id") int id,
-                                 @Body UserUpdate update);
+    ApiResponse<UserDetails> updateUser(@Path("id") int id,
+                                        @Body UserUpdate update);
 }

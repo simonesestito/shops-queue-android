@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
 
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
@@ -76,23 +75,16 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBi
                         data);
             }
         });
-        adapter.setItemClickListener(user -> {
-            NavDirections directions = AdminFragmentDirections
-                    .actionAdminFragmentToAdminUserEditFragment()
-                    .setUserId(user.getId());
-            NavUtils.navigate(this, directions);
-        });
+        adapter.setItemClickListener(user ->
+                NavUtils.navigate(this, AdminFragmentDirections.adminEditUser(user.getId())));
         getViewBinding().adminUsersList.setAdapter(adapter);
         ViewUtils.addDivider(getViewBinding().adminUsersList);
 
         getViewBinding().adminUsersRefresh
                 .setOnRefreshListener(() -> viewModel.refreshUsers());
 
-        getViewBinding().adminUsersAdd.setOnClickListener(v -> {
-            NavDirections directions = AdminFragmentDirections
-                    .actionAdminFragmentToAdminUserEditFragment();
-            NavUtils.navigate(this, directions);
-        });
+        getViewBinding().adminUsersAdd.setOnClickListener(v ->
+                NavUtils.navigate(this, AdminFragmentDirections.adminCreateNewUser()));
     }
 
     @Override

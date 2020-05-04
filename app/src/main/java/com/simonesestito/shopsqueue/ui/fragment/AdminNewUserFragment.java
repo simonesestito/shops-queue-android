@@ -31,7 +31,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.Shop;
-import com.simonesestito.shopsqueue.api.dto.User;
 import com.simonesestito.shopsqueue.databinding.AdminUserEditBinding;
 import com.simonesestito.shopsqueue.model.HttpStatus;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
@@ -42,20 +41,16 @@ import com.simonesestito.shopsqueue.util.NavUtils;
 import com.simonesestito.shopsqueue.viewmodel.AdminUserEditViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
-import java.util.Objects;
-
 import javax.inject.Inject;
 
-public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBinding> {
+public class AdminNewUserFragment extends AbstractAppFragment<AdminUserEditBinding> {
     @Inject ViewModelFactory viewModelFactory;
     private AdminUserEditViewModel viewModel;
-    private AdminUserEditFragmentArgs args;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ShopsQueueApplication.getInjector().inject(this);
-        args = AdminUserEditFragmentArgs.fromBundle(requireArguments());
         NavUtils.<Shop>listenForResult(this, ShopPickerFragment.PICKED_SHOP_KEY,
                 shop -> viewModel.pickedShop = shop);
     }
@@ -76,25 +71,11 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
         super.onActivityCreated(savedInstanceState);
         viewModel = new ViewModelProvider(this, viewModelFactory).get(AdminUserEditViewModel.class);
 
-        viewModel.loadUser(args.getUserId());
-
         viewModel.getLiveUser().observe(getViewLifecycleOwner(), event -> {
             if (event.isLoading()) {
                 getViewBinding().contentLoading.setVisibility(View.VISIBLE);
                 getViewBinding().userForm.setVisibility(View.GONE);
                 getViewBinding().userSaveEdit.setEnabled(false);
-            } else if (event.isSuccessful()) {
-                getViewBinding().contentLoading.setVisibility(View.GONE);
-                getViewBinding().userForm.setVisibility(View.VISIBLE);
-                getViewBinding().userSaveEdit.setEnabled(true);
-
-                User data = Objects.requireNonNull(event.getData());
-                requireActivity().setTitle(data.getFullName());
-
-                if (!event.hasBeenHandled()) {
-                    event.handle();
-                    populateView(data);
-                }
             } else if (event.isFailed()) {
                 getViewBinding().userSaveEdit.setEnabled(false);
                 getViewBinding().contentLoading.setVisibility(View.GONE);
@@ -106,22 +87,11 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
         });
     }
 
-    private void populateView(User user) {
-        getViewBinding().emailInput.setText(user.getEmail());
-        getViewBinding().nameInput.setText(user.getName());
-        getViewBinding().surnameInput.setText(user.getSurname());
-
-        // TODO Shop ID
-        // TODO User role
-    }
-
     private void handleError(Throwable error) {
         @StringRes int errorMessage = 0;
 
         if (!(error instanceof ApiException)) {
             errorMessage = R.string.error_network_offline;
-        } else if (((ApiException) error).getStatusCode() == HttpStatus.HTTP_NOT_FOUND) {
-            errorMessage = R.string.error_result_not_found;
         } else if (((ApiException) error).getStatusCode() == HttpStatus.HTTP_CONFLICT) {
             errorMessage = R.string.error_sign_up_duplicate_email;
         } else {
@@ -141,7 +111,7 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
                 FormValidators.isString(getViewBinding().nameInputLayout),
                 FormValidators.isString(getViewBinding().surnameInputLayout),
                 FormValidators.isEmail(getViewBinding().emailInputLayout),
-                FormValidators.optional(getViewBinding().passwordInputLayout, FormValidators::isPassword)
+                FormValidators.isPassword(getViewBinding().passwordInputLayout)
         );
 
         if (!isInputValid)
@@ -155,6 +125,6 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
         // TODO Shop ID
         // TODO User role
 
-        // TODO UserUpdate userUpdate = new UserUpdate()
+        // TODO NewUser
     }
 }

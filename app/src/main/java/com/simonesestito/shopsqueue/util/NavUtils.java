@@ -19,11 +19,18 @@
 package com.simonesestito.shopsqueue.util;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleEventObserver;
+import androidx.navigation.NavBackStackEntry;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.simonesestito.shopsqueue.R;
+import com.simonesestito.shopsqueue.util.functional.Callback;
+
+import java.util.Objects;
 
 /**
  * Navigation Component utilities
@@ -46,5 +53,23 @@ public class NavUtils {
 
         NavHostFragment.findNavController(fragment)
                 .navigate(directions, animationNavOptions);
+    }
+
+    /**
+     * Listen for a result to be returned by the next fragment
+     * https://developer.android.com/guide/navigation/navigation-programmatic#returning_a_result
+     */
+    public static <T> void listenForResult(Fragment fragment, String key, Callback<T> callback) {
+        NavController navController = NavHostFragment.findNavController(fragment);
+        NavBackStackEntry backStackEntry = navController.getCurrentBackStackEntry();
+        Objects.requireNonNull(backStackEntry);
+
+        backStackEntry.getLifecycle()
+                .addObserver((LifecycleEventObserver) (source, event) -> {
+                    if (event.equals(Lifecycle.Event.ON_RESUME) &&
+                            backStackEntry.getSavedStateHandle().contains(key)) {
+                        callback.onResult(backStackEntry.getSavedStateHandle().get(key));
+                    }
+                });
     }
 }

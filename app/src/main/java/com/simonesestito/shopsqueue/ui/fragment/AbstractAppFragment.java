@@ -39,6 +39,7 @@ import androidx.viewbinding.ViewBinding;
 
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.util.InternetUtils;
+import com.simonesestito.shopsqueue.util.ThemeUtils;
 
 import java.util.Objects;
 
@@ -121,7 +122,7 @@ public abstract class AbstractAppFragment<T extends ViewBinding> extends Fragmen
             actionBar.show();
         }
 
-        if (isAppbarElevated) {
+        if (isAppbarElevated || ThemeUtils.isDarkTheme(requireContext())) {
             actionBar.setElevation(activity.getResources().getDimension(R.dimen.default_appbar_elevation));
         } else {
             actionBar.setElevation(0f);

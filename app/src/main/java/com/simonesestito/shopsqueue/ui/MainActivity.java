@@ -50,11 +50,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+        setSupportActionBar(findViewById(R.id.appToolbar));
+
         ShopsQueueApplication.getInjector().inject(this);
         loginViewModel = new ViewModelProvider(this, factory)
                 .get(LoginViewModel.class);
 
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.navHostFragment);
         navController.addOnDestinationChangedListener((controller, destination, args) -> {
             // Check if it's a root destination
             NavGraph destinationGraph = destination.getParent();

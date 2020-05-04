@@ -19,7 +19,7 @@
 <resources>
     <!-- Organize themes following the conventions of AppCompat library -->
 
-    <style name="Base.Theme.App" parent="Theme.MaterialComponents.DayNight">
+    <style name="Base.Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/green_500</item>
         <item name="colorSecondary">@color/green_500</item>
         <item name="colorOnSecondary">@color/white</item>

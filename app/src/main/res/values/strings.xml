@@ -59,4 +59,9 @@
     <string name="role_user">User</string>
     <string name="role_admin">Administrator</string>
     <string name="role_owner">Shop owner</string>
+    <string name="error_result_not_found">Requested item not found</string>
+    <string name="shop_picker_fragment_title">Pick a shop</string>
+    <string name="shop_queue_count">People in queue: %d</string>
+    <string name="new_user_title">Add new user</string>
+    <string name="user_edit_save">Save user</string>
 </resources>

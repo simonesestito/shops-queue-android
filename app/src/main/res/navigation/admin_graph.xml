@@ -25,6 +25,28 @@
         android:id="@+id/adminFragment"
         android:name="com.simonesestito.shopsqueue.ui.fragment.AdminFragment"
         android:label="@string/admin_fragment_title"
-        tools:layout="@layout/admin_fragment" />
+        tools:layout="@layout/admin_fragment">
+        <action
+            android:id="@+id/action_adminFragment_to_adminUserEditFragment"
+            app:destination="@id/adminUserEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminUserEditFragment"
+        android:name="com.simonesestito.shopsqueue.ui.fragment.AdminUserEditFragment"
+        android:label="@string/admin_fragment_title"
+        tools:layout="@layout/admin_user_edit">
+        <argument
+            android:name="userId"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_adminUserEditFragment_to_shopPickerFragment"
+            app:destination="@id/shopPickerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/shopPickerFragment"
+        android:name="com.simonesestito.shopsqueue.ui.fragment.ShopPickerFragment"
+        android:label="@string/shop_picker_fragment_title"
+        tools:layout="@layout/shop_picker" />
 
 </navigation>

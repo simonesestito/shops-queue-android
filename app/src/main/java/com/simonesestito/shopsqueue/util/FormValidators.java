@@ -98,4 +98,17 @@ public class FormValidators {
             return false;
         }
     }
+
+    @SuppressWarnings("ConstantConditions")
+    public static boolean optional(TextInputLayout inputLayout, Validator validator) {
+        String input = inputLayout.getEditText().getText().toString().trim();
+        if (input.isEmpty())
+            return true;
+        else
+            return validator.validate(inputLayout);
+    }
+
+    public interface Validator {
+        boolean validate(TextInputLayout inputLayout);
+    }
 }

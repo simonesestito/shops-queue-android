@@ -18,8 +18,41 @@
 
 package com.simonesestito.shopsqueue.model;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.StringRes;
+
+import com.simonesestito.shopsqueue.R;
+
 public enum UserRole {
     USER,
     OWNER,
-    ADMIN,
+    ADMIN;
+
+    @StringRes
+    public int getDisplayName() {
+        switch (this) {
+            case ADMIN:
+                return R.string.role_admin;
+            case USER:
+                return R.string.role_user;
+            case OWNER:
+                return R.string.role_owner;
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+
+    @DrawableRes
+    public int getIcon() {
+        switch (this) {
+            case ADMIN:
+                return R.drawable.ic_work_black_24dp;
+            case USER:
+                return R.drawable.ic_person_black_24dp;
+            case OWNER:
+                return R.drawable.ic_shopping_cart_black_24dp;
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
 }

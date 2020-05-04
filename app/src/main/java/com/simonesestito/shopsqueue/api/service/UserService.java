@@ -50,6 +50,6 @@ public interface UserService {
                                        @Query("shopId") int shopId);
 
     @PUT("/users/{id}")
-    ApiResponse<User> updateUser(@Path("id") String id,
+    ApiResponse<User> updateUser(@Path("id") int id,
                                  @Body UserUpdate update);
 }

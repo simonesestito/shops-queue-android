@@ -28,29 +28,32 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.simonesestito.shopsqueue.R;
-import com.simonesestito.shopsqueue.api.dto.User;
-import com.simonesestito.shopsqueue.databinding.AdminUsersItemBinding;
+import com.simonesestito.shopsqueue.api.dto.Shop;
+import com.simonesestito.shopsqueue.databinding.AdminShopItemBinding;
 
 
-public class AdminUsersAdapter extends DiffUtilAdapter<User, AdminUsersAdapter.ViewHolder> {
+public class AdminShopsAdapter extends DiffUtilAdapter<Shop, AdminShopsAdapter.ViewHolder> {
     private MenuItemListener menuItemListener;
 
     @NonNull
     @Override
-    public AdminUsersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdminShopsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        AdminUsersItemBinding binding = AdminUsersItemBinding.inflate(inflater, parent, false);
-        return new AdminUsersAdapter.ViewHolder(binding);
+        AdminShopItemBinding binding = AdminShopItemBinding.inflate(inflater, parent, false);
+        return new AdminShopsAdapter.ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdminUsersAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdminShopsAdapter.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        User user = getItemAt(position);
-        holder.view.userItemName.setText(user.getFullName());
-        holder.view.userItemEmail.setText(user.getEmail());
-        holder.view.userItemIcon.setImageResource(user.getRole().getIcon());
-        holder.view.userItemRole.setText(user.getRole().getDisplayName());
+        Shop shop = getItemAt(position);
+        holder.view.shopItemAddress.setText(shop.getAddress());
+        holder.view.shopItemName.setText(shop.getName());
+
+        int queueCount = shop.getCount();
+        String queueDisplayCount = holder.view.getRoot().getContext()
+                .getString(R.string.shop_queue_count, queueCount);
+        holder.view.shopItemQueueCount.setText(queueDisplayCount);
 
         if (menuItemListener == null) {
             holder.view.userItemMenu.setVisibility(View.GONE);
@@ -61,8 +64,8 @@ public class AdminUsersAdapter extends DiffUtilAdapter<User, AdminUsersAdapter.V
                 popupMenu.inflate(R.menu.admin_users_popup_menu);
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     int index = holder.getAdapterPosition();
-                    User clickedUser = getItemAt(index);
-                    menuItemListener.onClick(menuItem, clickedUser.getId());
+                    Shop clickedShop = getItemAt(index);
+                    menuItemListener.onClick(menuItem, clickedShop.getId());
                     return true;
                 });
                 popupMenu.show();
@@ -79,9 +82,9 @@ public class AdminUsersAdapter extends DiffUtilAdapter<User, AdminUsersAdapter.V
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private final AdminUsersItemBinding view;
+        private final AdminShopItemBinding view;
 
-        ViewHolder(AdminUsersItemBinding view) {
+        ViewHolder(AdminShopItemBinding view) {
             super(view.getRoot());
             this.view = view;
         }

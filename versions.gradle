@@ -18,7 +18,7 @@
 
 def versions = [:]
 
-versions.navigation = '2.2.2'
+versions.navigation = '2.3.0-alpha02'
 versions.lifecycle = '2.2.0'
 versions.appcompat = '1.1.0'
 versions.constraintlayout = '1.1.3'

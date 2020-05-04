@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.simonesestito.shopsqueue.model.Identifiable;
+import com.simonesestito.shopsqueue.util.functional.Callback;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,6 +35,7 @@ import java.util.Objects;
 public abstract class DiffUtilAdapter<T extends Identifiable, VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
     private final AsyncListDiffer<T> listDiffer;
+    private Callback<T> clickListener;
 
     public DiffUtilAdapter() {
         listDiffer = new AsyncListDiffer<>(this, new DiffUtil.ItemCallback<T>() {
@@ -47,6 +49,21 @@ public abstract class DiffUtilAdapter<T extends Identifiable, VH extends Recycle
                 return oldItem.getId() == newItem.getId();
             }
         });
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull VH holder, int position) {
+        holder.itemView.setTag(holder.getAdapterPosition());
+        holder.itemView.setOnClickListener(v -> {
+            int clickedIndex = (int) v.getTag();
+            T clickedItem = getItemAt(clickedIndex);
+            if (clickListener != null)
+                clickListener.onResult(clickedItem);
+        });
+    }
+
+    public void setItemClickListener(Callback<T> itemClickListener) {
+        this.clickListener = itemClickListener;
     }
 
     public List<T> getDataSet() {

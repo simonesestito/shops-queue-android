@@ -75,7 +75,6 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBi
             }
         });
         getViewBinding().adminUsersList.setAdapter(adapter);
-
         ViewUtils.addDivider(getViewBinding().adminUsersList);
 
         getViewBinding().adminUsersRefresh
@@ -87,6 +86,8 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBi
         super.onActivityCreated(savedInstanceState);
         viewModel = new ViewModelProvider(this, viewModelFactory)
                 .get(AdminUsersViewModel.class);
+
+        ViewUtils.onRecyclerViewLoadMore(getViewBinding().adminUsersList, viewModel::loadNextPage);
 
         viewModel.getUsers().observe(getViewLifecycleOwner(), event -> {
             getViewBinding().adminUsersRefresh.setRefreshing(event.isLoading());

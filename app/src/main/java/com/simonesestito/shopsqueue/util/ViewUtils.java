@@ -20,6 +20,7 @@ package com.simonesestito.shopsqueue.util;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -56,5 +57,34 @@ public class ViewUtils {
 
         DividerItemDecoration decoration = new DividerItemDecoration(context, orientation);
         recyclerView.addItemDecoration(decoration);
+    }
+
+    /**
+     * Add a listener on the RecyclerView
+     * It will execute the callback when it's necessary to load more data.
+     */
+    public static void onRecyclerViewLoadMore(RecyclerView recyclerView, Runnable callback) {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                if (layoutManager == null)
+                    return;
+
+                if (!(layoutManager instanceof LinearLayoutManager))
+                    return;
+
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+                int visibleItemCount = linearLayoutManager.getChildCount();
+                int totalItemCount = linearLayoutManager.getItemCount();
+                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+
+                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0) {
+                    callback.run();
+                }
+            }
+        });
     }
 }

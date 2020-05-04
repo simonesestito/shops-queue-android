@@ -60,6 +60,12 @@ public class AdminUsersViewModel extends ViewModel {
     }
 
     public void loadNextPage() {
+        if (users.getValue() != null && users.getValue().isLoading())
+            return;
+
+        if (lastPage != null && lastUsers.size() == lastPage.getTotalItems())
+            return;
+
         users.emitLoading();
         int nextPage = lastPage == null ? 0 : lastPage.getPage() + 1;
         userService.listUsers(nextPage, "" /* TODO */)

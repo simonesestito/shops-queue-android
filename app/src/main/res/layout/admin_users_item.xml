@@ -20,39 +20,61 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="@dimen/activity_content_margin"
-    android:paddingBottom="@dimen/activity_content_margin">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/userItemIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_content_margin"
+        android:layout_width="@dimen/list_item_image_size"
+        android:layout_height="@dimen/list_item_image_size"
+        android:layout_marginStart="@dimen/list_item_margin"
         android:tint="?colorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription"
-        tools:src="@drawable/ic_perm_identity_black_24dp" />
+        tools:src="@drawable/ic_person_black_24dp" />
+
+    <TextView
+        android:id="@+id/userItemRole"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/list_item_overline_height"
+        android:layout_marginStart="@dimen/list_item_margin"
+        android:gravity="bottom"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+        app:layout_constraintStart_toEndOf="@id/userItemIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Administrator" />
 
     <TextView
         android:id="@+id/userItemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_content_margin"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:layout_marginStart="@dimen/list_item_margin"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         app:layout_constraintStart_toEndOf="@id/userItemIcon"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/userItemRole"
         tools:text="John Scott" />
 
     <TextView
         android:id="@+id/userItemEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_content_margin"
+        android:layout_marginStart="@dimen/list_item_margin"
         android:layout_marginTop="@dimen/form_element_margin"
+        android:layout_marginBottom="@dimen/list_item_margin"
         app:layout_constraintStart_toEndOf="@id/userItemIcon"
         app:layout_constraintTop_toBottomOf="@id/userItemName"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="john.scott@example.com" />
+
+    <ImageView
+        android:id="@+id/userItemMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/list_item_margin"
+        android:src="@drawable/ic_more_vert_black_24dp"
+        android:tint="?colorControlNormal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 </androidx.constraintlayout.widget.ConstraintLayout>

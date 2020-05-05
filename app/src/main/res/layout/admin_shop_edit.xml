@@ -67,13 +67,18 @@
             android:inputType="textCapWords" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/shopForm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="map,mapEmptyView,nameInputLayout" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/userSaveEdit"
+        android:id="@+id/shopSaveEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/activity_content_margin"
-        android:text="@string/user_edit_save"
+        android:text="@string/shop_edit_save"
         app:icon="@drawable/ic_save_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

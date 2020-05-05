@@ -66,4 +66,6 @@
     <string name="user_edit_save">Save user</string>
     <string name="input_shop_for_owner">Shop</string>
     <string name="shop_delete_confirm_message">This shop will be deleted irrevocably</string>
+    <string name="shop_edit_save">Save</string>
+    <string name="new_shop_title">Add a new shop</string>
 </resources>

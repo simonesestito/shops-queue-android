@@ -45,7 +45,7 @@ public class RetrofitModule {
 
         if (BuildConfig.DEBUG) {
             builder.addInterceptor(new HttpLoggingInterceptor()
-                    .setLevel(HttpLoggingInterceptor.Level.BODY));
+                    .setLevel(HttpLoggingInterceptor.Level.BASIC));
         }
 
         return builder.build();

@@ -44,6 +44,7 @@ import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.util.NavUtils;
 import com.simonesestito.shopsqueue.util.ViewUtils;
+import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 import com.simonesestito.shopsqueue.viewmodel.AdminUserEditViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -51,16 +52,14 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
-public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBinding> {
+public class AdminUserEditFragment extends AdminEditFragment<UserDetails, AdminUserEditBinding> {
     @Inject ViewModelFactory viewModelFactory;
     private AdminUserEditViewModel viewModel;
-    private AdminUserEditFragmentArgs args;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ShopsQueueApplication.getInjector().inject(this);
-        args = AdminUserEditFragmentArgs.fromBundle(requireArguments());
     }
 
     @Override
@@ -71,10 +70,6 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getViewBinding().userSaveEdit.setOnClickListener(v -> onSaveUser());
-        getViewBinding().shopInput.setOnClickListener(v ->
-                NavUtils.navigate(this, AdminUserEditFragmentDirections.adminNewUserPickShop()));
-
         UserRoleSpinnerAdapter roleAdapter = new UserRoleSpinnerAdapter(requireContext());
         getViewBinding().adminUserRole.setAdapter(roleAdapter);
 
@@ -82,45 +77,6 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
             UserRole clickedRole = UserRole.values()[index];
             int shopVisibility = clickedRole.equals(UserRole.OWNER) ? View.VISIBLE : View.GONE;
             getViewBinding().shopInputLayout.setVisibility(shopVisibility);
-        });
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        viewModel = new ViewModelProvider(this, viewModelFactory).get(AdminUserEditViewModel.class);
-
-        if (args.getUserId() == 0)
-            showData(null);
-        else
-            viewModel.loadUser(args.getUserId());
-
-        viewModel.getLiveUser().observe(getViewLifecycleOwner(), event -> {
-            if (event.isLoading()) {
-                getViewBinding().contentLoading.setVisibility(View.VISIBLE);
-                getViewBinding().userForm.setVisibility(View.GONE);
-                getViewBinding().userSaveEdit.setEnabled(false);
-            } else {
-                getViewBinding().contentLoading.setVisibility(View.GONE);
-                getViewBinding().userForm.setVisibility(View.VISIBLE);
-                getViewBinding().userSaveEdit.setEnabled(true);
-            }
-
-            if (event.isFailed() && !event.hasBeenHandled()) {
-                event.handle();
-                handleError(event.getError());
-            }
-
-            if (event.isSuccessful()) {
-                if (event.getData() == null) {
-                    // Successful update request
-                    requireActivity().onBackPressed();
-                } else if (!event.hasBeenHandled()) {
-                    // Data fetched
-                    event.handle();
-                    showData(event.getData());
-                }
-            }
         });
     }
 
@@ -133,9 +89,9 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
         }
     }
 
-    private void showData(@Nullable UserDetails user) {
-        getViewBinding().contentLoading.setVisibility(View.GONE);
-
+    @Override
+    protected void showData(@Nullable UserDetails user) {
+        super.showData(user);
         if (user != null) {
             requireActivity().setTitle(user.getFullName());
             getViewBinding().nameInput.setText(user.getName());
@@ -164,7 +120,8 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
         getViewBinding().shopInput.setText(shop.getName());
     }
 
-    private void handleError(Throwable error) {
+    @Override
+    protected void handleError(Throwable error) {
         @StringRes int errorMessage = 0;
 
         if (!(error instanceof ApiException)) {
@@ -182,7 +139,8 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void onSaveUser() {
+    @Override
+    protected void onSaveForm() {
         // Validate input
         UserRole role = UserRole.values()[getViewBinding().adminUserRole.getSelectedItemPosition()];
         boolean shopValid = !role.equals(UserRole.OWNER) || viewModel.pickedShop != null;
@@ -190,7 +148,7 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
             getViewBinding().shopInputLayout.setError(getString(R.string.form_field_required));
         }
 
-        boolean isPasswordValid = args.getUserId() == 0
+        boolean isPasswordValid = getArgumentId() == 0
                 ? FormValidators.isPassword(getViewBinding().passwordInputLayout)
                 : FormValidators.optional(getViewBinding().passwordInputLayout, FormValidators::isPassword);
 
@@ -214,12 +172,48 @@ public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBind
         if (password.isEmpty())
             password = null;
 
-        if (args.getUserId() == 0) {
+        if (getArgumentId() == 0) {
             NewUser newUser = new NewUser(name, surname, email, password, shopId, role);
             viewModel.saveNewUser(newUser);
         } else {
             UserUpdate userUpdate = new UserUpdate(name, surname, email, password, shopId, role);
-            viewModel.updateUser(args.getUserId(), userUpdate);
+            viewModel.updateUser(getArgumentId(), userUpdate);
         }
+    }
+
+    @Override
+    protected int getArgumentId() {
+        return AdminUserEditFragmentArgs.fromBundle(requireArguments()).getUserId();
+    }
+
+    @Override
+    protected LiveResource<UserDetails> getLiveData() {
+        if (viewModel == null)
+            viewModel = new ViewModelProvider(this, viewModelFactory).get(AdminUserEditViewModel.class);
+        return viewModel.getLiveUser();
+    }
+
+    @Override
+    protected View getSaveButton() {
+        return getViewBinding().userSaveEdit;
+    }
+
+
+    @Override
+    protected View getLoadingView() {
+        return getViewBinding().contentLoading;
+    }
+
+    @Override
+    protected View getForm() {
+        return getViewBinding().userForm;
+    }
+
+    @Override
+    protected void onLoadData() {
+        super.onLoadData();
+        if (viewModel == null)
+            viewModel = new ViewModelProvider(this, viewModelFactory).get(AdminUserEditViewModel.class);
+        viewModel.loadUser(getArgumentId());
     }
 }

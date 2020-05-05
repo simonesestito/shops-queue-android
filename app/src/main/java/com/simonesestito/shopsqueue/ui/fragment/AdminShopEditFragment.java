@@ -22,13 +22,38 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.simonesestito.shopsqueue.R;
+import com.simonesestito.shopsqueue.ShopsQueueApplication;
+import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.databinding.AdminShopEditBinding;
+import com.simonesestito.shopsqueue.di.module.ShopAdminDetails;
+import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
+import com.simonesestito.shopsqueue.util.ArrayUtils;
+import com.simonesestito.shopsqueue.util.FormValidators;
+import com.simonesestito.shopsqueue.util.livedata.LiveResource;
+import com.simonesestito.shopsqueue.viewmodel.AdminShopEditViewModel;
+import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
-public class AdminShopEditFragment extends AbstractAppFragment<AdminShopEditBinding> {
+import javax.inject.Inject;
+
+public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, AdminShopEditBinding> {
+    @Inject ViewModelFactory viewModelFactory;
+    private AdminShopEditViewModel viewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ShopsQueueApplication.getInjector().inject(this);
+    }
+
     @Override
     protected AdminShopEditBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return AdminShopEditBinding.inflate(layoutInflater, container, false);
@@ -37,6 +62,140 @@ public class AdminShopEditFragment extends AbstractAppFragment<AdminShopEditBind
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        getViewBinding().map.setOnClickListener(v -> {
+            // TODO: open location selector
+        });
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getViewBinding().map.onResume();
+        // TODO Map selection
+    }
+
+    @Override
+    protected void showData(@Nullable ShopAdminDetails data) {
+        super.showData(data);
+        if (data != null) {
+            Shop shop = data.getShop();
+            requireActivity().setTitle(shop.getName());
+            getViewBinding().nameInput.setText(shop.getName());
+            getViewBinding().map.setVisibility(View.VISIBLE);
+            getViewBinding().mapEmptyView.setVisibility(View.GONE);
+            getViewBinding().map.getMapAsync(map -> {
+                Toast.makeText(requireContext(), "GETMAP", Toast.LENGTH_LONG).show();
+                map.setCameraPosition(new CameraPosition.Builder()
+                        .target(new LatLng(shop.getLatitude(), shop.getLongitude()))
+                        .zoom(0.4)
+                        .build());
+            });
+
+            // TODO Show owners (read-only)
+        } else {
+            getViewBinding().map.setVisibility(View.INVISIBLE);
+            getViewBinding().mapEmptyView.setVisibility(View.VISIBLE);
+            requireActivity().setTitle(R.string.new_shop_title);
+        }
+    }
+
+    @Override
+    protected void handleError(Throwable error) {
+        super.handleError(error);
+        ErrorDialog.newInstance(getString(R.string.error_network_offline))
+                .show(getChildFragmentManager(), null);
+    }
+
+    @Override
+    @SuppressWarnings("ConstantConditions")
+    protected void onSaveForm() {
+        super.onSaveForm();
+        boolean isInputValid = ArrayUtils.allTrue(
+                FormValidators.isString(getViewBinding().nameInputLayout)
+                // TODO Map selection
+        );
+
+        if (!isInputValid)
+            return;
+
+        String name = getViewBinding().nameInputLayout.getEditText().getText().toString().trim();
+        // TODO Map selection
+
+        if (getArgumentId() == 0) {
+            // TODO New shop
+        } else {
+            // TODO Update shop
+        }
+    }
+
+    //region AdminEditFragment
+
+    @Override
+    protected View getSaveButton() {
+        return getViewBinding().shopSaveEdit;
+    }
+
+    @Override
+    protected View getForm() {
+        return getViewBinding().shopForm;
+    }
+
+    @Override
+    protected View getLoadingView() {
+        return getViewBinding().contentLoading;
+    }
+
+    @Override
+    protected void onLoadData() {
+        super.onLoadData();
+        if (viewModel == null)
+            viewModel = new ViewModelProvider(this, viewModelFactory).get(AdminShopEditViewModel.class);
+        viewModel.loadShop(getArgumentId());
+    }
+
+    @Override
+    protected LiveResource<ShopAdminDetails> getLiveData() {
+        if (viewModel == null)
+            viewModel = new ViewModelProvider(this, viewModelFactory).get(AdminShopEditViewModel.class);
+        return viewModel.getLiveShop();
+    }
+
+    @Override
+    protected int getArgumentId() {
+        return AdminShopEditFragmentArgs.fromBundle(requireArguments()).getShopId();
+    }
+
+    //endregion
+
+    //region Mapbox lifecycle
+    @Override
+    public void onStart() {
+        super.onStart();
+        getViewBinding().map.onStart();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getViewBinding().map.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getViewBinding().map.onStop();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getViewBinding().map.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getViewBinding().map.onDestroy();
+    }
+    //endregion
 }

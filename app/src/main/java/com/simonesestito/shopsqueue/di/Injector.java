@@ -24,6 +24,7 @@ import com.simonesestito.shopsqueue.di.module.RetrofitModule;
 import com.simonesestito.shopsqueue.di.module.SharedPreferencesModule;
 import com.simonesestito.shopsqueue.di.module.ViewModelModule;
 import com.simonesestito.shopsqueue.ui.MainActivity;
+import com.simonesestito.shopsqueue.ui.fragment.AdminShopEditFragment;
 import com.simonesestito.shopsqueue.ui.fragment.AdminShopsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.AdminUserEditFragment;
 import com.simonesestito.shopsqueue.ui.fragment.AdminUsersFragment;
@@ -59,6 +60,8 @@ public interface Injector {
     void inject(ShopPickerFragment shopPickerFragment);
 
     void inject(AdminShopsFragment adminShopsFragment);
+
+    void inject(AdminShopEditFragment adminShopEditFragment);
 
     @Component.Builder
     interface Builder {

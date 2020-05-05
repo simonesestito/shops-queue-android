@@ -24,8 +24,8 @@ import com.simonesestito.shopsqueue.di.module.RetrofitModule;
 import com.simonesestito.shopsqueue.di.module.SharedPreferencesModule;
 import com.simonesestito.shopsqueue.di.module.ViewModelModule;
 import com.simonesestito.shopsqueue.ui.MainActivity;
-import com.simonesestito.shopsqueue.ui.fragment.AdminEditUserFragment;
 import com.simonesestito.shopsqueue.ui.fragment.AdminShopsFragment;
+import com.simonesestito.shopsqueue.ui.fragment.AdminUserEditFragment;
 import com.simonesestito.shopsqueue.ui.fragment.AdminUsersFragment;
 import com.simonesestito.shopsqueue.ui.fragment.LoginFragment;
 import com.simonesestito.shopsqueue.ui.fragment.MainFragment;
@@ -54,7 +54,7 @@ public interface Injector {
 
     void inject(AdminUsersFragment adminUsersFragment);
 
-    void inject(AdminEditUserFragment adminEditUserFragment);
+    void inject(AdminUserEditFragment adminUserEditFragment);
 
     void inject(ShopPickerFragment shopPickerFragment);
 

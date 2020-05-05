@@ -51,16 +51,16 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
-public class AdminEditUserFragment extends AbstractAppFragment<AdminUserEditBinding> {
+public class AdminUserEditFragment extends AbstractAppFragment<AdminUserEditBinding> {
     @Inject ViewModelFactory viewModelFactory;
     private AdminUserEditViewModel viewModel;
-    private AdminEditUserFragmentArgs args;
+    private AdminUserEditFragmentArgs args;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ShopsQueueApplication.getInjector().inject(this);
-        args = AdminEditUserFragmentArgs.fromBundle(requireArguments());
+        args = AdminUserEditFragmentArgs.fromBundle(requireArguments());
     }
 
     @Override
@@ -73,7 +73,7 @@ public class AdminEditUserFragment extends AbstractAppFragment<AdminUserEditBind
         super.onViewCreated(view, savedInstanceState);
         getViewBinding().userSaveEdit.setOnClickListener(v -> onSaveUser());
         getViewBinding().shopInput.setOnClickListener(v ->
-                NavUtils.navigate(this, AdminEditUserFragmentDirections.adminNewUserPickShop()));
+                NavUtils.navigate(this, AdminUserEditFragmentDirections.adminNewUserPickShop()));
 
         UserRoleSpinnerAdapter roleAdapter = new UserRoleSpinnerAdapter(requireContext());
         getViewBinding().adminUserRole.setAdapter(roleAdapter);

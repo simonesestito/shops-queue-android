@@ -39,4 +39,5 @@
     <dimen name="error_big_icon_size">36dp</dimen>
     <dimen name="default_appbar_elevation">8dp</dimen>
     <dimen name="fab_area_size">60dp</dimen>
+    <dimen name="map_height">200dp</dimen>
 </resources>

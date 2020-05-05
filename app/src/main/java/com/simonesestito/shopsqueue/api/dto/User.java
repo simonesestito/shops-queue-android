@@ -58,7 +58,7 @@ public class User implements Identifiable {
     }
 
     public String getFullName() {
-        return name + " " + surname;
+        return surname + " " + name;
     }
 
     public String getEmail() {
@@ -78,6 +78,7 @@ public class User implements Identifiable {
     }
 
     @Nullable
+    @SuppressWarnings("WeakerAccess")
     public Integer getShopId() {
         return shopId;
     }

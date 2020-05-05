@@ -20,6 +20,7 @@ package com.simonesestito.shopsqueue;
 
 import android.app.Application;
 
+import com.mapbox.mapboxsdk.Mapbox;
 import com.simonesestito.shopsqueue.di.DaggerInjector;
 import com.simonesestito.shopsqueue.di.Injector;
 
@@ -36,5 +37,7 @@ public class ShopsQueueApplication extends Application {
         injector = DaggerInjector.builder()
                 .provideContext(getApplicationContext())
                 .build();
+
+        Mapbox.getInstance(this, Constants.MAPBOX_API_KEY);
     }
 }

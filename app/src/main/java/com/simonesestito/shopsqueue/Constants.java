@@ -22,4 +22,5 @@ public class Constants {
     public static final String API_BASE_URL = "http://192.168.1.100:1234/";
     public static final String SHARED_PREFERENCES_FILE = BuildConfig.APPLICATION_ID + "_preferences";
     public static final String SHARED_PREFERENCES_TOKEN_KEY = "api_access_token";
+    public static final String MAPBOX_API_KEY = "pk.eyJ1Ijoic2ltb25lLXNlc3RpdG8iLCJhIjoiY2s5dHFncHoxMWdvaTNrcWNpc2FreTNkZCJ9.ivwfyIV4s6dfQz3wkM4N1g";
 }

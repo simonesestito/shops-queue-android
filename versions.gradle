@@ -18,13 +18,14 @@
 
 def versions = [:]
 
-versions.navigation = '2.3.0-alpha02'
+versions.navigation = '2.3.0-alpha06'
 versions.lifecycle = '2.2.0'
 versions.appcompat = '1.1.0'
 versions.constraintlayout = '1.1.3'
 versions.material = '1.1.0'
 versions.dagger = '2.27'
 versions.retrofit = '2.8.1'
+versions.okhttpLog = '3.8.0'
 versions.swiperefresh = '1.0.0'
 
 ext.versions = versions

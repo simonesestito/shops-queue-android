@@ -18,6 +18,7 @@
 
 package com.simonesestito.shopsqueue.di.module;
 
+import com.simonesestito.shopsqueue.BuildConfig;
 import com.simonesestito.shopsqueue.api.ApiCallAdapter;
 import com.simonesestito.shopsqueue.api.AuthorizationInterceptor;
 import com.simonesestito.shopsqueue.api.service.BookingService;
@@ -29,6 +30,7 @@ import com.simonesestito.shopsqueue.api.service.UserService;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -38,9 +40,15 @@ import static com.simonesestito.shopsqueue.Constants.API_BASE_URL;
 public class RetrofitModule {
     @Provides
     OkHttpClient provideOkHttp(AuthorizationInterceptor authorizationInterceptor) {
-        return new OkHttpClient.Builder()
-                .addInterceptor(authorizationInterceptor)
-                .build();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .addInterceptor(authorizationInterceptor);
+
+        if (BuildConfig.DEBUG) {
+            builder.addInterceptor(new HttpLoggingInterceptor()
+                    .setLevel(HttpLoggingInterceptor.Level.BODY));
+        }
+
+        return builder.build();
     }
 
     @Provides

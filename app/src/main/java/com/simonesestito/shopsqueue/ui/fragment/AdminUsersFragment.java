@@ -76,7 +76,7 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminChildFragmentBi
             }
         });
         adapter.setItemClickListener(user ->
-                NavUtils.navigate(this, AdminFragmentDirections.adminEditUser().setUserId(user.getId())));
+                NavUtils.navigate(this, AdminFragmentDirections.adminUserEdit().setUserId(user.getId())));
         getViewBinding().adminList.setAdapter(adapter);
         ViewUtils.addDivider(getViewBinding().adminList);
 
@@ -84,7 +84,7 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminChildFragmentBi
                 .setOnRefreshListener(() -> viewModel.refreshUsers());
 
         getViewBinding().adminListActionAdd.setOnClickListener(v ->
-                NavUtils.navigate(this, AdminFragmentDirections.adminEditUser()));
+                NavUtils.navigate(this, AdminFragmentDirections.adminUserEdit()));
     }
 
     @Override

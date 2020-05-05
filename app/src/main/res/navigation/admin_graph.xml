@@ -27,11 +27,11 @@
         android:label="@string/admin_fragment_title"
         tools:layout="@layout/admin_fragment">
         <action
-            android:id="@+id/adminEditUser"
+            android:id="@+id/adminUserEdit"
             app:destination="@id/adminUserEditFragment" />
         <action
-            android:id="@+id/adminEditShop"
-            app:destination="@id/adminEditShopFragment" />
+            android:id="@+id/adminShopEdit"
+            app:destination="@id/adminShopEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/shopPickerFragment"
@@ -52,7 +52,7 @@
     </fragment>
 
     <fragment
-        android:id="@+id/adminEditShopFragment"
+        android:id="@+id/adminShopEditFragment"
         android:name="com.simonesestito.shopsqueue.ui.fragment.AdminShopEditFragment"
         android:label="@string/admin_fragment_title"
         tools:layout="@layout/admin_shop_edit">

@@ -76,7 +76,7 @@ public class AdminShopsFragment extends AbstractAppFragment<AdminChildFragmentBi
             }
         });
         adapter.setItemClickListener(shop ->
-                NavUtils.navigate(this, null /* TODO */));
+                NavUtils.navigate(this, AdminFragmentDirections.adminShopEdit().setShopId(shop.getId())));
         getViewBinding().adminList.setAdapter(adapter);
         ViewUtils.addDivider(getViewBinding().adminList);
 
@@ -84,7 +84,7 @@ public class AdminShopsFragment extends AbstractAppFragment<AdminChildFragmentBi
                 .setOnRefreshListener(() -> viewModel.refreshShops());
 
         getViewBinding().adminListActionAdd.setOnClickListener(v ->
-                NavUtils.navigate(this, null /* TODO */));
+                NavUtils.navigate(this, AdminFragmentDirections.adminShopEdit()));
     }
 
     @Override

@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -84,7 +83,6 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
             getViewBinding().map.setVisibility(View.VISIBLE);
             getViewBinding().mapEmptyView.setVisibility(View.GONE);
             getViewBinding().map.getMapAsync(map -> {
-                Toast.makeText(requireContext(), "GETMAP", Toast.LENGTH_LONG).show();
                 map.setCameraPosition(new CameraPosition.Builder()
                         .target(new LatLng(shop.getLatitude(), shop.getLongitude()))
                         .zoom(0.4)

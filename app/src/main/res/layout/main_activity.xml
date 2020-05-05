@@ -26,7 +26,8 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/appToolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.App.Toolbar" />
 
     <fragment
         android:id="@+id/navHostFragment"

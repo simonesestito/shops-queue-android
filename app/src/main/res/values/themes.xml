@@ -34,4 +34,8 @@
     </style>
 
     <style name="Theme.App" parent="Base.Theme.App.Light" />
+
+    <style name="ThemeOverlay.App.Toolbar" parent="">
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
 </resources>

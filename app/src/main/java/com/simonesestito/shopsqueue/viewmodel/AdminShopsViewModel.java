@@ -43,9 +43,6 @@ public class AdminShopsViewModel extends ViewModel {
     }
 
     public void refreshShops() {
-        if (shops.getValue() != null && shops.getValue().isLoading())
-            return;
-
         shops.emitLoading();
         shopService.getAllShops(0)
                 .onResult(newPage -> {

@@ -45,9 +45,6 @@ public class AdminUsersViewModel extends ViewModel {
     }
 
     public void refreshUsers() {
-        if (users.getValue() != null && users.getValue().isLoading())
-            return;
-
         users.emitLoading();
         userService.listUsers(0)
                 .onResult(newPage -> {
@@ -63,9 +60,6 @@ public class AdminUsersViewModel extends ViewModel {
     }
 
     public void loadNextPage() {
-        if (users.getValue() != null && users.getValue().isLoading())
-            return;
-
         if (lastPage != null && lastUsers.size() == lastPage.getTotalItems())
             return;
 

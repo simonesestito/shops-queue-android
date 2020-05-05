@@ -27,5 +27,6 @@ versions.dagger = '2.27'
 versions.retrofit = '2.8.1'
 versions.okhttpLog = '3.8.0'
 versions.swiperefresh = '1.0.0'
+versions.mapbox = '0.7.0'
 
 ext.versions = versions

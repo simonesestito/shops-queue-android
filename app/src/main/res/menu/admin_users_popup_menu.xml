@@ -19,5 +19,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/deleteUserMenuAction"
-        android:title="@string/user_delete_action" />
+        android:title="@string/menu_delete_action" />
 </menu>

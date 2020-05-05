@@ -74,7 +74,7 @@ public class ShopPickerFragment extends AbstractAppFragment<ShopPickerBinding> {
         getViewBinding().adminShopsList.setAdapter(adapter);
 
         ViewUtils.addDivider(getViewBinding().adminShopsList);
-        getViewBinding().adminUsersRefresh.setOnRefreshListener(() -> viewModel.refreshShops());
+        getViewBinding().adminListRefresh.setOnRefreshListener(() -> viewModel.refreshShops());
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ShopPickerFragment extends AbstractAppFragment<ShopPickerBinding> {
 
         ViewUtils.onRecyclerViewLoadMore(getViewBinding().adminShopsList, viewModel::loadNextPage);
         viewModel.getShops().observe(getViewLifecycleOwner(), event -> {
-            getViewBinding().adminUsersRefresh.setRefreshing(event.isLoading());
+            getViewBinding().adminListRefresh.setRefreshing(event.isLoading());
 
             if (event.isFailed() && !event.hasBeenHandled()) {
                 event.handle();

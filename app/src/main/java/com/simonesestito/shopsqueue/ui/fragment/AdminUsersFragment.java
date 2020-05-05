@@ -31,7 +31,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
-import com.simonesestito.shopsqueue.databinding.AdminUsersFragmentBinding;
+import com.simonesestito.shopsqueue.databinding.AdminChildFragmentBinding;
 import com.simonesestito.shopsqueue.ui.dialog.ConfirmDialog;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.AdminUsersAdapter;
@@ -44,7 +44,7 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBinding> {
+public class AdminUsersFragment extends AbstractAppFragment<AdminChildFragmentBinding> {
     private static final int REQUEST_DELETE_USER = 1;
     private static final String EXTRA_CLICKED_USER_ID = "userId";
     @Inject ViewModelFactory viewModelFactory;
@@ -57,8 +57,8 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBi
     }
 
     @Override
-    protected AdminUsersFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
-        return AdminUsersFragmentBinding.inflate(layoutInflater, container, false);
+    protected AdminChildFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
+        return AdminChildFragmentBinding.inflate(layoutInflater, container, false);
     }
 
     @Override
@@ -77,13 +77,13 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBi
         });
         adapter.setItemClickListener(user ->
                 NavUtils.navigate(this, AdminFragmentDirections.adminEditUser().setUserId(user.getId())));
-        getViewBinding().adminUsersList.setAdapter(adapter);
-        ViewUtils.addDivider(getViewBinding().adminUsersList);
+        getViewBinding().adminList.setAdapter(adapter);
+        ViewUtils.addDivider(getViewBinding().adminList);
 
-        getViewBinding().adminUsersRefresh
+        getViewBinding().adminListRefresh
                 .setOnRefreshListener(() -> viewModel.refreshUsers());
 
-        getViewBinding().adminUsersAdd.setOnClickListener(v ->
+        getViewBinding().adminListActionAdd.setOnClickListener(v ->
                 NavUtils.navigate(this, AdminFragmentDirections.adminEditUser()));
     }
 
@@ -93,17 +93,17 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminUsersFragmentBi
         viewModel = new ViewModelProvider(this, viewModelFactory)
                 .get(AdminUsersViewModel.class);
 
-        ViewUtils.onRecyclerViewLoadMore(getViewBinding().adminUsersList, viewModel::loadNextPage);
+        ViewUtils.onRecyclerViewLoadMore(getViewBinding().adminList, viewModel::loadNextPage);
 
         viewModel.getUsers().observe(getViewLifecycleOwner(), event -> {
-            getViewBinding().adminUsersRefresh.setRefreshing(event.isLoading());
+            getViewBinding().adminListRefresh.setRefreshing(event.isLoading());
 
             if (event.isFailed() && !event.hasBeenHandled()) {
                 event.handle();
                 ErrorDialog.newInstance(getString(R.string.error_network_offline))
                         .show(getChildFragmentManager(), null);
             } else if (event.isSuccessful()) {
-                AdminUsersAdapter adapter = (AdminUsersAdapter) getViewBinding().adminUsersList.getAdapter();
+                AdminUsersAdapter adapter = (AdminUsersAdapter) getViewBinding().adminList.getAdapter();
                 Objects.requireNonNull(adapter).updateDataSet(event.getData());
             }
         });

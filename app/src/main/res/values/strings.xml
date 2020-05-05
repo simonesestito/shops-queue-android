@@ -54,8 +54,8 @@
     <string name="owner_cancel_all_message">All the bookings will be cancelled</string>
     <string name="admin_tab_users">Users</string>
     <string name="admin_tab_shops">Shops</string>
-    <string name="user_delete_action">Delete</string>
-    <string name="user_delete_confirm_message">This user and all of his data will be deleted immediately.</string>
+    <string name="menu_delete_action">Delete</string>
+    <string name="user_delete_confirm_message">This user and all of his data will be deleted irrevocably.</string>
     <string name="role_user">User</string>
     <string name="role_admin">Administrator</string>
     <string name="role_owner">Shop owner</string>
@@ -65,4 +65,5 @@
     <string name="new_user_title">Add new user</string>
     <string name="user_edit_save">Save user</string>
     <string name="input_shop_for_owner">Shop</string>
+    <string name="shop_delete_confirm_message">This shop will be deleted irrevocably</string>
 </resources>

@@ -61,7 +61,7 @@ public class AdminShopsAdapter extends DiffUtilAdapter<Shop, AdminShopsAdapter.V
             holder.view.userItemMenu.setVisibility(View.VISIBLE);
             holder.view.userItemMenu.setOnClickListener(menuIcon -> {
                 PopupMenu popupMenu = new PopupMenu(menuIcon.getContext(), menuIcon);
-                popupMenu.inflate(R.menu.admin_users_popup_menu);
+                popupMenu.inflate(R.menu.admin_shops_popup_menu);
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     int index = holder.getAdapterPosition();
                     Shop clickedShop = getItemAt(index);

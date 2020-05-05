@@ -72,5 +72,5 @@ dependencies {
     // Retrofit
     implementation "com.squareup.retrofit2:converter-jackson:$versions.retrofit"
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
-    debugImplementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttpLog"
+    implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttpLog"
 }

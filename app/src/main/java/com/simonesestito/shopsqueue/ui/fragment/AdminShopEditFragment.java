@@ -27,8 +27,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.Shop;
@@ -37,6 +39,8 @@ import com.simonesestito.shopsqueue.di.module.ShopAdminDetails;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
+import com.simonesestito.shopsqueue.util.MapboxLifecycleObserver;
+import com.simonesestito.shopsqueue.util.ThemeUtils;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 import com.simonesestito.shopsqueue.viewmodel.AdminShopEditViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
@@ -61,6 +65,9 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getViewLifecycleOwner().getLifecycle()
+                .addObserver(new MapboxLifecycleObserver(getViewBinding().map));
+        getViewBinding().map.onCreate(savedInstanceState);
         getViewBinding().map.setOnClickListener(v -> {
             // TODO: open location selector
         });
@@ -69,7 +76,6 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
     @Override
     public void onResume() {
         super.onResume();
-        getViewBinding().map.onResume();
         // TODO Map selection
     }
 
@@ -83,10 +89,20 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
             getViewBinding().map.setVisibility(View.VISIBLE);
             getViewBinding().mapEmptyView.setVisibility(View.GONE);
             getViewBinding().map.getMapAsync(map -> {
+                LatLng position = new LatLng(shop.getLatitude(), shop.getLongitude());
+
                 map.setCameraPosition(new CameraPosition.Builder()
-                        .target(new LatLng(shop.getLatitude(), shop.getLongitude()))
-                        .zoom(0.4)
+                        .target(position)
+                        .zoom(14)
                         .build());
+
+                // TODO Annotations plugin
+                map.addMarker(new MarkerOptions().setPosition(position));
+
+                if (ThemeUtils.isDarkTheme(requireContext()))
+                    map.setStyle(Style.DARK);
+                else
+                    map.setStyle(Style.MAPBOX_STREETS);
             });
 
             // TODO Show owners (read-only)

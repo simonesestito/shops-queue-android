@@ -164,36 +164,4 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
     }
 
     //endregion
-
-    //region Mapbox lifecycle
-    @Override
-    public void onStart() {
-        super.onStart();
-        getViewBinding().map.onStart();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getViewBinding().map.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        getViewBinding().map.onStop();
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        getViewBinding().map.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        getViewBinding().map.onDestroy();
-    }
-    //endregion
 }

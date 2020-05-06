@@ -16,12 +16,20 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue;
+package com.simonesestito.shopsqueue.viewmodel;
 
-@SuppressWarnings("WeakerAccess")
-public class Constants {
-    public static final String API_BASE_URL = "http://192.168.1.100:1234/";
-    public static final String SHARED_PREFERENCES_FILE = BuildConfig.APPLICATION_ID + "_preferences";
-    public static final String SHARED_PREFERENCES_TOKEN_KEY = "api_access_token";
-    public static final int COORDINATES_DIGITS_PRECISION = 6;
+import androidx.lifecycle.ViewModel;
+
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.simonesestito.shopsqueue.model.PickedLocation;
+
+import javax.inject.Inject;
+
+public class LocationPickerViewModel extends ViewModel {
+    public LatLng userLocation;
+    public PickedLocation latestLocation;
+
+    @Inject
+    LocationPickerViewModel() {
+    }
 }

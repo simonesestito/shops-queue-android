@@ -103,4 +103,16 @@ public abstract class AdminEditFragment<T, V extends ViewBinding> extends Abstra
     protected LiveResource<T> getLiveData() {
         return null;
     }
+
+    @Override
+    protected void onOnline() {
+        super.onOnline();
+        getSaveButton().setEnabled(true);
+    }
+
+    @Override
+    protected void onOffline() {
+        super.onOffline();
+        getSaveButton().setEnabled(false);
+    }
 }

@@ -16,12 +16,20 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue;
+package com.simonesestito.shopsqueue.util;
 
-@SuppressWarnings("WeakerAccess")
-public class Constants {
-    public static final String API_BASE_URL = "http://192.168.1.100:1234/";
-    public static final String SHARED_PREFERENCES_FILE = BuildConfig.APPLICATION_ID + "_preferences";
-    public static final String SHARED_PREFERENCES_TOKEN_KEY = "api_access_token";
-    public static final int COORDINATES_DIGITS_PRECISION = 6;
+import com.simonesestito.shopsqueue.Constants;
+
+public class NumberUtils {
+    /**
+     * Round a number to the amount of digits after comma required
+     */
+    public static double roundDigits(double number, int digits) {
+        double pow = Math.pow(10, digits);
+        return Math.floor(number * pow) / pow;
+    }
+
+    public static double roundCoordinate(double coordinate) {
+        return roundDigits(coordinate, Constants.COORDINATES_DIGITS_PRECISION);
+    }
 }

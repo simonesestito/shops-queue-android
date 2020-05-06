@@ -18,6 +18,9 @@
 
 package com.simonesestito.shopsqueue.util;
 
+import java.util.List;
+import java.util.Objects;
+
 /**
  * Utility functions to use on arrays
  */
@@ -31,5 +34,42 @@ public class ArrayUtils {
                 return false;
         }
         return true;
+    }
+
+    /**
+     * Check if every element of this array is equal to the given value
+     */
+    public static <T> boolean all(T[] array, T value) {
+        for (T element : array) {
+            if (!Objects.equals(element, value))
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * Check if every element of this array is equal to the given value
+     */
+    public static boolean all(int[] array, int value) {
+        for (int element : array) {
+            if (!Objects.equals(element, value))
+                return false;
+        }
+        return true;
+    }
+
+    public static String join(String delimiter, List<String> elements) {
+        if (elements.size() == 0)
+            return "";
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(elements.get(0));
+
+        for (int i = 1; i < elements.size(); i++) {
+            builder.append(delimiter);
+            builder.append(elements.get(i));
+        }
+
+        return builder.toString();
     }
 }

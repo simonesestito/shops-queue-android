@@ -18,6 +18,8 @@
 
 package com.simonesestito.shopsqueue.ui.fragment;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -36,10 +40,12 @@ import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.databinding.AdminShopEditBinding;
 import com.simonesestito.shopsqueue.di.module.ShopAdminDetails;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
+import com.simonesestito.shopsqueue.ui.dialog.PermissionDialog;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.util.MapUtils;
 import com.simonesestito.shopsqueue.util.MapboxLifecycleObserver;
+import com.simonesestito.shopsqueue.util.NavUtils;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 import com.simonesestito.shopsqueue.viewmodel.AdminShopEditViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
@@ -47,6 +53,9 @@ import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 import javax.inject.Inject;
 
 public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, AdminShopEditBinding> {
+    private final static int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private final static int PICK_LOCATION_REQUEST_CODE = 2;
+    private final static String LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
     @Inject ViewModelFactory viewModelFactory;
     private AdminShopEditViewModel viewModel;
 
@@ -67,15 +76,9 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
         getViewLifecycleOwner().getLifecycle()
                 .addObserver(new MapboxLifecycleObserver(getViewBinding().map));
         getViewBinding().map.onCreate(savedInstanceState);
-        getViewBinding().map.setOnClickListener(v -> {
-            // TODO: open location selector
-        });
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // TODO Map selection
+        getViewBinding().map.setOnClickListener(v -> pickLocation());
+        getViewBinding().mapEmptyView.setOnClickListener(v -> pickLocation());
     }
 
     @Override
@@ -92,7 +95,7 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
 
                 map.setCameraPosition(new CameraPosition.Builder()
                         .target(position)
-                        .zoom(14)
+                        .zoom(getResources().getInteger(R.integer.mapbox_default_zoom))
                         .build());
 
                 MapUtils.setStyle(requireContext(), map, style -> {
@@ -114,7 +117,29 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
     }
 
     private void pickLocation() {
+        // Check location permission
+        if (ContextCompat.checkSelfPermission(requireContext(), LOCATION_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission();
+        } else {
+            NavUtils.navigate(this, AdminShopEditFragmentDirections.adminShopEditPickLocation());
+        }
+    }
 
+    private void requestLocationPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), LOCATION_PERMISSION)) {
+            PermissionDialog.showForResult(this, LOCATION_PERMISSION_REQUEST_CODE, LOCATION_PERMISSION);
+        } else {
+            requestPermissions(new String[]{LOCATION_PERMISSION}, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE
+                && ArrayUtils.all(grantResults, PackageManager.PERMISSION_GRANTED)) {
+            pickLocation();
+        }
     }
 
     @Override

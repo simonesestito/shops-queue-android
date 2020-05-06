@@ -18,9 +18,12 @@
 
 package com.simonesestito.shopsqueue.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.util.TypedValue;
 
+import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatDelegate;
 
 public class ThemeUtils {
@@ -30,5 +33,13 @@ public class ThemeUtils {
                 .uiMode & Configuration.UI_MODE_NIGHT_MASK;
         return sysUiMode == Configuration.UI_MODE_NIGHT_YES
                 || AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
+    }
+
+    @ColorInt
+    public static int getBackgroundColor(Activity activity) {
+        TypedValue typedValue = new TypedValue();
+        activity.getTheme()
+                .resolveAttribute(android.R.attr.colorBackground, typedValue, true);
+        return typedValue.data;
     }
 }

@@ -28,6 +28,9 @@ versions.retrofit = '2.8.1'
 versions.okhttpLog = '3.8.0'
 versions.swiperefresh = '1.0.0'
 versions.mapbox = '9.1.0'
+versions.mapboxSuffix = 'v9'
 versions.mapboxAnnotation = '0.8.0'
+versions.mapboxPlaces = '0.12.0'
+versions.playServicesLocation = '17.0.0'
 
 ext.versions = versions

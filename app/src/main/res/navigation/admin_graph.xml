@@ -59,5 +59,14 @@
         <argument
             android:name="shopId"
             android:defaultValue="0" />
+        <action
+            android:id="@+id/adminShopEditPickLocation"
+            app:destination="@id/locationPickerFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/locationPickerFragment"
+        android:name="com.simonesestito.shopsqueue.ui.fragment.LocationPickerFragment"
+        android:label="@string/location_picker_fragment_title"
+        tools:layout="@layout/location_picker" />
 </navigation>

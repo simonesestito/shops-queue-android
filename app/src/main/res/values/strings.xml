@@ -69,4 +69,11 @@
     <string name="shop_edit_save">Save</string>
     <string name="new_shop_title">Add a new shop</string>
     <string name="map_empty_selection_message">Click to pick a location</string>
+    <string name="map_location_search">Search location…</string>
+    <string name="permission_dialog_title">Permission required</string>
+    <string name="permission_dialog_message">The feature you\'re trying to use can\'t work without this permission</string>
+    <string name="permission_dialog_allow_button">Allow</string>
+    <string name="permission_dialog_deny_button">Deny</string>
+    <string name="gps_disabled_error">Unable to get current location.</string>
+    <string name="location_picker_fragment_title">Pick a location</string>
 </resources>

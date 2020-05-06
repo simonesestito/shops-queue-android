@@ -18,12 +18,14 @@
 
 package com.simonesestito.shopsqueue.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -31,6 +33,8 @@ import androidx.navigation.NavGraph;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.User;
@@ -42,6 +46,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int PLAY_SERVICES_AVAILABILITY_REQUEST_CODE = 1;
     @Inject ViewModelFactory factory;
     private NavController navController;
     private LoginViewModel loginViewModel;
@@ -80,6 +85,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        GoogleApiAvailability api = GoogleApiAvailability.getInstance();
+        int apiResult = api.isGooglePlayServicesAvailable(this);
+        if (apiResult != ConnectionResult.SUCCESS) {
+            // Google Play Services not available
+            api.getErrorDialog(this, apiResult,
+                    PLAY_SERVICES_AVAILABILITY_REQUEST_CODE,
+                    d -> checkPlayServicesOrFinish()
+            ).show();
+        }
+    }
+
+    private void checkPlayServicesOrFinish() {
+        GoogleApiAvailability api = GoogleApiAvailability.getInstance();
+        int apiResult = api.isGooglePlayServicesAvailable(this);
+        if (apiResult != ConnectionResult.SUCCESS) {
+            finish();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main_activity_menu, menu);
@@ -97,6 +124,14 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PLAY_SERVICES_AVAILABILITY_REQUEST_CODE) {
+            checkPlayServicesOrFinish();
         }
     }
 

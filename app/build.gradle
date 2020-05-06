@@ -76,5 +76,9 @@ dependencies {
 
     // Mapbox
     implementation "com.mapbox.mapboxsdk:mapbox-android-sdk:$versions.mapbox"
-    implementation "com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:$versions.mapboxAnnotation"
+    implementation "com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-$versions.mapboxSuffix:$versions.mapboxAnnotation"
+    implementation "com.mapbox.mapboxsdk:mapbox-android-plugin-places-$versions.mapboxSuffix:$versions.mapboxPlaces"
+
+    // Play Services
+    implementation "com.google.android.gms:play-services-location:$versions.playServicesLocation"
 }

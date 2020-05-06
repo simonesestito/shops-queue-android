@@ -19,16 +19,25 @@
 package com.simonesestito.shopsqueue.util;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 
 import androidx.annotation.Nullable;
 
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
+import com.simonesestito.shopsqueue.R;
+
+import java.util.Objects;
 
 /**
  * Utility functions for Mapbox
  */
 public class MapUtils {
+    private static final String MARKER_ICON_ID = "custom-map-marker";
+
     /**
      * Set the style of the map, according to the current UI Theme
      */
@@ -40,7 +49,22 @@ public class MapUtils {
         }
     }
 
-    public static void setStyle(Context context, MapboxMap map) {
-        setStyle(context, map, null);
+    /**
+     * Add a marker to the map
+     */
+    public static void addMarker(SymbolManager symbolManager, Style style, Context context, LatLng position) {
+        if (style.getImage(MARKER_ICON_ID) == null) {
+            Drawable drawable = context.getDrawable(R.drawable.ic_map_marker_24dp);
+            Objects.requireNonNull(drawable);
+            style.addImage(MARKER_ICON_ID, drawable);
+        }
+
+        symbolManager.setTextAllowOverlap(true);
+        symbolManager.setIconAllowOverlap(true);
+
+        symbolManager.create(new SymbolOptions()
+                .withLatLng(position)
+                .withIconImage(MARKER_ICON_ID)
+                .withIconSize(1.3f));
     }
 }

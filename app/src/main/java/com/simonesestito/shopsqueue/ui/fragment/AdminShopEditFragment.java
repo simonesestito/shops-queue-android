@@ -27,9 +27,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.Shop;
@@ -95,10 +95,14 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
                         .zoom(14)
                         .build());
 
-                // TODO Annotations plugin
-                map.addMarker(new MarkerOptions().setPosition(position));
-
-                MapUtils.setStyle(requireContext(), map);
+                MapUtils.setStyle(requireContext(), map, style -> {
+                    SymbolManager symbolManager = new SymbolManager(
+                            getViewBinding().map,
+                            map,
+                            style
+                    );
+                    MapUtils.addMarker(symbolManager, style, requireContext(), position);
+                });
             });
 
             // TODO Show owners (read-only)
@@ -107,6 +111,10 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
             getViewBinding().mapEmptyView.setVisibility(View.VISIBLE);
             requireActivity().setTitle(R.string.new_shop_title);
         }
+    }
+
+    private void pickLocation() {
+
     }
 
     @Override

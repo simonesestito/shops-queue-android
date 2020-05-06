@@ -38,6 +38,6 @@ public class ShopsQueueApplication extends Application {
                 .provideContext(getApplicationContext())
                 .build();
 
-        Mapbox.getInstance(this, Constants.MAPBOX_API_KEY);
+        Mapbox.getInstance(this, getString(R.string.mapbox_api_key));
     }
 }

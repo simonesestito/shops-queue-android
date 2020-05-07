@@ -222,8 +222,13 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
     }
 
     @Override
-    protected View getForm() {
-        return getViewBinding().shopForm;
+    protected void setFormVisibility(int visibility) {
+        super.setFormVisibility(visibility);
+        getViewBinding().shopForm.setVisibility(visibility);
+        if (visibility != View.VISIBLE) {
+            getViewBinding().mapEmptyView.setVisibility(visibility);
+            getViewBinding().shopOwnersListEmptyView.setVisibility(visibility);
+        }
     }
 
     @Override

@@ -45,11 +45,11 @@ public abstract class AdminEditFragment<T, V extends ViewBinding> extends Abstra
         getLiveData().observe(getViewLifecycleOwner(), event -> {
             if (event.isLoading()) {
                 getLoadingView().setVisibility(View.VISIBLE);
-                getForm().setVisibility(View.GONE);
+                setFormVisibility(View.GONE);
                 getSaveButton().setEnabled(false);
             } else {
                 getLoadingView().setVisibility(View.GONE);
-                getForm().setVisibility(View.VISIBLE);
+                setFormVisibility(View.VISIBLE);
                 getSaveButton().setEnabled(true);
             }
 
@@ -83,8 +83,7 @@ public abstract class AdminEditFragment<T, V extends ViewBinding> extends Abstra
         return null;
     }
 
-    protected View getForm() {
-        return null;
+    protected void setFormVisibility(int visibility) {
     }
 
     protected void handleError(Throwable error) {

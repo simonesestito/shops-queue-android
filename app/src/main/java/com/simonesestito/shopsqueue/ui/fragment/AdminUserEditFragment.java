@@ -191,8 +191,9 @@ public class AdminUserEditFragment extends AdminEditFragment<UserDetails, AdminU
     }
 
     @Override
-    protected View getForm() {
-        return getViewBinding().userForm;
+    protected void setFormVisibility(int visibility) {
+        super.setFormVisibility(visibility);
+        getViewBinding().userForm.setVisibility(visibility);
     }
 
     @Override

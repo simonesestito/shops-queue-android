@@ -23,14 +23,12 @@ public class NewShop {
     private double longitude;
     private String address;
     private String name;
-    private String city;
 
-    public NewShop(double latitude, double longitude, String address, String name, String city) {
+    public NewShop(double latitude, double longitude, String address, String name) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.address = address;
         this.name = name;
-        this.city = city;
     }
 
     public double getLatitude() {
@@ -63,13 +61,5 @@ public class NewShop {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 }

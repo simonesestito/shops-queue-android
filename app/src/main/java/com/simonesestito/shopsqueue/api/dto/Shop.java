@@ -40,7 +40,6 @@ public class Shop implements Identifiable, Parcelable {
     private double latitude;
     private String address;
     private String name;
-    private String city;
     private int count; // Queue length
 
     public Shop() {
@@ -52,7 +51,6 @@ public class Shop implements Identifiable, Parcelable {
         latitude = in.readDouble();
         address = in.readString();
         name = in.readString();
-        city = in.readString();
         count = in.readInt();
     }
 
@@ -64,7 +62,6 @@ public class Shop implements Identifiable, Parcelable {
         this.id = id;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public double getLongitude() {
         return longitude;
     }
@@ -73,7 +70,6 @@ public class Shop implements Identifiable, Parcelable {
         this.longitude = longitude;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public double getLatitude() {
         return latitude;
     }
@@ -98,15 +94,6 @@ public class Shop implements Identifiable, Parcelable {
         this.name = name;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public int getCount() {
         return count;
     }
@@ -125,8 +112,7 @@ public class Shop implements Identifiable, Parcelable {
                 Double.compare(shop.getLatitude(), getLatitude()) == 0 &&
                 getCount() == shop.getCount() &&
                 getAddress().equals(shop.getAddress()) &&
-                getName().equals(shop.getName()) &&
-                getCity().equals(shop.getCity());
+                getName().equals(shop.getName());
     }
 
     @Override
@@ -141,7 +127,6 @@ public class Shop implements Identifiable, Parcelable {
         dest.writeDouble(latitude);
         dest.writeString(address);
         dest.writeString(name);
-        dest.writeString(city);
         dest.writeInt(count);
     }
 }

@@ -21,8 +21,11 @@ package com.simonesestito.shopsqueue.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.Keep;
+
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
+@Keep
 public class PickedLocation implements Parcelable {
     public static final Creator<PickedLocation> CREATOR = new Creator<PickedLocation>() {
         @Override

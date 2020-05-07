@@ -23,6 +23,7 @@ import com.simonesestito.shopsqueue.util.ApiException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.CallAdapter;
@@ -51,7 +52,12 @@ public class ApiCallAdapter<T> implements CallAdapter<T, ApiResponse<T>> {
                 if (response.isSuccessful()) {
                     apiResponse.emitResult(response.body());
                 } else {
-                    apiResponse.emitError(new ApiException(response.code()));
+                    String errorBody = null;
+                    try {
+                        errorBody = Objects.requireNonNull(response.errorBody()).string();
+                    } catch (Exception ignored) {
+                    }
+                    apiResponse.emitError(new ApiException(response.code(), errorBody));
                 }
             }
 

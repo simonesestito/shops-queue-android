@@ -100,7 +100,7 @@ public class AdminShopsFragment extends AbstractAppFragment<AdminChildFragmentBi
 
             if (event.isFailed() && !event.hasBeenHandled()) {
                 event.handle();
-                ErrorDialog.newInstance(getString(R.string.error_network_offline))
+                ErrorDialog.newInstance(requireContext(), event.getError())
                         .show(getChildFragmentManager(), null);
             } else if (event.isSuccessful()) {
                 AdminShopsAdapter adapter = (AdminShopsAdapter) getViewBinding().adminList.getAdapter();

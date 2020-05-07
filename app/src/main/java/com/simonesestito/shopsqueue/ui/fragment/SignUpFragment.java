@@ -111,18 +111,13 @@ public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
         if (error == null)
             return;
 
-        if (!(error instanceof ApiException)) {
-            ErrorDialog.newInstance(getString(R.string.error_network_offline))
-                    .show(getChildFragmentManager(), null);
-            event.handle();
-            return;
-        }
-
-        ApiException apiException = (ApiException) error;
-        if (apiException.getStatusCode() == HttpStatus.HTTP_CONFLICT) {
+        event.handle();
+        if (error instanceof ApiException && ((ApiException) error).getStatusCode() == HttpStatus.HTTP_CONFLICT) {
             ErrorDialog.newInstance(getString(R.string.error_sign_up_duplicate_email))
                     .show(getChildFragmentManager(), null);
-            event.handle();
+        } else {
+            ErrorDialog.newInstance(requireContext(), error)
+                    .show(getChildFragmentManager(), null);
         }
     }
 

@@ -24,16 +24,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
+import com.simonesestito.shopsqueue.api.dto.NewShop;
 import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.databinding.AdminShopEditBinding;
 import com.simonesestito.shopsqueue.di.module.ShopAdminDetails;
@@ -127,7 +130,10 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
         if (ContextCompat.checkSelfPermission(requireContext(), LOCATION_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
             requestLocationPermission();
         } else {
-            NavUtils.navigate(this, AdminShopEditFragmentDirections.adminShopEditPickLocation());
+            NavDirections directions = AdminShopEditFragmentDirections
+                    .adminShopEditPickLocation()
+                    .setStartLocation(viewModel.pickedLocation);
+            NavUtils.navigate(this, directions);
         }
     }
 
@@ -151,7 +157,7 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
     @Override
     protected void handleError(Throwable error) {
         super.handleError(error);
-        ErrorDialog.newInstance(getString(R.string.error_network_offline))
+        ErrorDialog.newInstance(requireContext(), error)
                 .show(getChildFragmentManager(), null);
     }
 

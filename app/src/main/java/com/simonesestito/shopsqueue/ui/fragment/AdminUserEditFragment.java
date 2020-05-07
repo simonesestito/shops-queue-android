@@ -25,7 +25,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.simonesestito.shopsqueue.R;
@@ -35,11 +34,9 @@ import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.api.dto.UserUpdate;
 import com.simonesestito.shopsqueue.databinding.AdminUserEditBinding;
-import com.simonesestito.shopsqueue.model.HttpStatus;
 import com.simonesestito.shopsqueue.model.UserRole;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.UserRoleSpinnerAdapter;
-import com.simonesestito.shopsqueue.util.ApiException;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.util.NavUtils;
@@ -122,20 +119,9 @@ public class AdminUserEditFragment extends AdminEditFragment<UserDetails, AdminU
 
     @Override
     protected void handleError(Throwable error) {
-        @StringRes int errorMessage = 0;
-
-        if (!(error instanceof ApiException)) {
-            errorMessage = R.string.error_network_offline;
-        } else if (((ApiException) error).getStatusCode() == HttpStatus.HTTP_CONFLICT) {
-            errorMessage = R.string.error_sign_up_duplicate_email;
-        } else {
-            error.printStackTrace();
-        }
-
-        if (errorMessage != 0) {
-            ErrorDialog.newInstance(getString(errorMessage))
-                    .show(getChildFragmentManager(), null);
-        }
+        super.handleError(error);
+        ErrorDialog.newInstance(requireContext(), error)
+                .show(getChildFragmentManager(), null);
     }
 
     @SuppressWarnings("ConstantConditions")

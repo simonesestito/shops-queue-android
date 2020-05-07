@@ -49,8 +49,9 @@ import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 import javax.inject.Inject;
 
 public class LocationPickerFragment extends AbstractAppFragment<LocationPickerBinding> {
-    public static final String PICKED_LOCATION_KEY = "picked_location";
+    static final String PICKED_LOCATION_KEY = "picked_location";
     @Inject ViewModelFactory viewModelFactory;
+    private LocationPickerFragmentArgs args;
     private LocationPickerViewModel viewModel;
     private MapboxHelper mapboxHelper;
 
@@ -58,6 +59,7 @@ public class LocationPickerFragment extends AbstractAppFragment<LocationPickerBi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        args = LocationPickerFragmentArgs.fromBundle(requireArguments());
         ShopsQueueApplication.getInjector().inject(this);
     }
 
@@ -88,10 +90,16 @@ public class LocationPickerFragment extends AbstractAppFragment<LocationPickerBi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         viewModel = new ViewModelProvider(this, viewModelFactory).get(LocationPickerViewModel.class);
-        if (viewModel.latestLocation != null)
-            onNewLocation(viewModel.latestLocation);
 
-        showUserLocation();
+        if (viewModel.latestLocation == null) {
+            if (args.getStartLocation() != null)
+                onNewLocation(args.getStartLocation());
+            else
+                showUserLocation();
+        } else {
+            onNewLocation(viewModel.latestLocation);
+        }
+
         mapboxHelper.setOnClickListener(this::onNewLocation);
     }
 

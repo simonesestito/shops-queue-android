@@ -94,7 +94,7 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
             } else {
                 getViewBinding().ownerQueueRefreshLayout.setRefreshing(false);
                 if (!event.hasBeenHandled()) {
-                    ErrorDialog.newInstance(getString(R.string.error_network_offline))
+                    ErrorDialog.newInstance(requireContext(), event.getError())
                             .show(getChildFragmentManager(), null);
                 }
             }

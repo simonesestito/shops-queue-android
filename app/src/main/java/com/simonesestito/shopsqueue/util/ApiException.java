@@ -18,15 +18,25 @@
 
 package com.simonesestito.shopsqueue.util;
 
+import android.util.Log;
+
 public class ApiException extends Exception {
     private final int statusCode;
+    private final String body;
 
-    public ApiException(int statusCode) {
+    public ApiException(int statusCode, String body) {
         super("Request failed with HTTP status " + statusCode);
         this.statusCode = statusCode;
+        this.body = body;
     }
 
     public int getStatusCode() {
         return statusCode;
+    }
+
+    @Override
+    public void printStackTrace() {
+        super.printStackTrace();
+        Log.e("ApiException", "Error response body:\n" + body);
     }
 }

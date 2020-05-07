@@ -24,4 +24,5 @@ public class HttpStatus {
     public static final int HTTP_FORBIDDEN = 403;
     public static final int HTTP_NOT_FOUND = 404;
     public static final int HTTP_CONFLICT = 409;
+    public static final int HTTP_SERVER_ERROR = 500;
 }

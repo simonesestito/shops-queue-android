@@ -77,4 +77,9 @@
     <string name="gps_disabled_error">Unable to get current location.</string>
     <string name="location_picker_fragment_title">Pick a location</string>
     <string name="location_picker_menu_user_location">Show user location</string>
+    <string name="pick_location_required">You must first choose a location</string>
+    <string name="error_invalid_request_body">An error occurred sending the request</string>
+    <string name="error_forbidden">You are not authorized to perform this action</string>
+    <string name="error_api_conflict">The data you\'ve inserted already exists</string>
+    <string name="error_api_server">A server error occurred. Sorry for the inconvenience</string>
 </resources>

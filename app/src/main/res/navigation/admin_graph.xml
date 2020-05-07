@@ -68,5 +68,11 @@
         android:id="@+id/locationPickerFragment"
         android:name="com.simonesestito.shopsqueue.ui.fragment.LocationPickerFragment"
         android:label="@string/location_picker_fragment_title"
-        tools:layout="@layout/location_picker" />
+        tools:layout="@layout/location_picker">
+        <argument
+            android:name="startLocation"
+            android:defaultValue="@null"
+            app:argType="com.simonesestito.shopsqueue.model.PickedLocation"
+            app:nullable="true" />
+    </fragment>
 </navigation>

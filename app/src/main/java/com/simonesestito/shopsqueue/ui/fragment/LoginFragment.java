@@ -29,13 +29,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
 import com.simonesestito.shopsqueue.databinding.LoginFragmentBinding;
-import com.simonesestito.shopsqueue.model.HttpStatus;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
-import com.simonesestito.shopsqueue.util.ApiException;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.util.NavUtils;
@@ -106,19 +103,9 @@ public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
         if (error == null)
             return;
 
-        if (!(error instanceof ApiException)) {
-            ErrorDialog.newInstance(getString(R.string.error_network_offline))
-                    .show(getChildFragmentManager(), null);
-            event.handle();
-            return;
-        }
-
-        ApiException apiException = (ApiException) error;
-        if (apiException.getStatusCode() == HttpStatus.HTTP_NOT_LOGGED_IN) {
-            ErrorDialog.newInstance(getString(R.string.error_login_invalid))
-                    .show(getChildFragmentManager(), null);
-            event.handle();
-        }
+        event.handle();
+        ErrorDialog.newInstance(requireContext(), error)
+                .show(getChildFragmentManager(), null);
     }
 
     @SuppressWarnings("ConstantConditions")

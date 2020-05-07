@@ -29,7 +29,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.databinding.ShopPickerBinding;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
@@ -89,7 +88,7 @@ public class ShopPickerFragment extends AbstractAppFragment<ShopPickerBinding> {
 
             if (event.isFailed() && !event.hasBeenHandled()) {
                 event.handle();
-                ErrorDialog.newInstance(getString(R.string.error_network_offline))
+                ErrorDialog.newInstance(requireContext(), event.getError())
                         .show(getChildFragmentManager(), null);
             } else if (event.isSuccessful()) {
                 AdminShopsAdapter adapter = (AdminShopsAdapter) getViewBinding().adminShopsList.getAdapter();

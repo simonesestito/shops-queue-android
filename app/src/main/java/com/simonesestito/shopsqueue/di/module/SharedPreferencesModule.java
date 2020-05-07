@@ -20,15 +20,14 @@ package com.simonesestito.shopsqueue.di.module;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
 import com.simonesestito.shopsqueue.Constants;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 import dagger.Module;
 import dagger.Provides;
@@ -37,6 +36,15 @@ import dagger.Provides;
 public class SharedPreferencesModule {
     @Provides
     public SharedPreferences provideSharedPreferences(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return provideEncryptedSharedPreferences(context);
+        } else {
+            return provideLegacySharedPreferences(context);
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private SharedPreferences provideEncryptedSharedPreferences(Context context) {
         try {
             return EncryptedSharedPreferences.create(
                     Constants.SHARED_PREFERENCES_FILE,
@@ -45,9 +53,13 @@ public class SharedPreferencesModule {
                     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             );
-        } catch (GeneralSecurityException | IOException e) {
+        } catch (Exception e) {
             Log.e("SharedPreferences", "Unable to provide encrypted SharedPreferences", e);
-            return context.getSharedPreferences(Constants.SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+            return provideLegacySharedPreferences(context);
         }
+    }
+
+    private SharedPreferences provideLegacySharedPreferences(Context context) {
+        return context.getSharedPreferences(Constants.SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
     }
 }

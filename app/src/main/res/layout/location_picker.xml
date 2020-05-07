@@ -28,7 +28,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/locationSearchLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_content_margin"
@@ -39,8 +39,8 @@
             android:id="@+id/locationSearchEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?colorSurface"
             android:imeOptions="actionSearch"
+            android:hint="@string/address_input_hint"
             android:inputType="textCapWords"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>

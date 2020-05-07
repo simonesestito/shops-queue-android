@@ -2,6 +2,8 @@
 
 [![Android CI](https://github.com/simonesestito/shops-queue-android/workflows/Android%20CI/badge.svg)](https://github.com/simonesestito/shops-queue-android/actions?query=workflow%3A%22Android+CI%22)
 
+[Download latest APK](https://firebasestorage.googleapis.com/v0/b/shops-queue.appspot.com/o/app.apk?alt=media)
+
 This repository is part of the **Shops Queue** project.
 
 Other related repositories:

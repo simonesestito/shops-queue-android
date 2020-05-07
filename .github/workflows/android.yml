@@ -32,10 +32,12 @@ jobs:
         alias: ${{ secrets.KEYSTORE_ALIAS }}
         keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
         keyPassword: ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
-    - name: Rename signed APK
-      run: mv app/build/outputs/apk/release/app-release-unsigned-signed.apk app-release.apk
-    - name: Upload APK
-      uses: actions/upload-artifact@v2
-      with:
-        name: app
-        path: app-release.apk
+    - name: Upload APK to Firebase Storage
+      run: bash ./upload-apk.sh
+      env:
+        APK_PATH: app/build/outputs/apk/release/app-release-unsigned-signed.apk
+        APK_STORAGE_NAME: app.apk
+        OAUTH_CLIENT_ID: ${{ secrets.CLOUD_STORAGE_CLIENT_ID }}
+        OAUTH_CLIENT_SECRET: ${{ secrets.CLOUD_STORAGE_CLIENT_SECRET }}
+        OAUTH_REFRESH_TOKEN: ${{ secrets.CLOUD_STORAGE_REFRESH_TOKEN }}
+        BUCKET_NAME: shops-queue.appspot.com

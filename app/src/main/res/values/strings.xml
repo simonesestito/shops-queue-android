@@ -83,4 +83,5 @@
     <string name="error_api_conflict">The data you\'ve inserted already exists</string>
     <string name="error_api_server">A server error occurred. Sorry for the inconvenience</string>
     <string name="shop_owners_list_title">Shop owners</string>
+    <string name="shop_owners_list_empty">No user owns this shop.\nGo into a user\'s details to assign it.</string>
 </resources>

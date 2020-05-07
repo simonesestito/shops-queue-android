@@ -38,6 +38,7 @@ import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.NewShop;
 import com.simonesestito.shopsqueue.api.dto.Shop;
+import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.databinding.AdminShopEditBinding;
 import com.simonesestito.shopsqueue.di.module.ShopAdminDetails;
 import com.simonesestito.shopsqueue.model.PickedLocation;
@@ -52,6 +53,8 @@ import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 import com.simonesestito.shopsqueue.viewmodel.AdminShopEditViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -122,11 +125,23 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
             PickedLocation pickedLocation = new PickedLocation(shop.getLatitude(), shop.getLongitude(), shop.getAddress());
             updateLocation(pickedLocation);
 
-            AdminUsersAdapter adapter = ((AdminUsersAdapter) Objects.requireNonNull(getViewBinding().shopOwnersList.getAdapter()));
-            adapter.updateDataSet(data.getOwners());
+            updateShopOwners(data.getOwners());
         } else {
             updateLocation(null);
+            updateShopOwners(Collections.emptyList());
             requireActivity().setTitle(R.string.new_shop_title);
+        }
+    }
+
+    private void updateShopOwners(List<UserDetails> owners) {
+        AdminUsersAdapter adapter = ((AdminUsersAdapter) Objects.requireNonNull(getViewBinding().shopOwnersList.getAdapter()));
+        adapter.updateDataSet(owners);
+        if (owners.isEmpty()) {
+            getViewBinding().shopOwnersList.setVisibility(View.INVISIBLE);
+            getViewBinding().shopOwnersListEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            getViewBinding().shopOwnersList.setVisibility(View.VISIBLE);
+            getViewBinding().shopOwnersListEmptyView.setVisibility(View.GONE);
         }
     }
 

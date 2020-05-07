@@ -59,6 +59,7 @@ public class ConfirmDialog extends DialogFragment {
                 .setMessage(requireArguments().getString(EXTRA_MESSAGE))
                 .setPositiveButton(R.string.confirm_yes_button, (d, b) -> onResult(true))
                 .setNegativeButton(R.string.confirm_no_button, (d, b) -> onResult(false))
+                .setOnCancelListener(d -> onResult(false))
                 .create();
     }
 

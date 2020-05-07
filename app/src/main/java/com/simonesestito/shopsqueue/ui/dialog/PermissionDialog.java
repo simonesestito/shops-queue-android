@@ -52,6 +52,7 @@ public class PermissionDialog extends DialogFragment {
                 .setMessage(R.string.permission_dialog_message)
                 .setPositiveButton(R.string.permission_dialog_allow_button, (d, b) -> onAllow())
                 .setNegativeButton(R.string.permission_dialog_deny_button, (d, b) -> onDeny())
+                .setOnCancelListener(d -> onDeny())
                 .create();
     }
 

@@ -72,7 +72,7 @@
         android:id="@+id/shopForm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="map,mapEmptyView,nameInputLayout" />
+        app:constraint_referenced_ids="map,nameInputLayout" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/shopSaveEdit"

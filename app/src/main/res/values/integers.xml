@@ -17,6 +17,5 @@
   -->
 
 <resources>
-    <integer name="mapbox_default_zoom">4</integer>
-    <integer name="mapbox_picker_zoom">16</integer>
+    <integer name="mapbox_default_zoom">16</integer>
 </resources>

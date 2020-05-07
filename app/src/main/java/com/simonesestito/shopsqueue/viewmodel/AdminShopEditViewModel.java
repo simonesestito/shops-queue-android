@@ -25,6 +25,7 @@ import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.api.service.ShopService;
 import com.simonesestito.shopsqueue.api.service.UserService;
 import com.simonesestito.shopsqueue.di.module.ShopAdminDetails;
+import com.simonesestito.shopsqueue.model.PickedLocation;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class AdminShopEditViewModel extends ViewModel {
     private final LiveResource<ShopAdminDetails> liveShop = new LiveResource<>();
     private final UserService userService;
     private final ShopService shopService;
+    public PickedLocation pickedLocation;
 
     @Inject
     AdminShopEditViewModel(UserService userService, ShopService shopService) {

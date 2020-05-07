@@ -18,6 +18,8 @@
 
 package com.simonesestito.shopsqueue.util;
 
+import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavBackStackEntry;
@@ -54,7 +56,6 @@ public class NavUtils {
     }
 
     /**
-     * Listen for a result to be returned by the next fragment
      * https://developer.android.com/guide/navigation/navigation-programmatic#returning_a_result
      */
     @Nullable
@@ -63,5 +64,15 @@ public class NavUtils {
         NavBackStackEntry backStackEntry = navController.getCurrentBackStackEntry();
         Objects.requireNonNull(backStackEntry);
         return backStackEntry.getSavedStateHandle().get(key);
+    }
+
+    public static void setFragmentResult(Fragment fragment, String key, Parcelable value) {
+        NavBackStackEntry backStackEntry = NavHostFragment
+                .findNavController(fragment)
+                .getPreviousBackStackEntry();
+        Objects.requireNonNull(backStackEntry)
+                .getSavedStateHandle()
+                .set(key, value);
+        fragment.requireActivity().onBackPressed();
     }
 }

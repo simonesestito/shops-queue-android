@@ -19,12 +19,8 @@
 package com.simonesestito.shopsqueue.util;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.IntentSender;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
-
-import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationServices;
@@ -35,12 +31,6 @@ import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
-import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.util.functional.Callback;
 
 import java.util.List;
@@ -53,38 +43,6 @@ import retrofit2.Response;
  * Utility functions for Mapbox
  */
 public class MapUtils {
-    private static final String MARKER_ICON_ID = "custom-map-marker";
-
-    /**
-     * Set the style of the map, according to the current UI Theme
-     */
-    public static void setStyle(Context context, MapboxMap map, @Nullable Style.OnStyleLoaded callback) {
-        if (ThemeUtils.isDarkTheme(context)) {
-            map.setStyle(Style.DARK, callback);
-        } else {
-            map.setStyle(Style.MAPBOX_STREETS, callback);
-        }
-    }
-
-    /**
-     * Add a marker to the map
-     */
-    public static Symbol addMarker(SymbolManager symbolManager, Style style, Context context, LatLng position) {
-        if (style.getImage(MARKER_ICON_ID) == null) {
-            Drawable drawable = context.getDrawable(R.drawable.ic_map_marker_24dp);
-            Objects.requireNonNull(drawable);
-            style.addImage(MARKER_ICON_ID, drawable);
-        }
-
-        symbolManager.setTextAllowOverlap(true);
-        symbolManager.setIconAllowOverlap(true);
-
-        return symbolManager.create(new SymbolOptions()
-                .withLatLng(position)
-                .withIconImage(MARKER_ICON_ID)
-                .withIconSize(1.3f));
-    }
-
     public static void getLastKnownLocation(Activity activity, OnSuccessListener<Location> callback) {
         LocationServices.getFusedLocationProviderClient(activity)
                 .getLastLocation()

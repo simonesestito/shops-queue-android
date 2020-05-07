@@ -16,8 +16,9 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.util;
+package com.simonesestito.shopsqueue.model;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 public class ApiException extends Exception {
@@ -34,6 +35,7 @@ public class ApiException extends Exception {
         return statusCode;
     }
 
+    @SuppressLint("LogNotTimber")
     @Override
     public void printStackTrace() {
         super.printStackTrace();

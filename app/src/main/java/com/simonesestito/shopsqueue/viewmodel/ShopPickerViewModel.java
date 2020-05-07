@@ -34,7 +34,7 @@ public class ShopPickerViewModel extends ViewModel {
     private final LiveResource<Set<Shop>> shops = new LiveResource<>();
     private final ShopService shopService;
     private Page<Shop> lastPage;
-    private Set<Shop> lastShops = new LinkedHashSet<>();
+    private final Set<Shop> lastShops = new LinkedHashSet<>();
 
     @Inject
     ShopPickerViewModel(ShopService shopService) {

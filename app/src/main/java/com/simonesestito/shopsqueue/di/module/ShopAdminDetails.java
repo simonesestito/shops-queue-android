@@ -24,8 +24,8 @@ import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import java.util.List;
 
 public class ShopAdminDetails {
-    private Shop shop;
-    private List<UserDetails> owners;
+    private final Shop shop;
+    private final List<UserDetails> owners;
 
     public ShopAdminDetails(Shop shop, List<UserDetails> owners) {
         this.shop = shop;

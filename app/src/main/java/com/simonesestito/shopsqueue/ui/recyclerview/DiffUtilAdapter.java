@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class DiffUtilAdapter<T extends Identifiable, VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
     private final AsyncListDiffer<T> listDiffer;

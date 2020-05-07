@@ -18,6 +18,7 @@
 
 package com.simonesestito.shopsqueue.api.dto;
 
+@SuppressWarnings("WeakerAccess")
 public class ShopWithDistance extends Shop {
     private double distance; // KMs
 

@@ -36,7 +36,7 @@ public class AdminUsersViewModel extends ViewModel {
     private final UserService userService;
     private final LiveResource<Set<UserDetails>> users = new LiveResource<>();
     private Page<UserDetails> lastPage;
-    private Set<UserDetails> lastUsers = new LinkedHashSet<>();
+    private final Set<UserDetails> lastUsers = new LinkedHashSet<>();
 
     @Inject
     AdminUsersViewModel(UserService userService) {

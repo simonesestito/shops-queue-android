@@ -34,9 +34,9 @@ import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
 import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.databinding.SignUpFragmentBinding;
+import com.simonesestito.shopsqueue.model.ApiException;
 import com.simonesestito.shopsqueue.model.HttpStatus;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
-import com.simonesestito.shopsqueue.util.ApiException;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.util.livedata.Resource;
@@ -66,7 +66,7 @@ public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
                 triggerAutofill();
             } else if (event.isLoading()) {
                 disableSignUp();
-            } else if (event.getError() != null && !event.hasBeenHandled()) {
+            } else if (event.getError() != null && event.hasToBeHandled()) {
                 handleError(event);
             }
         });

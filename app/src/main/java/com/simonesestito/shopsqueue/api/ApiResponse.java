@@ -21,7 +21,7 @@ package com.simonesestito.shopsqueue.api;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.simonesestito.shopsqueue.util.ApiException;
+import com.simonesestito.shopsqueue.model.ApiException;
 import com.simonesestito.shopsqueue.util.functional.Callback;
 
 import java.util.HashMap;
@@ -30,10 +30,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ApiResponse<T> {
-    private Handler uiHandler = new Handler(Looper.getMainLooper());
-    private List<Callback<T>> onResultHandlers;
-    private Map<Integer, List<Callback<ApiException>>> onErrorStatusHandlers;
-    private List<Callback<Throwable>> onErrorHandlers;
+    private final Handler uiHandler = new Handler(Looper.getMainLooper());
+    private final List<Callback<T>> onResultHandlers;
+    private final Map<Integer, List<Callback<ApiException>>> onErrorStatusHandlers;
+    private final List<Callback<Throwable>> onErrorHandlers;
 
     ApiResponse() {
         this.onResultHandlers = new LinkedList<>();

@@ -47,12 +47,13 @@ import java.util.Objects;
 /**
  * Helper class to work with Mapbox
  */
+@SuppressWarnings("WeakerAccess")
 public class MapboxHelper implements LifecycleObserver {
     private static final String MARKER_ICON_ID = "custom-marker";
-    private MapView mapView;
+    private final MapView mapView;
     private SymbolManager symbolManager;
-    private int currentZoom;
-    private Map<Integer, Symbol> symbols = new HashMap<>();
+    private final int currentZoom;
+    private final Map<Integer, Symbol> symbols = new HashMap<>();
 
     public MapboxHelper(MapView mapView, Fragment fragment) {
         this.mapView = mapView;
@@ -125,6 +126,7 @@ public class MapboxHelper implements LifecycleObserver {
         }
     }
 
+    @SuppressWarnings("SameReturnValue")
     public void setOnClickListener(Callback<LatLng> listener) {
         mapView.getMapAsync(map -> map.addOnMapClickListener(location -> {
             listener.onResult(location);

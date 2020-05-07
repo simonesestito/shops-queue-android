@@ -47,18 +47,18 @@ import java.util.Objects;
  * Base class for app fragments
  * It uses ViewBinding
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class AbstractAppFragment<T extends ViewBinding> extends Fragment {
     private static final String LATEST_INTERNET_CHECK = "internet_check";
     private boolean isAppbarHidden = false;
     private boolean isAppbarElevated = true;
     private ConnectivityManager.NetworkCallback callback;
-    private Handler uiThread = new Handler(Looper.getMainLooper());
+    private final Handler uiThread = new Handler(Looper.getMainLooper());
     private boolean latestInternetCheck = true;
     private T viewBinding;
 
     protected abstract T onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container);
 
-    @SuppressWarnings("WeakerAccess")
     protected void requestToHideAppbar() {
         isAppbarHidden = true;
     }
@@ -168,7 +168,6 @@ public abstract class AbstractAppFragment<T extends ViewBinding> extends Fragmen
     protected void onOffline() {
     }
 
-    @SuppressWarnings("WeakerAccess")
     protected T getViewBinding() {
         return viewBinding;
     }

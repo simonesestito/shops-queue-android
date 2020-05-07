@@ -93,7 +93,7 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
                 onData(Objects.requireNonNull(event.getData()));
             } else {
                 getViewBinding().ownerQueueRefreshLayout.setRefreshing(false);
-                if (!event.hasBeenHandled()) {
+                if (event.hasToBeHandled()) {
                     ErrorDialog.newInstance(requireContext(), event.getError())
                             .show(getChildFragmentManager(), null);
                 }

@@ -18,7 +18,7 @@
 
 package com.simonesestito.shopsqueue.api;
 
-import com.simonesestito.shopsqueue.util.ApiException;
+import com.simonesestito.shopsqueue.model.ApiException;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;

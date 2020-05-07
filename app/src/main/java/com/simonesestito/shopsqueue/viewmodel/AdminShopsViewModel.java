@@ -34,7 +34,7 @@ public class AdminShopsViewModel extends ViewModel {
     private final ShopService shopService;
     private final LiveResource<Set<Shop>> shops = new LiveResource<>();
     private Page<Shop> lastPage;
-    private Set<Shop> lastShops = new LinkedHashSet<>();
+    private final Set<Shop> lastShops = new LinkedHashSet<>();
 
     @Inject
     AdminShopsViewModel(ShopService shopService) {

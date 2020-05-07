@@ -53,8 +53,8 @@ public class Resource<T> {
         handled = true;
     }
 
-    public boolean hasBeenHandled() {
-        return handled;
+    public boolean hasToBeHandled() {
+        return !handled;
     }
 
     public boolean isSuccessful() {

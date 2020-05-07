@@ -29,8 +29,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.simonesestito.shopsqueue.R;
+import com.simonesestito.shopsqueue.model.ApiException;
 import com.simonesestito.shopsqueue.model.HttpStatus;
-import com.simonesestito.shopsqueue.util.ApiException;
 
 public class ErrorDialog extends DialogFragment {
     private static final String EXTRA_MESSAGE = "error_message";

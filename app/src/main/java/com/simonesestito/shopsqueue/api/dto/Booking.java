@@ -22,6 +22,7 @@ import com.simonesestito.shopsqueue.model.Identifiable;
 
 import java.util.Date;
 
+@SuppressWarnings("WeakerAccess")
 public class Booking implements Identifiable {
     private int bookingId;
     private Date createdAt;

@@ -20,6 +20,7 @@ package com.simonesestito.shopsqueue.util;
 
 import com.simonesestito.shopsqueue.Constants;
 
+@SuppressWarnings("WeakerAccess")
 public class NumberUtils {
     /**
      * Round a number to the amount of digits after comma required

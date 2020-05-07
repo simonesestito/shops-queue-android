@@ -28,7 +28,7 @@ public class SharedPreferencesStore {
     private final SharedPreferences sharedPreferences;
 
     @Inject
-    public SharedPreferencesStore(SharedPreferences sharedPreferences) {
+    SharedPreferencesStore(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
     }
 

@@ -45,7 +45,7 @@ public class Shop implements Identifiable, Parcelable {
     public Shop() {
     }
 
-    protected Shop(Parcel in) {
+    private Shop(Parcel in) {
         id = in.readInt();
         longitude = in.readDouble();
         latitude = in.readDouble();

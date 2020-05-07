@@ -35,9 +35,9 @@ public class PickedLocation implements Parcelable {
             return new PickedLocation[size];
         }
     };
-    private double latitude;
-    private double longitude;
-    private String address;
+    private final double latitude;
+    private final double longitude;
+    private final String address;
 
     public PickedLocation(double latitude, double longitude, String address) {
         this.latitude = latitude;

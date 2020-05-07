@@ -98,7 +98,7 @@ public class AdminShopsFragment extends AbstractAppFragment<AdminChildFragmentBi
         viewModel.getShops().observe(getViewLifecycleOwner(), event -> {
             getViewBinding().adminListRefresh.setRefreshing(event.isLoading());
 
-            if (event.isFailed() && !event.hasBeenHandled()) {
+            if (event.isFailed() && event.hasToBeHandled()) {
                 event.handle();
                 ErrorDialog.newInstance(requireContext(), event.getError())
                         .show(getChildFragmentManager(), null);

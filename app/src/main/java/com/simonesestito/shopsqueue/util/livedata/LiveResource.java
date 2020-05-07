@@ -44,7 +44,7 @@ public class LiveResource<T> extends LiveData<Resource<T>> {
      */
     public void observeUnhandled(LifecycleOwner lifecycleOwner, Handler<Resource<T>> handler) {
         observe(lifecycleOwner, event -> {
-            if (!event.hasBeenHandled()) {
+            if (event.hasToBeHandled()) {
                 boolean handled = handler.handle(event);
                 if (handled)
                     event.handle();

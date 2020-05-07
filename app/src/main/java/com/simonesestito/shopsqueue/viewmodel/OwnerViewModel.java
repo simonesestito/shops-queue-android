@@ -45,7 +45,7 @@ public class OwnerViewModel extends ViewModel {
         loadAllData();
     }
 
-    public void loadAllData() {
+    private void loadAllData() {
         shopData.emitLoading();
 
         // Load shop info

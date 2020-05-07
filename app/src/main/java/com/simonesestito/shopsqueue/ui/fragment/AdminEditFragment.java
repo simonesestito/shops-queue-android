@@ -27,6 +27,7 @@ import androidx.viewbinding.ViewBinding;
 
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class AdminEditFragment<T, V extends ViewBinding> extends AbstractAppFragment<V> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public abstract class AdminEditFragment<T, V extends ViewBinding> extends Abstra
                 getSaveButton().setEnabled(true);
             }
 
-            if (event.isFailed() && !event.hasBeenHandled()) {
+            if (event.isFailed() && event.hasToBeHandled()) {
                 event.handle();
                 handleError(event.getError());
             }
@@ -62,7 +63,7 @@ public abstract class AdminEditFragment<T, V extends ViewBinding> extends Abstra
                 if (event.getData() == null) {
                     // Successful update request
                     requireActivity().onBackPressed();
-                } else if (!event.hasBeenHandled()) {
+                } else if (event.hasToBeHandled()) {
                     // Data fetched
                     event.handle();
                     showData(event.getData());

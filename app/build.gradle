@@ -54,6 +54,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
     implementation "com.google.android.material:material:$versions.material"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$versions.swiperefresh"
+    implementation "androidx.security:security-crypto:$versions.crypto"
 
     // Lifecycle libs
     implementation "androidx.lifecycle:lifecycle-viewmodel:$versions.lifecycle"

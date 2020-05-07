@@ -76,4 +76,5 @@
     <string name="permission_dialog_deny_button">Deny</string>
     <string name="gps_disabled_error">Unable to get current location.</string>
     <string name="location_picker_fragment_title">Pick a location</string>
+    <string name="location_picker_menu_user_location">Show user location</string>
 </resources>

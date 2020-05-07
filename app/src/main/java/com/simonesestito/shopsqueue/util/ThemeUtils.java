@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.util.TypedValue;
 
+import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -36,10 +37,10 @@ public class ThemeUtils {
     }
 
     @ColorInt
-    public static int getBackgroundColor(Activity activity) {
+    public static int getThemeColor(Activity activity, @AttrRes int attrId) {
         TypedValue typedValue = new TypedValue();
         activity.getTheme()
-                .resolveAttribute(android.R.attr.colorBackground, typedValue, true);
+                .resolveAttribute(attrId, typedValue, true);
         return typedValue.data;
     }
 }

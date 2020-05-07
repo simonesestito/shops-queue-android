@@ -18,6 +18,8 @@
 
 package com.simonesestito.shopsqueue.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -101,6 +103,15 @@ public class LocationPickerFragment extends AbstractAppFragment<LocationPickerBi
         }
 
         mapboxHelper.setOnClickListener(this::onNewLocation);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MapUtils.ENABLE_LOCATION_REQUEST_CODE &&
+                resultCode == Activity.RESULT_OK) {
+            showUserLocation();
+        }
     }
 
     @Override

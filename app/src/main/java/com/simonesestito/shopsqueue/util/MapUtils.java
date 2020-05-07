@@ -19,12 +19,15 @@
 package com.simonesestito.shopsqueue.util;
 
 import android.app.Activity;
+import android.content.IntentSender;
 import android.location.Location;
 
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
@@ -43,21 +46,66 @@ import retrofit2.Response;
 /**
  * Utility functions for Mapbox
  */
+@SuppressWarnings("WeakerAccess")
 public class MapUtils {
+    public static final int ENABLE_LOCATION_REQUEST_CODE = 10;
+
+    /**
+     * Check location Settings
+     * You need to pass a callback
+     * It'll be return {@code true} if it's safe to fetch location updates
+     * It'll return {@code false} if it's impossible to change location settings
+     * In case location is disabled, an intent will be launched to fix the issue
+     * You should listen on onActivityResult.
+     * The callback won't be called!
+     *
+     * @param onLocationEnabled Callback
+     */
+    public static void checkLocationSettings(Activity activity, Callback<Boolean> onLocationEnabled) {
+        LocationSettingsRequest settingsRequest = new LocationSettingsRequest.Builder()
+                .addLocationRequest(createLocationRequest())
+                .build();
+        LocationServices.getSettingsClient(activity)
+                .checkLocationSettings(settingsRequest)
+                .addOnSuccessListener(response -> onLocationEnabled.onResult(true))
+                .addOnFailureListener(error -> {
+                    if (!(error instanceof ResolvableApiException)) {
+                        onLocationEnabled.onResult(false);
+                        return;
+                    }
+
+                    ResolvableApiException resolvable = (ResolvableApiException) error;
+                    try {
+                        resolvable.startResolutionForResult(
+                                activity, ENABLE_LOCATION_REQUEST_CODE
+                        );
+                    } catch (IntentSender.SendIntentException e) {
+                        onLocationEnabled.onResult(false);
+                    }
+                });
+    }
+
     public static void getCurrentLocation(Activity activity, OnSuccessListener<Location> callback) {
-        LocationRequest locationRequest = LocationRequest.create()
+        checkLocationSettings(activity, success -> {
+            if (!success)
+                return;
+
+            LocationServices.getFusedLocationProviderClient(activity)
+                    .requestLocationUpdates(createLocationRequest(), new LocationCallback() {
+                        @Override
+                        public void onLocationResult(LocationResult locationResult) {
+                            super.onLocationResult(locationResult);
+                            callback.onSuccess(locationResult.getLastLocation());
+                        }
+                    }, null);
+        });
+    }
+
+    private static LocationRequest createLocationRequest() {
+        return LocationRequest.create()
                 .setNumUpdates(1)
                 .setExpirationDuration(5_000)
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        
-        LocationServices.getFusedLocationProviderClient(activity)
-                .requestLocationUpdates(locationRequest, new LocationCallback() {
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        super.onLocationResult(locationResult);
-                        callback.onSuccess(locationResult.getLastLocation());
-                    }
-                }, null);
     }
 
     public static void getAddressByCoordinates(LatLng newLocation, Callback<String> callback) {

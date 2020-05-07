@@ -27,11 +27,13 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -132,7 +134,25 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PLAY_SERVICES_AVAILABILITY_REQUEST_CODE) {
             checkPlayServicesOrFinish();
+        } else {
+            handleFragmentActivityResult(requestCode, resultCode, data);
+
         }
+    }
+
+    private void handleFragmentActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Fragment firstFragment = getSupportFragmentManager()
+                .getFragments()
+                .get(0);
+        if (!(firstFragment instanceof NavHostFragment))
+            return;
+
+        NavHostFragment navHostFragment = (NavHostFragment) firstFragment;
+        Fragment currentFragment = navHostFragment
+                .getChildFragmentManager()
+                .getPrimaryNavigationFragment();
+        if (currentFragment != null)
+            currentFragment.onActivityResult(requestCode, resultCode, data);
     }
 
     private void onNewAuthStatus(User currentUser) {

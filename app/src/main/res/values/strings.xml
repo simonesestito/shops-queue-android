@@ -82,4 +82,5 @@
     <string name="error_forbidden">You are not authorized to perform this action</string>
     <string name="error_api_conflict">The data you\'ve inserted already exists</string>
     <string name="error_api_server">A server error occurred. Sorry for the inconvenience</string>
+    <string name="shop_owners_list_title">Shop owners</string>
 </resources>

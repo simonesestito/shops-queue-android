@@ -44,12 +44,15 @@ import com.simonesestito.shopsqueue.model.PickedLocation;
 import com.simonesestito.shopsqueue.ui.MapboxHelper;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.dialog.PermissionDialog;
+import com.simonesestito.shopsqueue.ui.recyclerview.AdminUsersAdapter;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.util.NavUtils;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 import com.simonesestito.shopsqueue.viewmodel.AdminShopEditViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -81,6 +84,7 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
         if (viewModel.pickedLocation != null) {
             updateLocation(viewModel.pickedLocation);
         }
+        getViewBinding().shopOwnersList.setAdapter(new AdminUsersAdapter());
     }
 
     @Override
@@ -118,7 +122,8 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
             PickedLocation pickedLocation = new PickedLocation(shop.getLatitude(), shop.getLongitude(), shop.getAddress());
             updateLocation(pickedLocation);
 
-            // TODO Show owners (read-only)
+            AdminUsersAdapter adapter = ((AdminUsersAdapter) Objects.requireNonNull(getViewBinding().shopOwnersList.getAdapter()));
+            adapter.updateDataSet(data.getOwners());
         } else {
             updateLocation(null);
             requireActivity().setTitle(R.string.new_shop_title);
@@ -165,21 +170,32 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
     @SuppressWarnings("ConstantConditions")
     protected void onSaveForm() {
         super.onSaveForm();
+        boolean locationPicked = viewModel.pickedLocation != null;
+        if (!locationPicked) {
+            Toast.makeText(requireContext(), R.string.pick_location_required, Toast.LENGTH_SHORT).show();
+        }
+
         boolean isInputValid = ArrayUtils.allTrue(
-                FormValidators.isString(getViewBinding().nameInputLayout)
-                // TODO Map selection
+                FormValidators.isString(getViewBinding().nameInputLayout),
+                viewModel.pickedLocation != null
         );
 
         if (!isInputValid)
             return;
 
         String name = getViewBinding().nameInputLayout.getEditText().getText().toString().trim();
-        // TODO Map selection
+
+        NewShop newShop = new NewShop(
+                viewModel.pickedLocation.getLatitude(),
+                viewModel.pickedLocation.getLongitude(),
+                viewModel.pickedLocation.getAddress(),
+                name
+        );
 
         if (getArgumentId() == 0) {
-            // TODO New shop
+            viewModel.saveNewShop(newShop);
         } else {
-            // TODO Update shop
+            viewModel.updateShop(getArgumentId(), newShop);
         }
     }
 

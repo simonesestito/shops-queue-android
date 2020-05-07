@@ -68,11 +68,32 @@
             android:inputType="textCapWords" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/shopOwnersListTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/form_element_margin"
+        android:text="@string/shop_owners_list_title"
+        android:textAppearance="@style/TextAppearance.App.Overline.Bold"
+        app:layout_constraintTop_toBottomOf="@id/nameInputLayout" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/shopOwnersList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/form_element_margin"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/fab_area_size"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shopOwnersListTitle"
+        app:layout_constraintVertical_bias="0.0" />
+
     <androidx.constraintlayout.widget.Group
         android:id="@+id/shopForm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="map,nameInputLayout" />
+        app:constraint_referenced_ids="map,nameInputLayout,shopOwnersList,shopOwnersListTitle" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/shopSaveEdit"

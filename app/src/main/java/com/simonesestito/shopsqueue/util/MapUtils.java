@@ -19,10 +19,11 @@
 package com.simonesestito.shopsqueue.util;
 
 import android.app.Activity;
-import android.content.IntentSender;
 import android.location.Location;
 
-import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
@@ -43,22 +44,20 @@ import retrofit2.Response;
  * Utility functions for Mapbox
  */
 public class MapUtils {
-    public static void getLastKnownLocation(Activity activity, OnSuccessListener<Location> callback) {
+    public static void getCurrentLocation(Activity activity, OnSuccessListener<Location> callback) {
+        LocationRequest locationRequest = LocationRequest.create()
+                .setNumUpdates(1)
+                .setExpirationDuration(5_000)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        
         LocationServices.getFusedLocationProviderClient(activity)
-                .getLastLocation()
-                .addOnSuccessListener(callback)
-                .addOnFailureListener(e -> {
-                    if (e instanceof ResolvableApiException) {
-                        try {
-                            ResolvableApiException resolvable = (ResolvableApiException) e;
-                            resolvable.startResolutionForResult(activity, 0);
-                            return;
-                        } catch (IntentSender.SendIntentException intentException) {
-                            intentException.printStackTrace();
-                        }
+                .requestLocationUpdates(locationRequest, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        super.onLocationResult(locationResult);
+                        callback.onSuccess(locationResult.getLastLocation());
                     }
-                    callback.onSuccess(null);
-                });
+                }, null);
     }
 
     public static void getAddressByCoordinates(LatLng newLocation, Callback<String> callback) {

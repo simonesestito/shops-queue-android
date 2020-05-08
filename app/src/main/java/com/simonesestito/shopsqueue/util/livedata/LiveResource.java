@@ -64,27 +64,27 @@ public class LiveResource<T> extends LiveData<Resource<T>> {
      * Emit a new event with a result
      */
     public void emitResult(T result) {
-        postValue(Resource.successful(result));
+        setValue(Resource.successful(result));
     }
 
     /**
      * Emit a new event reporting an error occurred
      */
     public void emitError(Throwable error) {
-        postValue(Resource.error(error));
+        setValue(Resource.error(error));
     }
 
     /**
      * Emit a new event indicating the task is in progress
      */
     public void emitLoading() {
-        postValue(Resource.loading());
+        setValue(Resource.loading());
     }
 
     /**
      * Clear the actually stored value
      */
     public void clearValue() {
-        postValue(null);
+        setValue(null);
     }
 }

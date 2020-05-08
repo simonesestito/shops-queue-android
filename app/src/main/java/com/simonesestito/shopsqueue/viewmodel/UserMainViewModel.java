@@ -22,7 +22,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
 import com.simonesestito.shopsqueue.api.service.BookingService;
-import com.simonesestito.shopsqueue.api.service.UserService;
 import com.simonesestito.shopsqueue.model.AuthUserHolder;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
@@ -31,13 +30,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class UserMainViewModel extends ViewModel {
-    private final UserService userService;
     private final BookingService bookingService;
     private LiveResource<List<BookingWithCount>> bookings = new LiveResource<>();
 
     @Inject
-    UserMainViewModel(UserService userService, BookingService bookingService) {
-        this.userService = userService;
+    UserMainViewModel(BookingService bookingService) {
         this.bookingService = bookingService;
     }
 
@@ -50,5 +47,15 @@ public class UserMainViewModel extends ViewModel {
 
     public LiveResource<List<BookingWithCount>> getBookings() {
         return bookings;
+    }
+
+    public void deleteBooking(int id) {
+        bookings.emitLoading();
+        bookingService.deleteBookingsByShop(id)
+                .onResult(v -> loadBookings())
+                .onError(err -> {
+                    bookings.emitError(err);
+                    loadBookings();
+                });
     }
 }

@@ -24,6 +24,8 @@ import com.simonesestito.shopsqueue.api.dto.Page;
 import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.api.dto.ShopWithDistance;
 
+import java.util.List;
+
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -37,8 +39,7 @@ public interface ShopService {
     ApiResponse<Shop> addNewShop(@Body NewShop newShop);
 
     @GET("/shops/nearby")
-    ApiResponse<Page<ShopWithDistance>> getShopsNearby(@Query("page") int page,
-                                                       @Query("lat") double latitude,
+    ApiResponse<List<ShopWithDistance>> getShopsNearby(@Query("lat") double latitude,
                                                        @Query("lon") double longitude,
                                                        @Query("query") String name);
 

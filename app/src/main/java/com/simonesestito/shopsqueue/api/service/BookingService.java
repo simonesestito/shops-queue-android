@@ -40,7 +40,7 @@ public interface BookingService {
     ApiResponse<List<BookingWithCount>> getBookingsByUserId(@Path("userId") int userId);
 
     @DELETE("/bookings/{id}")
-    ApiResponse<Void> removeBooking(@Path("id") int bookingId);
+    ApiResponse<Void> deleteBooking(@Path("id") int bookingId);
 
     @POST("/shops/{shopId}/bookings/next")
     ApiResponse<Booking> callNextUser(@Path("shopId") int shopId);

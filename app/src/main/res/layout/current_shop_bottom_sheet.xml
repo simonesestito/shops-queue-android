@@ -18,42 +18,44 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.App.BottomSheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/Widget.App.BottomSheet"
     android:orientation="vertical"
-    app:behavior_hideable="false"
-    app:behavior_peekHeight="@dimen/bottomsheet_min_height"
-    android:paddingBottom="0dp"
+    app:behavior_hideable="true"
+    app:behavior_skipCollapsed="true"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <TextView
+        android:id="@+id/currentShopName"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottomsheet_min_height"
         android:layout_marginBottom="@dimen/form_element_margin"
         android:gravity="center"
-        android:text="@string/user_bookings_title"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/userBookingsList"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-    <ProgressBar
-        android:id="@+id/userBookingsLoading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:minHeight="@dimen/bottomsheet_min_height" />
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        tools:text="Best Shop" />
 
     <TextView
-        android:id="@+id/userBookingsEmptyView"
+        android:id="@+id/currentShopAddress"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bottomsheet_min_height"
-        android:gravity="center"
-        android:text="@string/user_bookings_empty"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/form_element_margin"
+        tools:text="1st street, 8" />
+
+    <TextView
+        android:id="@+id/currentShopQueueCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/form_element_margin"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        tools:text="People in the queue: 4" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/currentShopBookButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="@dimen/form_element_margin"
+        android:text="@string/add_booking_to_shop" />
 </LinearLayout>

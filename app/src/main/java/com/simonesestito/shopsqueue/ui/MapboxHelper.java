@@ -55,6 +55,7 @@ public class MapboxHelper implements LifecycleObserver {
     private SymbolManager symbolManager;
     private final int currentZoom;
     private final Map<Integer, Symbol> symbols = new HashMap<>();
+    private final Map<Long, Runnable> markerClickCallbacks = new HashMap<>();
 
     public MapboxHelper(MapView mapView, Fragment fragment) {
         this.mapView = mapView;
@@ -85,6 +86,12 @@ public class MapboxHelper implements LifecycleObserver {
                         mapboxMap,
                         mapStyle
                 );
+                this.symbolManager.addClickListener(clickedSymbol -> {
+                    Runnable markerListener = markerClickCallbacks.get(clickedSymbol.getId());
+                    if (markerListener != null) {
+                        markerListener.run();
+                    }
+                });
 
                 if (callback != null)
                     callback.run();
@@ -127,23 +134,34 @@ public class MapboxHelper implements LifecycleObserver {
         }
     }
 
-    public void addMarker(@NonNull LatLng latLng) {
+    public void addMarker(@NonNull LatLng latLng, @Nullable Runnable onClickListener) {
         if (symbolManager == null) {
-            initMap(() -> addMarker(latLng));
+            initMap(() -> addMarker(latLng, onClickListener));
             return;
         }
 
+        for (int i = 0; i < symbolManager.getAnnotations().size(); i++) {
+            Symbol symbol = symbolManager.getAnnotations().get(i);
+            if (Objects.requireNonNull(symbol).getLatLng().equals(latLng)) {
+                return;
+            }
+        }
+
         mapView.getMapAsync(map -> {
-            map.getStyle(style -> addMarker(symbolManager, style, mapView.getContext(), latLng));
+            map.getStyle(style -> {
+                Symbol symbol = addMarker(symbolManager, style, mapView.getContext(), latLng);
+                if (onClickListener != null)
+                    markerClickCallbacks.put(symbol.getId(), onClickListener);
+            });
         });
     }
 
-    public void clearMarkers() {
-        if (symbolManager == null) {
-            initMap(this::clearMarkers);
-        } else {
-            symbolManager.deleteAll();
-        }
+    public void onMapMoved(Callback<LatLng> callback) {
+        mapView.getMapAsync(map -> {
+            map.addOnCameraIdleListener(() -> {
+                callback.onResult(map.getCameraPosition().target);
+            });
+        });
     }
 
     @SuppressWarnings("SameReturnValue")

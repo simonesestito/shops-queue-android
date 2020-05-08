@@ -38,6 +38,7 @@ public class UserMainViewModel extends ViewModel {
     private final ShopService shopService;
     private LiveResource<List<BookingWithCount>> bookings = new LiveResource<>();
     private LiveResource<Set<ShopWithDistance>> shops = new LiveResource<>();
+    private Set<ShopWithDistance> lastShops = new LinkedHashSet<>();
 
     @Inject
     UserMainViewModel(BookingService bookingService, ShopService shopService) {
@@ -48,13 +49,11 @@ public class UserMainViewModel extends ViewModel {
 
     public void loadNearShops(double lat, double lon) {
         shops.emitLoading();
-        // TODO Page
         // TODO Shops query
-        shopService.getShopsNearby(0, lat, lon, "")
-                .onResult(page -> {
-                    Set<ShopWithDistance> shops = new LinkedHashSet<>();
-                    shops.addAll(page.getData());
-                    this.shops.emitResult(shops);
+        shopService.getShopsNearby(lat, lon, "")
+                .onResult(result -> {
+                    lastShops.addAll(result);
+                    shops.emitResult(lastShops);
                 })
                 .onError(err -> {
                     shops.emitError(err);
@@ -68,21 +67,31 @@ public class UserMainViewModel extends ViewModel {
                 .onError(bookings::emitError);
     }
 
+    public void book(int shopId) {
+        bookings.emitLoading();
+        bookingService.addBookingToShop(shopId)
+                .onResult(booking -> loadBookings())
+                .onError(err -> {
+                    bookings.emitError(err);
+                    loadBookings();
+                });
+    }
+
+    public void deleteBooking(int id) {
+        bookings.emitLoading();
+        bookingService.deleteBooking(id)
+                .onResult(v -> loadBookings())
+                .onError(err -> {
+                    bookings.emitError(err);
+                    loadBookings();
+                });
+    }
+
     public LiveResource<List<BookingWithCount>> getBookings() {
         return bookings;
     }
 
     public LiveResource<Set<ShopWithDistance>> getShops() {
         return shops;
-    }
-
-    public void deleteBooking(int id) {
-        bookings.emitLoading();
-        bookingService.deleteBookingsByShop(id)
-                .onResult(v -> loadBookings())
-                .onError(err -> {
-                    bookings.emitError(err);
-                    loadBookings();
-                });
     }
 }

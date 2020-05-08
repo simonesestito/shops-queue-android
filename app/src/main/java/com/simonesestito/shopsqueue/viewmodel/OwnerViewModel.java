@@ -24,6 +24,7 @@ import com.simonesestito.shopsqueue.api.dto.Booking;
 import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.api.service.BookingService;
 import com.simonesestito.shopsqueue.api.service.ShopService;
+import com.simonesestito.shopsqueue.model.AuthUserHolder;
 import com.simonesestito.shopsqueue.model.ShopOwnerDetails;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
@@ -49,7 +50,8 @@ public class OwnerViewModel extends ViewModel {
         shopData.emitLoading();
 
         // Load shop info
-        shopService.getOwnShop()
+        //noinspection ConstantConditions
+        shopService.getShopById(AuthUserHolder.getCurrentUser().getShop().getId())
                 // Then, load bookings
                 .onResult(shop -> {
                     currentShop = shop;

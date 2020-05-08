@@ -39,6 +39,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
+import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.api.dto.ShopWithDistance;
 import com.simonesestito.shopsqueue.databinding.UserFragmentBinding;
 import com.simonesestito.shopsqueue.ui.MapboxHelper;
@@ -78,6 +79,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mapboxHelper = new MapboxHelper(getViewBinding().userShopsMap, this);
+        mapboxHelper.onMapMoved(latLng -> viewModel.loadNearShops(latLng.getLatitude(), latLng.getLongitude()));
 
         UserBookingsAdapter adapter = new UserBookingsAdapter();
         adapter.setMenuItemListener(((menuItem, booking) -> {
@@ -157,6 +159,8 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.GONE);
             BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot())
                     .setState(BottomSheetBehavior.STATE_EXPANDED);
+            BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())
+                    .setState(BottomSheetBehavior.STATE_HIDDEN);
             return;
         }
 
@@ -184,15 +188,50 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
     private void onShopsEvent(Resource<Set<ShopWithDistance>> event) {
         if (event.isSuccessful()) {
-            mapboxHelper.clearMarkers();
             for (ShopWithDistance shop : Objects.requireNonNull(event.getData())) {
                 LatLng latLng = new LatLng(shop.getLatitude(), shop.getLongitude());
-                mapboxHelper.addMarker(latLng);
+                mapboxHelper.addMarker(latLng, () -> {
+                    mapboxHelper.moveTo(latLng);
+                    onShopMarkerClicked(shop);
+                });
             }
         } else if (event.isFailed() && event.hasToBeHandled()) {
             event.handle();
             ErrorDialog.newInstance(requireContext(), event.getError())
                     .show(getChildFragmentManager(), null);
         }
+    }
+
+    private void onShopMarkerClicked(Shop shop) {
+        BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot())
+                .setState(BottomSheetBehavior.STATE_COLLAPSED);
+        BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())
+                .setState(BottomSheetBehavior.STATE_EXPANDED);
+
+        getViewBinding().currentShopBottomSheet.currentShopName.setText(shop.getName());
+        getViewBinding().currentShopBottomSheet.currentShopAddress.setText(shop.getAddress());
+
+        String queueDisplayCount = getString(R.string.shop_queue_count, shop.getCount());
+        getViewBinding().currentShopBottomSheet.currentShopQueueCount.setText(queueDisplayCount);
+
+        disableBookButtonIfAlreadyInQueue(shop);
+        getViewBinding().currentShopBottomSheet.currentShopBookButton
+                .setOnClickListener(v -> viewModel.book(shop.getId()));
+    }
+
+    private void disableBookButtonIfAlreadyInQueue(Shop shop) {
+        Resource<List<BookingWithCount>> currentState = viewModel.getBookings().getValue();
+        if (currentState != null && currentState.isSuccessful()) {
+            List<BookingWithCount> currentBookings = currentState.getData();
+            if (currentBookings != null) {
+                for (BookingWithCount booking : currentBookings) {
+                    if (booking.getShop().getId() == shop.getId()) {
+                        getViewBinding().currentShopBottomSheet.currentShopBookButton.setEnabled(false);
+                        return;
+                    }
+                }
+            }
+        }
+        getViewBinding().currentShopBottomSheet.currentShopBookButton.setEnabled(true);
     }
 }

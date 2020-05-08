@@ -18,9 +18,9 @@
 
 package com.simonesestito.shopsqueue.api.dto;
 
-@SuppressWarnings("WeakerAccess")
-public class ShopWithDistance extends Shop {
+public class ShopResult extends Shop {
     private double distance; // KMs
+    private boolean isFavourite;
 
     public double getDistance() {
         return distance;
@@ -33,9 +33,9 @@ public class ShopWithDistance extends Shop {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ShopWithDistance)) return false;
+        if (!(o instanceof ShopResult)) return false;
         if (!super.equals(o)) return false;
-        ShopWithDistance that = (ShopWithDistance) o;
+        ShopResult that = (ShopResult) o;
         return Double.compare(that.getDistance(), getDistance()) == 0;
     }
 }

@@ -22,7 +22,7 @@ import com.simonesestito.shopsqueue.api.ApiResponse;
 import com.simonesestito.shopsqueue.api.dto.NewShop;
 import com.simonesestito.shopsqueue.api.dto.Page;
 import com.simonesestito.shopsqueue.api.dto.Shop;
-import com.simonesestito.shopsqueue.api.dto.ShopWithDistance;
+import com.simonesestito.shopsqueue.api.dto.ShopResult;
 
 import java.util.List;
 
@@ -39,9 +39,9 @@ public interface ShopService {
     ApiResponse<Shop> addNewShop(@Body NewShop newShop);
 
     @GET("/shops/nearby")
-    ApiResponse<List<ShopWithDistance>> getShopsNearby(@Query("lat") double latitude,
-                                                       @Query("lon") double longitude,
-                                                       @Query("query") String name);
+    ApiResponse<List<ShopResult>> getShopsNearby(@Query("lat") double latitude,
+                                                 @Query("lon") double longitude,
+                                                 @Query("query") String name);
 
     @GET("/shops/{id}")
     ApiResponse<Shop> getShopById(@Path("id") int id);

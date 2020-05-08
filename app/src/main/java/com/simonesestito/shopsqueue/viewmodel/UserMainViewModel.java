@@ -21,7 +21,7 @@ package com.simonesestito.shopsqueue.viewmodel;
 import androidx.lifecycle.ViewModel;
 
 import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
-import com.simonesestito.shopsqueue.api.dto.ShopWithDistance;
+import com.simonesestito.shopsqueue.api.dto.ShopResult;
 import com.simonesestito.shopsqueue.api.service.BookingService;
 import com.simonesestito.shopsqueue.api.service.ShopService;
 import com.simonesestito.shopsqueue.model.AuthUserHolder;
@@ -37,8 +37,8 @@ public class UserMainViewModel extends ViewModel {
     private final BookingService bookingService;
     private final ShopService shopService;
     private LiveResource<List<BookingWithCount>> bookings = new LiveResource<>();
-    private LiveResource<Set<ShopWithDistance>> shops = new LiveResource<>();
-    private Set<ShopWithDistance> lastShops = new LinkedHashSet<>();
+    private LiveResource<Set<ShopResult>> shops = new LiveResource<>();
+    private Set<ShopResult> lastShops = new LinkedHashSet<>();
     private String query;
 
     @Inject
@@ -101,7 +101,7 @@ public class UserMainViewModel extends ViewModel {
         return bookings;
     }
 
-    public LiveResource<Set<ShopWithDistance>> getShops() {
+    public LiveResource<Set<ShopResult>> getShops() {
         return shops;
     }
 }

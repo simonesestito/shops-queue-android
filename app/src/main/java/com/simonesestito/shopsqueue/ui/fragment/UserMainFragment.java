@@ -43,7 +43,7 @@ import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
 import com.simonesestito.shopsqueue.api.dto.Shop;
-import com.simonesestito.shopsqueue.api.dto.ShopWithDistance;
+import com.simonesestito.shopsqueue.api.dto.ShopResult;
 import com.simonesestito.shopsqueue.databinding.UserFragmentBinding;
 import com.simonesestito.shopsqueue.ui.MapboxHelper;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
@@ -214,14 +214,14 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         }
     }
 
-    private void onShopsEvent(Resource<Set<ShopWithDistance>> event) {
+    private void onShopsEvent(Resource<Set<ShopResult>> event) {
         if (event.isSuccessful()) {
-            Set<ShopWithDistance> shops = Objects.requireNonNull(event.getData());
+            Set<ShopResult> shops = Objects.requireNonNull(event.getData());
             if (shops.isEmpty()) {
                 Toast.makeText(requireContext(), R.string.no_shops_found, Toast.LENGTH_LONG).show();
             }
             List<LatLng> latLngs = new LinkedList<>();
-            for (ShopWithDistance shop : Objects.requireNonNull(event.getData())) {
+            for (ShopResult shop : Objects.requireNonNull(event.getData())) {
                 LatLng latLng = new LatLng(shop.getLatitude(), shop.getLongitude());
                 latLngs.add(latLng);
                 mapboxHelper.addMarker(latLng, () -> {
@@ -241,7 +241,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         }
     }
 
-    private void onShopMarkerClicked(ShopWithDistance shop) {
+    private void onShopMarkerClicked(ShopResult shop) {
         BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot())
                 .setState(BottomSheetBehavior.STATE_COLLAPSED);
         BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())

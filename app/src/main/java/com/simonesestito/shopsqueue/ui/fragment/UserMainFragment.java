@@ -24,6 +24,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -31,6 +34,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.databinding.UserFragmentBinding;
 import com.simonesestito.shopsqueue.ui.MapboxHelper;
@@ -50,6 +54,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ShopsQueueApplication.getInjector().inject(this);
+        setHasOptionsMenu(true);
         viewModel = new ViewModelProvider(this, viewModelFactory).get(UserMainViewModel.class);
     }
 
@@ -70,6 +75,27 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         if (MapUtils.requestLocationPermission(this)) {
             showUserLocation();
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.user_main_fragment_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.userLocation:
+                showUserLocation();
+                break;
+            case R.id.userRefreshBookings:
+                // TODO
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     @SuppressWarnings("MissingPermission")

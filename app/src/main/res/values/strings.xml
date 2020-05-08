@@ -76,7 +76,6 @@
     <string name="permission_dialog_deny_button">Deny</string>
     <string name="gps_disabled_error">Unable to get current location.</string>
     <string name="location_picker_fragment_title">Pick a location</string>
-    <string name="location_picker_menu_user_location">Show user location</string>
     <string name="pick_location_required">You have to first choose a location</string>
     <string name="error_invalid_request_body">An error occurred sending the request</string>
     <string name="error_forbidden">You are not authorized to perform this action</string>
@@ -85,4 +84,7 @@
     <string name="shop_owners_list_title">Shop owners</string>
     <string name="shop_owners_list_empty">No user owns this shop.\nGo into a user\'s details to assign it.</string>
     <string name="address_input_hint">Address</string>
+    <string name="menu_user_location">Show user location</string>
+    <string name="menu_user_refresh_bookings">Refresh bookings</string>
+    <string name="user_bookings_title">Your bookings</string>
 </resources>

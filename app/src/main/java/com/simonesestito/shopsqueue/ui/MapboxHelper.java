@@ -22,6 +22,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
@@ -123,6 +124,25 @@ public class MapboxHelper implements LifecycleObserver {
                     symbols.put(id, symbol);
                 });
             });
+        }
+    }
+
+    public void addMarker(@NonNull LatLng latLng) {
+        if (symbolManager == null) {
+            initMap(() -> addMarker(latLng));
+            return;
+        }
+
+        mapView.getMapAsync(map -> {
+            map.getStyle(style -> addMarker(symbolManager, style, mapView.getContext(), latLng));
+        });
+    }
+
+    public void clearMarkers() {
+        if (symbolManager == null) {
+            initMap(this::clearMarkers);
+        } else {
+            symbolManager.deleteAll();
         }
     }
 

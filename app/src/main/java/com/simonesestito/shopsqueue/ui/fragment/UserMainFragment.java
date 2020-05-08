@@ -35,20 +35,24 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
+import com.simonesestito.shopsqueue.api.dto.ShopWithDistance;
 import com.simonesestito.shopsqueue.databinding.UserFragmentBinding;
 import com.simonesestito.shopsqueue.ui.MapboxHelper;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.UserBookingsAdapter;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.MapUtils;
+import com.simonesestito.shopsqueue.util.livedata.Resource;
 import com.simonesestito.shopsqueue.viewmodel.UserMainViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -82,37 +86,8 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         getViewBinding().userBookingsBottomSheet.userBookingsList.setAdapter(adapter);
 
         viewModel.loadBookings();
-        viewModel.getBookings().observe(getViewLifecycleOwner(), event -> {
-            if (event.isLoading()) {
-                getViewBinding().userBookingsBottomSheet.userBookingsLoading.setVisibility(View.VISIBLE);
-                getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.GONE);
-                getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.GONE);
-                BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot())
-                        .setState(BottomSheetBehavior.STATE_EXPANDED);
-                return;
-            }
-
-            getViewBinding().userBookingsBottomSheet.userBookingsLoading.setVisibility(View.GONE);
-
-            if (event.isFailed()) {
-                if (event.hasToBeHandled()) {
-                    ErrorDialog.newInstance(requireContext(), event.getError())
-                            .show(getChildFragmentManager(), null);
-                    event.handle();
-                }
-                return;
-            }
-
-            List<BookingWithCount> bookings = Objects.requireNonNull(event.getData());
-            adapter.updateDataSet(bookings);
-            if (bookings.isEmpty()) {
-                getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.GONE);
-                getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.VISIBLE);
-            } else {
-                getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.VISIBLE);
-                getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.GONE);
-            }
-        });
+        viewModel.getBookings().observe(getViewLifecycleOwner(), this::onBookingEvent);
+        viewModel.getShops().observe(getViewLifecycleOwner(), this::onShopsEvent);
     }
 
     @Override
@@ -149,6 +124,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         MapUtils.getCurrentLocation(requireActivity(), location -> {
             Log.d("UserFragment Map", "User location detected");
             mapboxHelper.moveTo(location);
+            viewModel.loadNearShops(location.getLatitude(), location.getLongitude());
         });
     }
 
@@ -165,6 +141,58 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == MapUtils.ENABLE_LOCATION_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             showUserLocation();
+        }
+    }
+
+    private void onBookingEvent(Resource<List<BookingWithCount>> event) {
+        UserBookingsAdapter adapter = (UserBookingsAdapter) getViewBinding()
+                .userBookingsBottomSheet
+                .userBookingsList
+                .getAdapter();
+        Objects.requireNonNull(adapter);
+
+        if (event.isLoading()) {
+            getViewBinding().userBookingsBottomSheet.userBookingsLoading.setVisibility(View.VISIBLE);
+            getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.GONE);
+            getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.GONE);
+            BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot())
+                    .setState(BottomSheetBehavior.STATE_EXPANDED);
+            return;
+        }
+
+        getViewBinding().userBookingsBottomSheet.userBookingsLoading.setVisibility(View.GONE);
+
+        if (event.isFailed()) {
+            if (event.hasToBeHandled()) {
+                ErrorDialog.newInstance(requireContext(), event.getError())
+                        .show(getChildFragmentManager(), null);
+                event.handle();
+            }
+            return;
+        }
+
+        List<BookingWithCount> bookings = Objects.requireNonNull(event.getData());
+        adapter.updateDataSet(bookings);
+        if (bookings.isEmpty()) {
+            getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.GONE);
+            getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.VISIBLE);
+            getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.GONE);
+        }
+    }
+
+    private void onShopsEvent(Resource<Set<ShopWithDistance>> event) {
+        if (event.isSuccessful()) {
+            mapboxHelper.clearMarkers();
+            for (ShopWithDistance shop : Objects.requireNonNull(event.getData())) {
+                LatLng latLng = new LatLng(shop.getLatitude(), shop.getLongitude());
+                mapboxHelper.addMarker(latLng);
+            }
+        } else if (event.isFailed() && event.hasToBeHandled()) {
+            event.handle();
+            ErrorDialog.newInstance(requireContext(), event.getError())
+                    .show(getChildFragmentManager(), null);
         }
     }
 }

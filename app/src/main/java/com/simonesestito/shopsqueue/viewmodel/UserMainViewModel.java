@@ -21,21 +21,44 @@ package com.simonesestito.shopsqueue.viewmodel;
 import androidx.lifecycle.ViewModel;
 
 import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
+import com.simonesestito.shopsqueue.api.dto.ShopWithDistance;
 import com.simonesestito.shopsqueue.api.service.BookingService;
+import com.simonesestito.shopsqueue.api.service.ShopService;
 import com.simonesestito.shopsqueue.model.AuthUserHolder;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
 public class UserMainViewModel extends ViewModel {
     private final BookingService bookingService;
+    private final ShopService shopService;
     private LiveResource<List<BookingWithCount>> bookings = new LiveResource<>();
+    private LiveResource<Set<ShopWithDistance>> shops = new LiveResource<>();
 
     @Inject
-    UserMainViewModel(BookingService bookingService) {
+    UserMainViewModel(BookingService bookingService, ShopService shopService) {
         this.bookingService = bookingService;
+        this.shopService = shopService;
+        loadBookings();
+    }
+
+    public void loadNearShops(double lat, double lon) {
+        shops.emitLoading();
+        // TODO Page
+        // TODO Shops query
+        shopService.getShopsNearby(0, lat, lon, "")
+                .onResult(page -> {
+                    Set<ShopWithDistance> shops = new LinkedHashSet<>();
+                    shops.addAll(page.getData());
+                    this.shops.emitResult(shops);
+                })
+                .onError(err -> {
+                    shops.emitError(err);
+                });
     }
 
     public void loadBookings() {
@@ -47,6 +70,10 @@ public class UserMainViewModel extends ViewModel {
 
     public LiveResource<List<BookingWithCount>> getBookings() {
         return bookings;
+    }
+
+    public LiveResource<Set<ShopWithDistance>> getShops() {
+        return shops;
     }
 
     public void deleteBooking(int id) {

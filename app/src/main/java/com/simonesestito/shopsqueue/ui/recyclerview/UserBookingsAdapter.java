@@ -36,7 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class UserBookingsAdapter extends DiffUtilAdapter<BookingWithCount, UserBookingsAdapter.ViewHolder> {
-    private static final String DATE_FORMAT = "HH:mm:ss";
+    private static final String DATE_FORMAT = "HH:mm";
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
     private MenuItemListener menuItemListener;
 

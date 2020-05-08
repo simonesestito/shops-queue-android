@@ -18,26 +18,45 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/userBookingsBottomSheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheet_background"
+    android:minHeight="@dimen/bottomsheet_min_height"
     android:orientation="vertical"
-    android:padding="@dimen/bottomsheet_padding"
+    android:paddingLeft="@dimen/bottomsheet_padding"
+    android:paddingRight="@dimen/bottomsheet_padding"
+    android:paddingBottom="@dimen/bottomsheet_padding"
     app:behavior_hideable="false"
     app:behavior_peekHeight="@dimen/bottomsheet_min_height"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/bottomsheet_min_height"
         android:layout_marginBottom="@dimen/form_element_margin"
         android:gravity="center"
         android:text="@string/user_bookings_title"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
-    <!-- Test only -->
-    <View
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userBookingsList"
         android:layout_width="match_parent"
-        android:layout_height="800dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <ProgressBar
+        android:id="@+id/userBookingsLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:minHeight="@dimen/bottomsheet_min_height" />
+
+    <TextView
+        android:id="@+id/userBookingsEmptyView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottomsheet_min_height"
+        android:gravity="center"
+        android:text="@string/user_bookings_empty"
+        android:visibility="gone" />
 </LinearLayout>

@@ -36,12 +36,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
+import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
 import com.simonesestito.shopsqueue.databinding.UserFragmentBinding;
 import com.simonesestito.shopsqueue.ui.MapboxHelper;
+import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.MapUtils;
 import com.simonesestito.shopsqueue.viewmodel.UserMainViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
+
+import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -67,6 +72,35 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mapboxHelper = new MapboxHelper(getViewBinding().userShopsMap, this);
+        viewModel.loadBookings();
+        viewModel.getBookings().observe(getViewLifecycleOwner(), event -> {
+            if (event.isLoading()) {
+                getViewBinding().userBookingsBottomSheet.userBookingsLoading.setVisibility(View.VISIBLE);
+                getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.GONE);
+                getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.GONE);
+                return;
+            }
+
+            getViewBinding().userBookingsBottomSheet.userBookingsLoading.setVisibility(View.GONE);
+
+            if (event.isFailed()) {
+                if (event.hasToBeHandled()) {
+                    ErrorDialog.newInstance(requireContext(), event.getError());
+                    event.handle();
+                }
+                return;
+            }
+
+            List<BookingWithCount> bookings = Objects.requireNonNull(event.getData());
+            if (bookings.isEmpty()) {
+                getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.GONE);
+                getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.VISIBLE);
+            } else {
+                getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.VISIBLE);
+                getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.GONE);
+            }
+            // TODO Update adapter
+        });
     }
 
     @Override
@@ -90,7 +124,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
                 showUserLocation();
                 break;
             case R.id.userRefreshBookings:
-                // TODO
+                viewModel.loadBookings();
                 break;
             default:
                 return super.onOptionsItemSelected(item);

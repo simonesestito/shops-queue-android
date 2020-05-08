@@ -20,10 +20,35 @@ package com.simonesestito.shopsqueue.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 
+import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
+import com.simonesestito.shopsqueue.api.service.BookingService;
+import com.simonesestito.shopsqueue.api.service.UserService;
+import com.simonesestito.shopsqueue.model.AuthUserHolder;
+import com.simonesestito.shopsqueue.util.livedata.LiveResource;
+
+import java.util.List;
+
 import javax.inject.Inject;
 
 public class UserMainViewModel extends ViewModel {
+    private final UserService userService;
+    private final BookingService bookingService;
+    private LiveResource<List<BookingWithCount>> bookings = new LiveResource<>();
+
     @Inject
-    UserMainViewModel() {
+    UserMainViewModel(UserService userService, BookingService bookingService) {
+        this.userService = userService;
+        this.bookingService = bookingService;
+    }
+
+    public void loadBookings() {
+        bookings.emitLoading();
+        bookingService.getBookingsByUserId(AuthUserHolder.getCurrentUser().getId())
+                .onResult(bookings::emitResult)
+                .onError(bookings::emitError);
+    }
+
+    public LiveResource<List<BookingWithCount>> getBookings() {
+        return bookings;
     }
 }

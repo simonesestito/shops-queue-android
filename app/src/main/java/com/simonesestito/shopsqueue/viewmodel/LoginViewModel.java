@@ -23,9 +23,10 @@ import androidx.lifecycle.ViewModel;
 import com.simonesestito.shopsqueue.SharedPreferencesStore;
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
 import com.simonesestito.shopsqueue.api.dto.NewUser;
-import com.simonesestito.shopsqueue.api.dto.User;
+import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.api.dto.UserLogin;
 import com.simonesestito.shopsqueue.api.service.LoginService;
+import com.simonesestito.shopsqueue.model.AuthUserHolder;
 import com.simonesestito.shopsqueue.model.HttpStatus;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
@@ -34,7 +35,7 @@ import javax.inject.Inject;
 public class LoginViewModel extends ViewModel {
     private final LoginService loginService;
     private final SharedPreferencesStore sharedPreferencesStore;
-    private final LiveResource<User> authStatus = new LiveResource<>();
+    private final LiveResource<UserDetails> authStatus = new LiveResource<>();
     private final LiveResource<AuthResponse> loginRequest = new LiveResource<>();
 
     @Inject
@@ -42,6 +43,10 @@ public class LoginViewModel extends ViewModel {
         this.loginService = loginService;
         this.sharedPreferencesStore = sharedPreferencesStore;
         initAuthStatus();
+        this.authStatus.observeForever(event -> {
+            if (!event.isLoading())
+                AuthUserHolder.setCurrentUser(event.getData());
+        });
     }
 
     private void initAuthStatus() {
@@ -100,7 +105,7 @@ public class LoginViewModel extends ViewModel {
         this.authStatus.emitResult(null);
     }
 
-    public LiveResource<User> getAuthStatus() {
+    public LiveResource<UserDetails> getAuthStatus() {
         return authStatus;
     }
 

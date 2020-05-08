@@ -87,4 +87,5 @@
     <string name="menu_user_location">Show user location</string>
     <string name="menu_user_refresh_bookings">Refresh bookings</string>
     <string name="user_bookings_title">Your bookings</string>
+    <string name="user_bookings_empty">No bookings found.</string>
 </resources>

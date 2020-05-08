@@ -88,4 +88,6 @@
     <string name="user_bookings_title">Your bookings</string>
     <string name="user_bookings_empty">No bookings found.</string>
     <string name="add_booking_to_shop">Book</string>
+    <string name="shop_name_search_input_hint">Shop name</string>
+    <string name="no_shops_found">No shops were found</string>
 </resources>

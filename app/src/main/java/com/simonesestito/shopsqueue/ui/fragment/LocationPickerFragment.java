@@ -28,7 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Toast;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +45,7 @@ import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.util.MapUtils;
 import com.simonesestito.shopsqueue.util.NavUtils;
 import com.simonesestito.shopsqueue.util.NumberUtils;
+import com.simonesestito.shopsqueue.util.ViewUtils;
 import com.simonesestito.shopsqueue.viewmodel.LocationPickerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -80,9 +81,8 @@ public class LocationPickerFragment extends AbstractAppFragment<LocationPickerBi
         });
         getViewBinding().locationSearchEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                Toast.makeText(requireContext(), "Search", Toast.LENGTH_SHORT).show();
+                ViewUtils.hideKeyboard((EditText) v);
                 doSearch(v.getText().toString().trim());
-                return true;
             }
             return false;
         });

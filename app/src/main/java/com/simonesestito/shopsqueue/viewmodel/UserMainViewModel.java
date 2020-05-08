@@ -39,6 +39,7 @@ public class UserMainViewModel extends ViewModel {
     private LiveResource<List<BookingWithCount>> bookings = new LiveResource<>();
     private LiveResource<Set<ShopWithDistance>> shops = new LiveResource<>();
     private Set<ShopWithDistance> lastShops = new LinkedHashSet<>();
+    private String query;
 
     @Inject
     UserMainViewModel(BookingService bookingService, ShopService shopService) {
@@ -49,8 +50,7 @@ public class UserMainViewModel extends ViewModel {
 
     public void loadNearShops(double lat, double lon) {
         shops.emitLoading();
-        // TODO Shops query
-        shopService.getShopsNearby(lat, lon, "")
+        shopService.getShopsNearby(lat, lon, query)
                 .onResult(result -> {
                     lastShops.addAll(result);
                     shops.emitResult(lastShops);
@@ -85,6 +85,16 @@ public class UserMainViewModel extends ViewModel {
                     bookings.emitError(err);
                     loadBookings();
                 });
+    }
+
+    public void searchShops(double lat, double lon, String query) {
+        this.query = query;
+        lastShops.clear();
+        loadNearShops(lat, lon);
+    }
+
+    public void clearQuery() {
+        query = "";
     }
 
     public LiveResource<List<BookingWithCount>> getBookings() {

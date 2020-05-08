@@ -25,7 +25,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.util.Log;
 
-import androidx.annotation.RequiresPermission;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -98,7 +97,6 @@ public class MapUtils {
                 });
     }
 
-    @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     public static void getCurrentLocation(Activity activity, OnSuccessListener<Location> callback) {
         checkLocationSettings(activity, success -> {
             if (!success) {

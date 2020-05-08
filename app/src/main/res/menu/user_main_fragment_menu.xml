@@ -23,9 +23,4 @@
         android:icon="@drawable/ic_refresh_white_24dp"
         android:title="@string/menu_user_refresh_bookings"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/userLocation"
-        android:icon="@drawable/ic_location_searching_white_24dp"
-        android:title="@string/menu_user_location"
-        app:showAsAction="ifRoom" />
 </menu>

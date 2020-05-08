@@ -20,11 +20,14 @@ package com.simonesestito.shopsqueue.util;
 
 import android.content.Context;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -92,6 +95,9 @@ public class ViewUtils {
         });
     }
 
+    /**
+     * Add a click listener to a spinner (dropdown menu)
+     */
     public static void setSpinnerListener(Spinner spinner, Callback<Integer> callback) {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -104,5 +110,14 @@ public class ViewUtils {
                 callback.onResult(0);
             }
         });
+    }
+
+    public static void hideKeyboard(EditText editText) {
+        InputMethodManager imm = ContextCompat.getSystemService(
+                editText.getContext(),
+                InputMethodManager.class
+        );
+        if (imm != null)
+            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 }

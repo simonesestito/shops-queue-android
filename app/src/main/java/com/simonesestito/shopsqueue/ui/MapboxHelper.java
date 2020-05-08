@@ -24,6 +24,7 @@ import android.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.collection.LongSparseArray;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -32,6 +33,7 @@ import androidx.lifecycle.OnLifecycleEvent;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
@@ -42,6 +44,7 @@ import com.simonesestito.shopsqueue.util.ThemeUtils;
 import com.simonesestito.shopsqueue.util.functional.Callback;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -52,10 +55,10 @@ import java.util.Objects;
 public class MapboxHelper implements LifecycleObserver {
     private static final String MARKER_ICON_ID = "custom-marker";
     private final MapView mapView;
-    private SymbolManager symbolManager;
     private final int currentZoom;
     private final Map<Integer, Symbol> symbols = new HashMap<>();
     private final Map<Long, Runnable> markerClickCallbacks = new HashMap<>();
+    private SymbolManager symbolManager;
 
     public MapboxHelper(MapView mapView, Fragment fragment) {
         this.mapView = mapView;
@@ -73,7 +76,7 @@ public class MapboxHelper implements LifecycleObserver {
             onResume();
         lifecycle.addObserver(this);
 
-        initMap(null);
+        initMap(callback);
     }
 
     private void initMap(@Nullable Runnable callback) {
@@ -140,9 +143,10 @@ public class MapboxHelper implements LifecycleObserver {
             return;
         }
 
-        for (int i = 0; i < symbolManager.getAnnotations().size(); i++) {
-            Symbol symbol = symbolManager.getAnnotations().get(i);
-            if (Objects.requireNonNull(symbol).getLatLng().equals(latLng)) {
+        LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
+        for (int i = 0; i < symbols.size(); i++) {
+            Symbol symbol = symbols.get(i);
+            if (symbol != null && symbol.getLatLng().equals(latLng)) {
                 return;
             }
         }
@@ -156,11 +160,37 @@ public class MapboxHelper implements LifecycleObserver {
         });
     }
 
+    public void clearMarkers() {
+        if (symbolManager == null) {
+            initMap(this::clearMarkers);
+        } else {
+            symbolManager.deleteAll();
+            symbols.clear();
+            markerClickCallbacks.clear();
+        }
+    }
+
     public void onMapMoved(Callback<LatLng> callback) {
         mapView.getMapAsync(map -> {
             map.addOnCameraIdleListener(() -> {
                 callback.onResult(map.getCameraPosition().target);
             });
+        });
+    }
+
+    public void fitBounds(List<LatLng> latLngs) {
+        if (latLngs.size() == 0)
+            return;
+
+        mapView.getMapAsync(map -> {
+            if (latLngs.size() == 1) {
+                this.moveTo(latLngs.get(0));
+            } else {
+                LatLngBounds bounds = new LatLngBounds.Builder()
+                        .includes(latLngs)
+                        .build();
+                map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 3));
+            }
         });
     }
 

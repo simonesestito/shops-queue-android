@@ -29,6 +29,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,11 +49,14 @@ import com.simonesestito.shopsqueue.ui.MapboxHelper;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.UserBookingsAdapter;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
+import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.util.MapUtils;
+import com.simonesestito.shopsqueue.util.ViewUtils;
 import com.simonesestito.shopsqueue.util.livedata.Resource;
 import com.simonesestito.shopsqueue.viewmodel.UserMainViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -61,6 +67,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     @Inject ViewModelFactory viewModelFactory;
     private UserMainViewModel viewModel;
     private MapboxHelper mapboxHelper;
+    private boolean shouldFitAll = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,6 +97,25 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         viewModel.loadBookings();
         viewModel.getBookings().observe(getViewLifecycleOwner(), this::onBookingEvent);
         viewModel.getShops().observe(getViewLifecycleOwner(), this::onShopsEvent);
+
+        getViewBinding().shopSearchEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId != EditorInfo.IME_ACTION_SEARCH)
+                return false;
+
+            boolean isInputValid = FormValidators.isString(getViewBinding().shopSearchLayout);
+            if (!isInputValid)
+                return false;
+
+            ViewUtils.hideKeyboard((EditText) v);
+
+            String query = v.getText().toString().trim();
+            mapboxHelper.clearMarkers();
+            shouldFitAll = true;
+            MapUtils.getCurrentLocation(requireActivity(), location -> {
+                viewModel.searchShops(location.getLatitude(), location.getLongitude(), query);
+            });
+            return true;
+        });
     }
 
     @Override
@@ -108,21 +134,22 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.userLocation:
-                showUserLocation();
-                break;
-            case R.id.userRefreshBookings:
-                viewModel.loadBookings();
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.userRefreshBookings) {
+            viewModel.loadBookings();
+            showUserLocation();
+            getViewBinding().shopSearchEditText.setText("");
+            BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())
+                    .setState(BottomSheetBehavior.STATE_HIDDEN);
+            BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot())
+                    .setState(BottomSheetBehavior.STATE_EXPANDED);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-        return true;
     }
 
-    @SuppressWarnings("MissingPermission")
     private void showUserLocation() {
+        viewModel.clearQuery();
         MapUtils.getCurrentLocation(requireActivity(), location -> {
             Log.d("UserFragment Map", "User location detected");
             mapboxHelper.moveTo(location);
@@ -157,8 +184,6 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             getViewBinding().userBookingsBottomSheet.userBookingsLoading.setVisibility(View.VISIBLE);
             getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.GONE);
             getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.GONE);
-            BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot())
-                    .setState(BottomSheetBehavior.STATE_EXPANDED);
             BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())
                     .setState(BottomSheetBehavior.STATE_HIDDEN);
             return;
@@ -188,12 +213,23 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
     private void onShopsEvent(Resource<Set<ShopWithDistance>> event) {
         if (event.isSuccessful()) {
+            Set<ShopWithDistance> shops = Objects.requireNonNull(event.getData());
+            if (shops.isEmpty()) {
+                Toast.makeText(requireContext(), R.string.no_shops_found, Toast.LENGTH_LONG).show();
+            }
+            List<LatLng> latLngs = new LinkedList<>();
             for (ShopWithDistance shop : Objects.requireNonNull(event.getData())) {
                 LatLng latLng = new LatLng(shop.getLatitude(), shop.getLongitude());
+                latLngs.add(latLng);
                 mapboxHelper.addMarker(latLng, () -> {
                     mapboxHelper.moveTo(latLng);
                     onShopMarkerClicked(shop);
                 });
+            }
+
+            if (shouldFitAll) {
+                shouldFitAll = false;
+                mapboxHelper.fitBounds(latLngs);
             }
         } else if (event.isFailed() && event.hasToBeHandled()) {
             event.handle();

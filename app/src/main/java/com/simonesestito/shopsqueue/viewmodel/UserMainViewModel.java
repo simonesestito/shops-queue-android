@@ -25,6 +25,7 @@ import com.simonesestito.shopsqueue.api.dto.ShopResult;
 import com.simonesestito.shopsqueue.api.service.BookingService;
 import com.simonesestito.shopsqueue.api.service.ShopService;
 import com.simonesestito.shopsqueue.model.AuthUserHolder;
+import com.simonesestito.shopsqueue.util.NumberUtils;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
 import java.util.LinkedHashSet;
@@ -49,6 +50,8 @@ public class UserMainViewModel extends ViewModel {
     }
 
     public void loadNearShops(double lat, double lon) {
+        lat = NumberUtils.roundCoordinate(lat);
+        lon = NumberUtils.roundCoordinate(lon);
         shops.emitLoading();
         shopService.getShopsNearby(lat, lon, query)
                 .onResult(result -> {

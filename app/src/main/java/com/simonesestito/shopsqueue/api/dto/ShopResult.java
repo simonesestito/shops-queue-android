@@ -19,15 +19,14 @@
 package com.simonesestito.shopsqueue.api.dto;
 
 public class ShopResult extends Shop {
-    private double distance; // KMs
     private boolean isFavourite;
 
-    public double getDistance() {
-        return distance;
+    public boolean isFavourite() {
+        return isFavourite;
     }
 
-    public void setDistance(double distance) {
-        this.distance = distance;
+    public void setIsFavourite(boolean favourite) {
+        isFavourite = favourite;
     }
 
     @Override
@@ -35,7 +34,9 @@ public class ShopResult extends Shop {
         if (this == o) return true;
         if (!(o instanceof ShopResult)) return false;
         if (!super.equals(o)) return false;
+
         ShopResult that = (ShopResult) o;
-        return Double.compare(that.getDistance(), getDistance()) == 0;
+
+        return isFavourite() == that.isFavourite();
     }
 }

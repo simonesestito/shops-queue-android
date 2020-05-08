@@ -150,12 +150,12 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         if (!MapUtils.requestLocationPermission(this))
             return;
 
-        viewModel.clearQuery();
         MapUtils.getCurrentLocation(requireActivity(), location -> {
             Log.d("UserFragment Map", "User location detected");
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            viewModel.clearQuery();
             mapboxHelper.showUserLocation(latLng);
-            mapboxHelper.moveTo(location);
+            mapboxHelper.moveTo(latLng);
             viewModel.loadNearShops(location.getLatitude(), location.getLongitude());
         });
     }

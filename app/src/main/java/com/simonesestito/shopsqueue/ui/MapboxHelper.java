@@ -155,15 +155,14 @@ public class MapboxHelper implements LifecycleObserver {
         for (int i = 0; i < symbols.size(); i++) {
             Symbol symbol = symbols.get(i);
             if (symbol != null && symbol.getLatLng().equals(latLng)) {
-                return;
+                markerClickCallbacks.put(symbol.getId(), onClickListener);
             }
         }
 
         mapView.getMapAsync(map -> {
             map.getStyle(style -> {
                 Symbol symbol = addMarker(symbolManager, latLng, MARKER_ICON_ID);
-                if (onClickListener != null)
-                    markerClickCallbacks.put(symbol.getId(), onClickListener);
+                markerClickCallbacks.put(symbol.getId(), onClickListener);
             });
         });
     }

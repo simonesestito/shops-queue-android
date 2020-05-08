@@ -18,9 +18,17 @@
 
 package com.simonesestito.shopsqueue.util;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.util.Log;
+
+import androidx.annotation.RequiresPermission;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationCallback;
@@ -35,6 +43,7 @@ import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.simonesestito.shopsqueue.ui.dialog.PermissionDialog;
 import com.simonesestito.shopsqueue.util.functional.Callback;
 
 import java.util.List;
@@ -49,6 +58,8 @@ import retrofit2.Response;
 @SuppressWarnings("WeakerAccess")
 public class MapUtils {
     public static final int ENABLE_LOCATION_REQUEST_CODE = 10;
+    public static final int LOCATION_PERMISSION_REQUEST_CODE = 11;
+    private static final String LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
 
     /**
      * Check location Settings
@@ -69,6 +80,7 @@ public class MapUtils {
                 .checkLocationSettings(settingsRequest)
                 .addOnSuccessListener(response -> onLocationEnabled.onResult(true))
                 .addOnFailureListener(error -> {
+                    Log.d("MapUtils", "User location forbidden");
                     if (!(error instanceof ResolvableApiException)) {
                         onLocationEnabled.onResult(false);
                         return;
@@ -76,6 +88,7 @@ public class MapUtils {
 
                     ResolvableApiException resolvable = (ResolvableApiException) error;
                     try {
+                        Log.d("MapUtils", "Trying to enable user location");
                         resolvable.startResolutionForResult(
                                 activity, ENABLE_LOCATION_REQUEST_CODE
                         );
@@ -85,11 +98,15 @@ public class MapUtils {
                 });
     }
 
+    @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     public static void getCurrentLocation(Activity activity, OnSuccessListener<Location> callback) {
         checkLocationSettings(activity, success -> {
-            if (!success)
+            if (!success) {
+                Log.w("MapUtils", "Unable to get user location");
                 return;
+            }
 
+            Log.d("MapUtils", "User location requested");
             LocationServices.getFusedLocationProviderClient(activity)
                     .requestLocationUpdates(createLocationRequest(), new LocationCallback() {
                         @Override
@@ -99,6 +116,24 @@ public class MapUtils {
                         }
                     }, null);
         });
+    }
+
+    /**
+     * Check if the location permission has been granted, or ask it to the user.
+     *
+     * @return True if the permission has already been granted, false otherwise
+     */
+    public static boolean requestLocationPermission(Fragment fragment) {
+        if (ContextCompat.checkSelfPermission(fragment.requireContext(), LOCATION_PERMISSION)
+                == PackageManager.PERMISSION_GRANTED)
+            return true;
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(fragment.requireActivity(), LOCATION_PERMISSION)) {
+            PermissionDialog.showForResult(fragment, LOCATION_PERMISSION_REQUEST_CODE, LOCATION_PERMISSION);
+        } else {
+            fragment.requestPermissions(new String[]{LOCATION_PERMISSION}, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+        return false;
     }
 
     private static LocationRequest createLocationRequest() {

@@ -129,6 +129,7 @@ public class LocationPickerFragment extends AbstractAppFragment<LocationPickerBi
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressWarnings("MissingPermission")
     private void showUserLocation() {
         MapUtils.getCurrentLocation(requireActivity(), location -> {
             if (location == null) {

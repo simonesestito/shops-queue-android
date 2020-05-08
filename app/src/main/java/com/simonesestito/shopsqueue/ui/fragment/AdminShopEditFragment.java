@@ -18,7 +18,6 @@
 
 package com.simonesestito.shopsqueue.ui.fragment;
 
-import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,8 +27,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 
@@ -44,10 +41,10 @@ import com.simonesestito.shopsqueue.di.module.ShopAdminDetails;
 import com.simonesestito.shopsqueue.model.PickedLocation;
 import com.simonesestito.shopsqueue.ui.MapboxHelper;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
-import com.simonesestito.shopsqueue.ui.dialog.PermissionDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.AdminUsersAdapter;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
+import com.simonesestito.shopsqueue.util.MapUtils;
 import com.simonesestito.shopsqueue.util.NavUtils;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 import com.simonesestito.shopsqueue.viewmodel.AdminShopEditViewModel;
@@ -59,9 +56,9 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import static com.simonesestito.shopsqueue.util.MapUtils.LOCATION_PERMISSION_REQUEST_CODE;
+
 public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, AdminShopEditBinding> {
-    private final static int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private final static String LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
     @Inject ViewModelFactory viewModelFactory;
     private AdminShopEditViewModel viewModel;
     private MapboxHelper mapboxHelper;
@@ -147,21 +144,11 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
 
     private void pickLocation() {
         // Check location permission
-        if (ContextCompat.checkSelfPermission(requireContext(), LOCATION_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
-            requestLocationPermission();
-        } else {
+        if (MapUtils.requestLocationPermission(this)) {
             NavDirections directions = AdminShopEditFragmentDirections
                     .adminShopEditPickLocation()
                     .setStartLocation(viewModel.pickedLocation);
             NavUtils.navigate(this, directions);
-        }
-    }
-
-    private void requestLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), LOCATION_PERMISSION)) {
-            PermissionDialog.showForResult(this, LOCATION_PERMISSION_REQUEST_CODE, LOCATION_PERMISSION);
-        } else {
-            requestPermissions(new String[]{LOCATION_PERMISSION}, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
 

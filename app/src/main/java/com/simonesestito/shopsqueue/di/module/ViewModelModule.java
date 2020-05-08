@@ -30,6 +30,7 @@ import com.simonesestito.shopsqueue.viewmodel.LocationPickerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ShopPickerViewModel;
+import com.simonesestito.shopsqueue.viewmodel.UserMainViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
 import dagger.Binds;
@@ -80,4 +81,9 @@ public interface ViewModelModule {
     @IntoMap
     @ViewModelKey(LocationPickerViewModel.class)
     ViewModel bindLocationPickerViewModel(LocationPickerViewModel locationPickerViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(UserMainViewModel.class)
+    ViewModel bindUserMainViewModel(UserMainViewModel userMainViewModel);
 }

@@ -16,18 +16,14 @@
  * along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.simonesestito.shopsqueue.ui.fragment;
+package com.simonesestito.shopsqueue.viewmodel;
 
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
+import androidx.lifecycle.ViewModel;
 
-import androidx.annotation.Nullable;
+import javax.inject.Inject;
 
-import com.simonesestito.shopsqueue.databinding.UserFragmentBinding;
-
-public class UserFragment extends AbstractAppFragment<UserFragmentBinding> {
-    @Override
-    protected UserFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
-        return UserFragmentBinding.inflate(layoutInflater, container, false);
+public class UserMainViewModel extends ViewModel {
+    @Inject
+    UserMainViewModel() {
     }
 }

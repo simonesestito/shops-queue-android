@@ -241,7 +241,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         }
     }
 
-    private void onShopMarkerClicked(Shop shop) {
+    private void onShopMarkerClicked(ShopWithDistance shop) {
         BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot())
                 .setState(BottomSheetBehavior.STATE_COLLAPSED);
         BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())
@@ -249,6 +249,9 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
         getViewBinding().currentShopBottomSheet.currentShopName.setText(shop.getName());
         getViewBinding().currentShopBottomSheet.currentShopAddress.setText(shop.getAddress());
+
+        String displayDistance = getString(R.string.shop_distance_field, shop.getDistance());
+        getViewBinding().currentShopBottomSheet.currentShopDistance.setText(displayDistance);
 
         String queueCount = getResources().getQuantityString(
                 R.plurals.shop_queue_count, shop.getCount(), shop.getCount());

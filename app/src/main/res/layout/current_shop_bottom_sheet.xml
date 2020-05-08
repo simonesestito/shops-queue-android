@@ -44,6 +44,14 @@
         tools:text="1st street, 8" />
 
     <TextView
+        android:id="@+id/currentShopDistance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/form_element_margin"
+        android:textStyle="bold"
+        tools:text="Distance: 3KMs" />
+
+    <TextView
         android:id="@+id/currentShopQueueCount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

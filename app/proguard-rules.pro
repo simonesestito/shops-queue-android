@@ -25,6 +25,9 @@
     public *** get*();
 }
 
+# Jetpack Crypto Library rules
+-keep class com.google.crypto.tink.** { *; }
+
 # Retrofit rules
 -keepattributes Signature, InnerClasses, EnclosingMethod
 -keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations

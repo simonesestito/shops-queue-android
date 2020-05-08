@@ -43,9 +43,6 @@ public interface ShopService {
                                                        @Query("lon") double longitude,
                                                        @Query("query") String name);
 
-    @GET("/shops/me")
-    ApiResponse<Shop> getOwnShop();
-
     @GET("/shops/{id}")
     ApiResponse<Shop> getShopById(@Path("id") int id);
 

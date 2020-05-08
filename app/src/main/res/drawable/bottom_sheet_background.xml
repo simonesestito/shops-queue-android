@@ -16,15 +16,10 @@
   ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <color name="white">#FAFAFA</color>
-    <color name="light_gray">#9E9E9E</color>
-    <color name="dark_gray">#202124</color>
-    <color name="bottom_sheet_color_background">#FAFAFA</color>
 
-    <color name="green_100">#C8E6C9</color>
-    <color name="green_500">#4CAF50</color>
-    <color name="green_900">#1B5E20</color>
-
-    <color name="red_a400">#FF1744</color>
-</resources>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/bottom_sheet_color_background" />
+    <corners
+        android:topLeftRadius="@dimen/bottomsheet_radius"
+        android:topRightRadius="@dimen/bottomsheet_radius" />
+</shape>

@@ -119,11 +119,9 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (MapUtils.requestLocationPermission(this)) {
-            showUserLocation();
-        }
+    public void onResume() {
+        super.onResume();
+        showUserLocation();
     }
 
     @Override
@@ -149,9 +147,14 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     }
 
     private void showUserLocation() {
+        if (!MapUtils.requestLocationPermission(this))
+            return;
+
         viewModel.clearQuery();
         MapUtils.getCurrentLocation(requireActivity(), location -> {
             Log.d("UserFragment Map", "User location detected");
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            mapboxHelper.showUserLocation(latLng);
             mapboxHelper.moveTo(location);
             viewModel.loadNearShops(location.getLatitude(), location.getLongitude());
         });

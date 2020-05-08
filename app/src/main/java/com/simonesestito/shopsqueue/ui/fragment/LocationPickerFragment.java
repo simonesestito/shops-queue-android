@@ -133,7 +133,8 @@ public class LocationPickerFragment extends AbstractAppFragment<LocationPickerBi
     private void showUserLocation() {
         MapUtils.getCurrentLocation(requireActivity(), location -> {
             if (location == null) {
-                ErrorDialog.newInstance(getString(R.string.gps_disabled_error));
+                ErrorDialog.newInstance(getString(R.string.gps_disabled_error))
+                        .show(getChildFragmentManager(), null);
                 return;
             }
 

@@ -19,7 +19,6 @@
 package com.simonesestito.shopsqueue.ui;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
@@ -53,7 +52,9 @@ import java.util.Objects;
  */
 @SuppressWarnings("WeakerAccess")
 public class MapboxHelper implements LifecycleObserver {
-    private static final String MARKER_ICON_ID = "custom-marker";
+    private static final String MARKER_ICON_ID = "custom-place-marker";
+    private static final String USER_LOCATION_ICON_ID = "custom-user-location-marker";
+    private static final int USER_LOCATION_MARKER_ID = 3742378;
     private final MapView mapView;
     private final int currentZoom;
     private final Map<Integer, Symbol> symbols = new HashMap<>();
@@ -95,6 +96,9 @@ public class MapboxHelper implements LifecycleObserver {
                         markerListener.run();
                     }
                 });
+                symbolManager.setTextAllowOverlap(true);
+                symbolManager.setIconAllowOverlap(true);
+                addMarkers(mapStyle);
 
                 if (callback != null)
                     callback.run();
@@ -117,6 +121,10 @@ public class MapboxHelper implements LifecycleObserver {
     }
 
     public void showOrReplaceMarker(int id, @Nullable LatLng latLng) {
+        showOrReplaceMarker(id, latLng, MARKER_ICON_ID);
+    }
+
+    private void showOrReplaceMarker(int id, @Nullable LatLng latLng, String icon) {
         if (symbolManager == null) {
             initMap(() -> showOrReplaceMarker(id, latLng));
             return;
@@ -130,7 +138,7 @@ public class MapboxHelper implements LifecycleObserver {
         if (latLng != null) {
             mapView.getMapAsync(map -> {
                 map.getStyle(style -> {
-                    Symbol symbol = addMarker(symbolManager, style, mapView.getContext(), latLng);
+                    Symbol symbol = addMarker(symbolManager, latLng, icon);
                     symbols.put(id, symbol);
                 });
             });
@@ -153,7 +161,7 @@ public class MapboxHelper implements LifecycleObserver {
 
         mapView.getMapAsync(map -> {
             map.getStyle(style -> {
-                Symbol symbol = addMarker(symbolManager, style, mapView.getContext(), latLng);
+                Symbol symbol = addMarker(symbolManager, latLng, MARKER_ICON_ID);
                 if (onClickListener != null)
                     markerClickCallbacks.put(symbol.getId(), onClickListener);
             });
@@ -164,10 +172,20 @@ public class MapboxHelper implements LifecycleObserver {
         if (symbolManager == null) {
             initMap(this::clearMarkers);
         } else {
+            Symbol userLocation = symbols.get(USER_LOCATION_MARKER_ID);
+
             symbolManager.deleteAll();
             symbols.clear();
             markerClickCallbacks.clear();
+
+            if (userLocation != null) {
+                showUserLocation(userLocation.getLatLng());
+            }
         }
+    }
+
+    public void showUserLocation(LatLng latLng) {
+        showOrReplaceMarker(USER_LOCATION_MARKER_ID, latLng, USER_LOCATION_ICON_ID);
     }
 
     public void onMapMoved(Callback<LatLng> callback) {
@@ -202,20 +220,25 @@ public class MapboxHelper implements LifecycleObserver {
         }));
     }
 
-    private Symbol addMarker(SymbolManager symbolManager, Style style, Context context, LatLng position) {
-        if (style.getImage(MARKER_ICON_ID) == null) {
-            Drawable drawable = context.getDrawable(R.drawable.ic_map_marker_24dp);
-            Objects.requireNonNull(drawable);
-            style.addImage(MARKER_ICON_ID, drawable);
-        }
-
-        symbolManager.setTextAllowOverlap(true);
-        symbolManager.setIconAllowOverlap(true);
-
+    private Symbol addMarker(SymbolManager symbolManager, LatLng position, String icon) {
+        float size = icon.equals(MARKER_ICON_ID) ? 1.3f : 1f;
         return symbolManager.create(new SymbolOptions()
                 .withLatLng(position)
-                .withIconImage(MARKER_ICON_ID)
-                .withIconSize(1.3f));
+                .withIconImage(icon)
+                .withIconSize(size));
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void addMarkers(Style style) {
+        Context context = mapView.getContext();
+
+        if (style.getImage(MARKER_ICON_ID) == null) {
+            style.addImage(MARKER_ICON_ID, context.getDrawable(R.drawable.ic_map_marker_24dp));
+        }
+
+        if (style.getImage(USER_LOCATION_ICON_ID) == null) {
+            style.addImage(USER_LOCATION_ICON_ID, context.getDrawable(R.drawable.ic_user_location_24dp));
+        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)

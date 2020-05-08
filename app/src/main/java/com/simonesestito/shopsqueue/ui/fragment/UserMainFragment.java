@@ -211,8 +211,9 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         getViewBinding().currentShopBottomSheet.currentShopName.setText(shop.getName());
         getViewBinding().currentShopBottomSheet.currentShopAddress.setText(shop.getAddress());
 
-        String queueDisplayCount = getString(R.string.shop_queue_count, shop.getCount());
-        getViewBinding().currentShopBottomSheet.currentShopQueueCount.setText(queueDisplayCount);
+        String queueCount = getResources().getQuantityString(
+                R.plurals.shop_queue_count, shop.getCount(), shop.getCount());
+        getViewBinding().currentShopBottomSheet.currentShopQueueCount.setText(queueCount);
 
         disableBookButtonIfAlreadyInQueue(shop);
         getViewBinding().currentShopBottomSheet.currentShopBookButton

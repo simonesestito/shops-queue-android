@@ -59,7 +59,8 @@ public class UserBookingsAdapter extends DiffUtilAdapter<BookingWithCount, UserB
         String displayTime = context.getString(R.string.booking_item_created_at_date, formattedTime);
         holder.view.bookingCreatedAtDate.setText(displayTime);
 
-        String queueCount = context.getString(R.string.user_booking_queue_count, data.getQueueCount());
+        String queueCount = context.getResources()
+                .getQuantityString(R.plurals.user_booking_queue_count, data.getQueueCount(), data.getQueueCount());
         holder.view.bookingQueueCount.setText(queueCount);
         if (menuItemListener == null) {
             holder.view.bookingItemMenu.setVisibility(View.GONE);

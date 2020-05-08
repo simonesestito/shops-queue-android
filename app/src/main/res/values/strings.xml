@@ -61,7 +61,6 @@
     <string name="role_owner">Shop owner</string>
     <string name="error_result_not_found">Requested item not found</string>
     <string name="shop_picker_fragment_title">Pick a shop</string>
-    <string name="shop_queue_count">People in queue: %d</string>
     <string name="new_user_title">Add new user</string>
     <string name="user_edit_save">Save user</string>
     <string name="input_shop_for_owner">Shop</string>
@@ -88,6 +87,5 @@
     <string name="menu_user_refresh_bookings">Refresh bookings</string>
     <string name="user_bookings_title">Your bookings</string>
     <string name="user_bookings_empty">No bookings found.</string>
-    <string name="user_booking_queue_count">People ahead in the queue: %d</string>
     <string name="add_booking_to_shop">Book</string>
 </resources>

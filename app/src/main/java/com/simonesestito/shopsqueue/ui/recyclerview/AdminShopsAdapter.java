@@ -51,7 +51,8 @@ public class AdminShopsAdapter extends DiffUtilAdapter<Shop, AdminShopsAdapter.V
         holder.view.shopItemName.setText(shop.getName());
 
         String queueDisplayCount = holder.view.getRoot().getContext()
-                .getString(R.string.shop_queue_count, shop.getCount());
+                .getResources()
+                .getQuantityString(R.plurals.shop_queue_count, shop.getCount(), shop.getCount());
         holder.view.shopItemQueueCount.setText(queueDisplayCount);
 
         if (menuItemListener == null) {

@@ -20,6 +20,7 @@ package com.simonesestito.shopsqueue.api.service;
 
 import com.simonesestito.shopsqueue.api.ApiResponse;
 import com.simonesestito.shopsqueue.api.dto.Booking;
+import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public interface BookingService {
     ApiResponse<List<Booking>> getBookingsByShopId(@Path("shopId") int shopId);
 
     @GET("/users/{userId}/bookings")
-    ApiResponse<List<Booking>> getBookingsByUserId(@Path("userId") int userId);
+    ApiResponse<List<BookingWithCount>> getBookingsByUserId(@Path("userId") int userId);
 
     @DELETE("/bookings/{id}")
     ApiResponse<Void> removeBooking(@Path("id") int bookingId);

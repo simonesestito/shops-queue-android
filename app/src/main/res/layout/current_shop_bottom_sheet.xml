@@ -16,23 +16,35 @@
   ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.App.BottomSheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     app:behavior_hideable="true"
     app:behavior_skipCollapsed="true"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/starButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/form_element_margin"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_star_black_24dp"
+        android:tint="@color/star_color"
+        app:layout_constraintBottom_toBottomOf="@id/currentShopName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/currentShopName"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottomsheet_min_height"
+        android:gravity="center_vertical"
         android:layout_marginBottom="@dimen/form_element_margin"
-        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         tools:text="Best Shop" />
 
@@ -41,6 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/form_element_margin"
+        app:layout_constraintTop_toBottomOf="@id/currentShopName"
         tools:text="1st street, 8" />
 
     <TextView
@@ -49,6 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/form_element_margin"
         android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/currentShopAddress"
         tools:text="Distance: 3KMs" />
 
     <TextView
@@ -56,6 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/form_element_margin"
+        app:layout_constraintTop_toBottomOf="@id/currentShopDistance"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         tools:text="People in the queue: 4" />
 
@@ -64,6 +79,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/currentShopQueueCount"
         android:layout_margin="@dimen/form_element_margin"
         android:text="@string/add_booking_to_shop" />
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

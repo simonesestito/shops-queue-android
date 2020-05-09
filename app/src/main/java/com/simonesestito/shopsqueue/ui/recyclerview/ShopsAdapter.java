@@ -32,19 +32,19 @@ import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.databinding.AdminShopItemBinding;
 
 
-public class AdminShopsAdapter extends DiffUtilAdapter<Shop, AdminShopsAdapter.ViewHolder> {
+public class ShopsAdapter extends DiffUtilAdapter<Shop, ShopsAdapter.ViewHolder> {
     private MenuItemListener menuItemListener;
 
     @NonNull
     @Override
-    public AdminShopsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ShopsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         AdminShopItemBinding binding = AdminShopItemBinding.inflate(inflater, parent, false);
-        return new AdminShopsAdapter.ViewHolder(binding);
+        return new ShopsAdapter.ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdminShopsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ShopsAdapter.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         Shop shop = getItemAt(position);
         holder.view.shopItemAddress.setText(shop.getAddress());

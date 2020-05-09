@@ -32,7 +32,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.databinding.ShopPickerBinding;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
-import com.simonesestito.shopsqueue.ui.recyclerview.AdminShopsAdapter;
+import com.simonesestito.shopsqueue.ui.recyclerview.ShopsAdapter;
 import com.simonesestito.shopsqueue.util.ViewUtils;
 import com.simonesestito.shopsqueue.viewmodel.ShopPickerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
@@ -60,7 +60,7 @@ public class ShopPickerFragment extends AbstractAppFragment<ShopPickerBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        AdminShopsAdapter adapter = new AdminShopsAdapter();
+        ShopsAdapter adapter = new ShopsAdapter();
         adapter.setItemClickListener(shop -> {
             NavBackStackEntry backStackEntry = NavHostFragment
                     .findNavController(this)
@@ -91,7 +91,7 @@ public class ShopPickerFragment extends AbstractAppFragment<ShopPickerBinding> {
                 ErrorDialog.newInstance(requireContext(), event.getError())
                         .show(getChildFragmentManager(), null);
             } else if (event.isSuccessful()) {
-                AdminShopsAdapter adapter = (AdminShopsAdapter) getViewBinding().adminShopsList.getAdapter();
+                ShopsAdapter adapter = (ShopsAdapter) getViewBinding().adminShopsList.getAdapter();
                 Objects.requireNonNull(adapter).updateDataSet(event.getData());
             }
         });

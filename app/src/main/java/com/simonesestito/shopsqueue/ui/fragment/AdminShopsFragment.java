@@ -34,7 +34,7 @@ import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.databinding.AdminChildFragmentBinding;
 import com.simonesestito.shopsqueue.ui.dialog.ConfirmDialog;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
-import com.simonesestito.shopsqueue.ui.recyclerview.AdminShopsAdapter;
+import com.simonesestito.shopsqueue.ui.recyclerview.ShopsAdapter;
 import com.simonesestito.shopsqueue.util.NavUtils;
 import com.simonesestito.shopsqueue.util.ViewUtils;
 import com.simonesestito.shopsqueue.viewmodel.AdminShopsViewModel;
@@ -64,7 +64,7 @@ public class AdminShopsFragment extends AbstractAppFragment<AdminChildFragmentBi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        AdminShopsAdapter adapter = new AdminShopsAdapter();
+        ShopsAdapter adapter = new ShopsAdapter();
         adapter.setMenuItemListener((menuItem, shopId) -> {
             if (menuItem.getItemId() == R.id.deleteShopMenuAction) {
                 Bundle data = new Bundle();
@@ -103,7 +103,7 @@ public class AdminShopsFragment extends AbstractAppFragment<AdminChildFragmentBi
                 ErrorDialog.newInstance(requireContext(), event.getError())
                         .show(getChildFragmentManager(), null);
             } else if (event.isSuccessful()) {
-                AdminShopsAdapter adapter = (AdminShopsAdapter) getViewBinding().adminList.getAdapter();
+                ShopsAdapter adapter = (ShopsAdapter) getViewBinding().adminList.getAdapter();
                 Objects.requireNonNull(adapter).updateDataSet(event.getData());
             }
         });

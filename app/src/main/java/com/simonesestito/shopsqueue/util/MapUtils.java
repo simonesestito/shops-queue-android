@@ -30,6 +30,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -113,6 +114,35 @@ public class MapUtils {
                             callback.onSuccess(locationResult.getLastLocation());
                         }
                     }, null);
+        });
+    }
+
+    public static void listenLocation(Fragment fragment, OnSuccessListener<Location> listener) {
+        checkLocationSettings(fragment.requireActivity(), success -> {
+            if (!success) {
+                Log.w("MapUtils", "Unable to get user location");
+                return;
+            }
+
+            // To get a location immediately, also fire a single one-shot location request
+            MapUtils.getCurrentLocation(fragment.requireActivity(), listener);
+
+            FusedLocationProviderClient providerClient =
+                    LocationServices.getFusedLocationProviderClient(fragment.requireActivity());
+            LocationCallback callback = new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    super.onLocationResult(locationResult);
+                    listener.onSuccess(locationResult.getLastLocation());
+                }
+            };
+            LocationRequest locationRequest = LocationRequest.create()
+                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                    .setInterval(5_000)
+                    .setFastestInterval(3_000)
+                    .setSmallestDisplacement(100);
+            fragment.getViewLifecycleOwner().getLifecycle()
+                    .addObserver(new LocationLifecycleObserver(providerClient, locationRequest, callback));
         });
     }
 

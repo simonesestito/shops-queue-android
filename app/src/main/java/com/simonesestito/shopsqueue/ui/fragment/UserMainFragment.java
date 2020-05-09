@@ -21,8 +21,8 @@ package com.simonesestito.shopsqueue.ui.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -98,6 +98,8 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         viewModel.getBookings().observe(getViewLifecycleOwner(), this::onBookingEvent);
         viewModel.getShops().observe(getViewLifecycleOwner(), this::onShopsEvent);
 
+        MapUtils.listenLocation(this, this::onNewUserLocation);
+
         getViewBinding().shopSearchEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId != EditorInfo.IME_ACTION_SEARCH)
                 return false;
@@ -111,17 +113,10 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             String query = v.getText().toString().trim();
             mapboxHelper.clearMarkers();
             shouldFitAll = true;
-            MapUtils.getCurrentLocation(requireActivity(), location -> {
-                viewModel.searchShops(location.getLatitude(), location.getLongitude(), query);
-            });
+            LatLng location = viewModel.getLastUserLocation();
+            viewModel.searchShops(location.getLatitude(), location.getLongitude(), query);
             return true;
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        showUserLocation();
     }
 
     @Override
@@ -134,7 +129,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.userRefreshBookings) {
             viewModel.loadBookings();
-            showUserLocation();
+            mapboxHelper.moveTo(viewModel.getLastUserLocation());
             getViewBinding().shopSearchEditText.setText("");
             BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())
                     .setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -146,25 +141,19 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         }
     }
 
-    private void showUserLocation() {
-        if (!MapUtils.requestLocationPermission(this))
-            return;
-
-        MapUtils.getCurrentLocation(requireActivity(), location -> {
-            Log.d("UserFragment Map", "User location detected");
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            viewModel.clearQuery();
-            mapboxHelper.showUserLocation(latLng);
-            mapboxHelper.moveTo(latLng);
-            viewModel.updateUserLocation(location.getLatitude(), location.getLongitude());
-        });
+    private void onNewUserLocation(Location location) {
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        viewModel.clearQuery();
+        mapboxHelper.showUserLocation(latLng);
+        mapboxHelper.moveTo(latLng);
+        viewModel.updateUserLocation(latLng.getLatitude(), latLng.getLongitude());
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MapUtils.LOCATION_PERMISSION_REQUEST_CODE && ArrayUtils.all(grantResults, PackageManager.PERMISSION_GRANTED)) {
-            showUserLocation();
+            MapUtils.listenLocation(this, this::onNewUserLocation);
         }
     }
 
@@ -172,7 +161,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == MapUtils.ENABLE_LOCATION_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            showUserLocation();
+            MapUtils.listenLocation(this, this::onNewUserLocation);
         }
     }
 

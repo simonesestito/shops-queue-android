@@ -70,6 +70,9 @@ public class AdminUserEditFragment extends AdminEditFragment<UserDetails, AdminU
         UserRoleSpinnerAdapter roleAdapter = new UserRoleSpinnerAdapter(requireContext());
         getViewBinding().adminUserRole.setAdapter(roleAdapter);
 
+        getViewBinding().shopInput.setOnClickListener(v ->
+                NavUtils.navigate(this, AdminUserEditFragmentDirections.adminNewUserPickShop()));
+
         ViewUtils.setSpinnerListener(getViewBinding().adminUserRole, index -> {
             UserRole clickedRole = UserRole.values()[index];
             int shopVisibility = clickedRole.equals(UserRole.OWNER) ? View.VISIBLE : View.GONE;

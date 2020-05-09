@@ -53,11 +53,11 @@ public abstract class DiffUtilAdapter<T extends Identifiable, VH extends Recycle
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        holder.itemView.setTag(holder.getAdapterPosition());
+        holder.itemView.setTag(getItemAt(position));
         holder.itemView.setOnClickListener(v -> {
-            int clickedIndex = (int) v.getTag();
-            T clickedItem = getItemAt(clickedIndex);
+            T clickedItem = (T) v.getTag();
             if (clickListener != null)
                 clickListener.onResult(clickedItem);
         });

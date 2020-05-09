@@ -28,7 +28,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-public interface FavouriteService {
+public interface FavouritesService {
     @GET("/users/{userId}/favourites")
     ApiResponse<List<Shop>> getUserFavouriteShops(@Path("userId") int userId);
 

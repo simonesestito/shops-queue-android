@@ -25,6 +25,15 @@
         android:id="@+id/userMainFragment"
         android:name="com.simonesestito.shopsqueue.ui.fragment.UserMainFragment"
         android:label="@string/user_fragment_title"
-        tools:layout="@layout/user_fragment" />
+        tools:layout="@layout/user_fragment">
+        <action
+            android:id="@+id/action_userMainFragment_to_userFavouriteShopsFragment"
+            app:destination="@id/userFavouriteShopsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userFavouriteShopsFragment"
+        android:name="com.simonesestito.shopsqueue.ui.fragment.UserFavouriteShopsFragment"
+        android:label="@string/user_favourite_shops"
+        tools:layout="@layout/user_favourite_shops" />
 
 </navigation>

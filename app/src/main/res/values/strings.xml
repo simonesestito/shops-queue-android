@@ -91,4 +91,5 @@
     <string name="shop_name_search_input_hint">Shop name</string>
     <string name="no_shops_found">No shops were found</string>
     <string name="shop_distance_field">Distance: %.2f KM</string>
+    <string name="user_favourite_shops">Favourite shops</string>
 </resources>

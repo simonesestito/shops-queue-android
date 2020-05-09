@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/form_element_margin"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_star_black_24dp"
+        android:src="@drawable/ic_star_white_24dp"
         android:tint="@color/star_color"
         app:layout_constraintBottom_toBottomOf="@id/currentShopName"
         app:layout_constraintEnd_toEndOf="parent"

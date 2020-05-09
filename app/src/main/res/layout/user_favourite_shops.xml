@@ -15,18 +15,21 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
   -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/userRefreshBookings"
-        android:icon="@drawable/ic_refresh_white_24dp"
-        android:title="@string/menu_user_refresh_bookings"
-        app:showAsAction="ifRoom" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userFavouriteShopsList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    <item
-        android:id="@+id/userFavouriteShops"
-        android:icon="@drawable/ic_star_white_24dp"
-        android:title="@string/user_favourite_shops"
-        app:showAsAction="ifRoom" />
-</menu>
+    <ProgressBar
+        android:id="@+id/userFavouriteShopsLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+</FrameLayout>

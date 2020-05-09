@@ -34,6 +34,7 @@ import com.simonesestito.shopsqueue.ui.fragment.MainFragment;
 import com.simonesestito.shopsqueue.ui.fragment.OwnerFragment;
 import com.simonesestito.shopsqueue.ui.fragment.ShopPickerFragment;
 import com.simonesestito.shopsqueue.ui.fragment.SignUpFragment;
+import com.simonesestito.shopsqueue.ui.fragment.UserFavouriteShopsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.UserMainFragment;
 
 import dagger.BindsInstance;
@@ -68,6 +69,8 @@ public interface Injector {
     void inject(LocationPickerFragment locationPickerFragment);
 
     void inject(UserMainFragment userMainFragment);
+
+    void inject(UserFavouriteShopsFragment userFavouriteShopsFragment);
 
     @Component.Builder
     interface Builder {

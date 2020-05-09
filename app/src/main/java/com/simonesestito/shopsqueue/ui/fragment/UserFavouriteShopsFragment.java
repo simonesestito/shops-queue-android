@@ -28,22 +28,20 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
-import com.simonesestito.shopsqueue.databinding.ShopPickerBinding;
+import com.simonesestito.shopsqueue.databinding.UserFavouriteShopsBinding;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.ShopsAdapter;
 import com.simonesestito.shopsqueue.util.NavUtils;
 import com.simonesestito.shopsqueue.util.ViewUtils;
-import com.simonesestito.shopsqueue.viewmodel.ShopPickerViewModel;
+import com.simonesestito.shopsqueue.viewmodel.UserFavouriteShopsViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 
-public class ShopPickerFragment extends AbstractAppFragment<ShopPickerBinding> {
-    static final String PICKED_SHOP_KEY = "picked_shop";
+public class UserFavouriteShopsFragment extends AbstractAppFragment<UserFavouriteShopsBinding> {
+    static final String SELECTED_SHOP_KEY = "picked_shop";
     @Inject ViewModelFactory viewModelFactory;
-    private ShopPickerViewModel viewModel;
+    private ShopsAdapter adapter = new ShopsAdapter();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,40 +50,37 @@ public class ShopPickerFragment extends AbstractAppFragment<ShopPickerBinding> {
     }
 
     @Override
-    protected ShopPickerBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
-        return ShopPickerBinding.inflate(layoutInflater, container, false);
+    protected UserFavouriteShopsBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
+        return UserFavouriteShopsBinding.inflate(layoutInflater, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ShopsAdapter adapter = new ShopsAdapter();
-        adapter.setItemClickListener(shop -> {
-            NavUtils.setFragmentResult(this, PICKED_SHOP_KEY, shop);
+        getViewBinding().userFavouriteShopsList.setAdapter(adapter);
+        adapter.setItemClickListener(clickedShop -> {
+            NavUtils.setFragmentResult(this, SELECTED_SHOP_KEY, clickedShop);
         });
-        getViewBinding().adminShopsList.setAdapter(adapter);
-
-        ViewUtils.addDivider(getViewBinding().adminShopsList);
-        getViewBinding().adminListRefresh.setOnRefreshListener(() -> viewModel.refreshShops());
+        ViewUtils.addDivider(getViewBinding().userFavouriteShopsList);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = new ViewModelProvider(this, viewModelFactory)
-                .get(ShopPickerViewModel.class);
+        UserFavouriteShopsViewModel viewModel = new ViewModelProvider(this, viewModelFactory)
+                .get(UserFavouriteShopsViewModel.class);
 
-        ViewUtils.onRecyclerViewLoadMore(getViewBinding().adminShopsList, viewModel::loadNextPage);
         viewModel.getShops().observe(getViewLifecycleOwner(), event -> {
-            getViewBinding().adminListRefresh.setRefreshing(event.isLoading());
+            getViewBinding().userFavouriteShopsLoading.setVisibility(
+                    event.isLoading() ? View.VISIBLE : View.GONE
+            );
 
             if (event.isFailed() && event.hasToBeHandled()) {
                 event.handle();
                 ErrorDialog.newInstance(requireContext(), event.getError())
                         .show(getChildFragmentManager(), null);
             } else if (event.isSuccessful()) {
-                ShopsAdapter adapter = (ShopsAdapter) getViewBinding().adminShopsList.getAdapter();
-                Objects.requireNonNull(adapter).updateDataSet(event.getData());
+                adapter.updateDataSet(event.getData());
             }
         });
     }

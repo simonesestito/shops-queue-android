@@ -52,6 +52,7 @@ import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.DelayedExecutor;
 import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.util.MapUtils;
+import com.simonesestito.shopsqueue.util.NavUtils;
 import com.simonesestito.shopsqueue.util.ViewUtils;
 import com.simonesestito.shopsqueue.util.livedata.Resource;
 import com.simonesestito.shopsqueue.viewmodel.UserMainViewModel;
@@ -84,6 +85,16 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     @Override
     protected UserFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return UserFragmentBinding.inflate(layoutInflater, container, false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Shop clickedShop = NavUtils.getFragmentResult(this, UserFavouriteShopsFragment.SELECTED_SHOP_KEY);
+        if (clickedShop != null) {
+            ShopResult shopResult = new ShopResult(clickedShop, true);
+            onShopMarkerClicked(shopResult);
+        }
     }
 
     @Override
@@ -131,18 +142,30 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.userRefreshBookings) {
-            viewModel.loadBookings();
-            mapboxHelper.moveTo(viewModel.getLastUserLocation());
-            getViewBinding().shopSearchEditText.setText("");
-            BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())
-                    .setState(BottomSheetBehavior.STATE_HIDDEN);
-            BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot())
-                    .setState(BottomSheetBehavior.STATE_EXPANDED);
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.userRefreshBookings:
+                onUserRefreshMenuClicked();
+                return true;
+            case R.id.userFavouriteShops:
+                onUserFavouritesMenuClicked();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void onUserRefreshMenuClicked() {
+        viewModel.loadBookings();
+        mapboxHelper.moveTo(viewModel.getLastUserLocation());
+        getViewBinding().shopSearchEditText.setText("");
+        BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())
+                .setState(BottomSheetBehavior.STATE_HIDDEN);
+        BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot())
+                .setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+
+    private void onUserFavouritesMenuClicked() {
+        NavUtils.navigate(this, UserMainFragmentDirections.actionUserMainFragmentToUserFavouriteShopsFragment());
     }
 
     private void onNewUserLocation(Location location) {

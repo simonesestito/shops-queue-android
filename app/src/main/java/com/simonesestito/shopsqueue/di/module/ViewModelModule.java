@@ -30,6 +30,7 @@ import com.simonesestito.shopsqueue.viewmodel.LocationPickerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ShopPickerViewModel;
+import com.simonesestito.shopsqueue.viewmodel.UserFavouriteShopsViewModel;
 import com.simonesestito.shopsqueue.viewmodel.UserMainViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -86,4 +87,9 @@ public interface ViewModelModule {
     @IntoMap
     @ViewModelKey(UserMainViewModel.class)
     ViewModel bindUserMainViewModel(UserMainViewModel userMainViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(UserFavouriteShopsViewModel.class)
+    ViewModel bindUserFavouriteShopsViewModel(UserFavouriteShopsViewModel userFavouriteShopsViewModel);
 }

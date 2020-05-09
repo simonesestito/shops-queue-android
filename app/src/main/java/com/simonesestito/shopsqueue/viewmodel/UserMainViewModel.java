@@ -25,7 +25,7 @@ import com.simonesestito.shopsqueue.api.ApiResponse;
 import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
 import com.simonesestito.shopsqueue.api.dto.ShopResult;
 import com.simonesestito.shopsqueue.api.service.BookingService;
-import com.simonesestito.shopsqueue.api.service.FavouriteService;
+import com.simonesestito.shopsqueue.api.service.FavouritesService;
 import com.simonesestito.shopsqueue.api.service.ShopService;
 import com.simonesestito.shopsqueue.model.AuthUserHolder;
 import com.simonesestito.shopsqueue.util.NumberUtils;
@@ -40,7 +40,7 @@ import javax.inject.Inject;
 public class UserMainViewModel extends ViewModel {
     private final BookingService bookingService;
     private final ShopService shopService;
-    private final FavouriteService favouriteService;
+    private final FavouritesService favouritesService;
     private LiveResource<List<BookingWithCount>> bookings = new LiveResource<>();
     private LiveResource<Set<ShopResult>> shops = new LiveResource<>();
     private Set<ShopResult> lastShops = new LinkedHashSet<>();
@@ -48,10 +48,10 @@ public class UserMainViewModel extends ViewModel {
     private LatLng lastUserLocation;
 
     @Inject
-    UserMainViewModel(BookingService bookingService, ShopService shopService, FavouriteService favouriteService) {
+    UserMainViewModel(BookingService bookingService, ShopService shopService, FavouritesService favouritesService) {
         this.bookingService = bookingService;
         this.shopService = shopService;
-        this.favouriteService = favouriteService;
+        this.favouritesService = favouritesService;
         loadBookings();
     }
 
@@ -100,8 +100,8 @@ public class UserMainViewModel extends ViewModel {
         shops.emitLoading();
         int userId = AuthUserHolder.getCurrentUser().getId();
         ApiResponse<Void> response = isFavourite
-                ? favouriteService.addShopToUserFavourites(userId, shopId)
-                : favouriteService.removeShopFromUserFavourites(userId, shopId);
+                ? favouritesService.addShopToUserFavourites(userId, shopId)
+                : favouritesService.removeShopFromUserFavourites(userId, shopId);
         response.onResult(v -> loadNearShops(lastUserLocation.getLatitude(), lastUserLocation.getLongitude()))
                 .onError(err -> {
                     shops.emitError(err);

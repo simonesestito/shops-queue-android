@@ -126,7 +126,7 @@ public class MapboxHelper implements LifecycleObserver {
 
     private void showOrReplaceMarker(int id, @Nullable LatLng latLng, String icon) {
         if (symbolManager == null) {
-            initMap(() -> showOrReplaceMarker(id, latLng));
+            initMap(() -> showOrReplaceMarker(id, latLng, icon));
             return;
         }
 

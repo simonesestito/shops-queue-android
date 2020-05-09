@@ -21,9 +21,11 @@ package com.simonesestito.shopsqueue.viewmodel;
 import androidx.lifecycle.ViewModel;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.simonesestito.shopsqueue.api.ApiResponse;
 import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
 import com.simonesestito.shopsqueue.api.dto.ShopResult;
 import com.simonesestito.shopsqueue.api.service.BookingService;
+import com.simonesestito.shopsqueue.api.service.FavouriteService;
 import com.simonesestito.shopsqueue.api.service.ShopService;
 import com.simonesestito.shopsqueue.model.AuthUserHolder;
 import com.simonesestito.shopsqueue.util.NumberUtils;
@@ -38,6 +40,7 @@ import javax.inject.Inject;
 public class UserMainViewModel extends ViewModel {
     private final BookingService bookingService;
     private final ShopService shopService;
+    private final FavouriteService favouriteService;
     private LiveResource<List<BookingWithCount>> bookings = new LiveResource<>();
     private LiveResource<Set<ShopResult>> shops = new LiveResource<>();
     private Set<ShopResult> lastShops = new LinkedHashSet<>();
@@ -45,16 +48,14 @@ public class UserMainViewModel extends ViewModel {
     private LatLng lastUserLocation;
 
     @Inject
-    UserMainViewModel(BookingService bookingService, ShopService shopService) {
+    UserMainViewModel(BookingService bookingService, ShopService shopService, FavouriteService favouriteService) {
         this.bookingService = bookingService;
         this.shopService = shopService;
+        this.favouriteService = favouriteService;
         loadBookings();
     }
 
     public void loadNearShops(double lat, double lon) {
-        if (shops.getValue() != null && shops.getValue().isLoading())
-            return;
-
         lat = NumberUtils.roundCoordinate(lat);
         lon = NumberUtils.roundCoordinate(lon);
         shops.emitLoading();
@@ -92,6 +93,19 @@ public class UserMainViewModel extends ViewModel {
                 .onError(err -> {
                     bookings.emitError(err);
                     loadBookings();
+                });
+    }
+
+    public void setFavouriteShop(int shopId, boolean isFavourite) {
+        shops.emitLoading();
+        int userId = AuthUserHolder.getCurrentUser().getId();
+        ApiResponse<Void> response = isFavourite
+                ? favouriteService.addShopToUserFavourites(userId, shopId)
+                : favouriteService.removeShopFromUserFavourites(userId, shopId);
+        response.onResult(v -> loadNearShops(lastUserLocation.getLatitude(), lastUserLocation.getLongitude()))
+                .onError(err -> {
+                    shops.emitError(err);
+                    loadNearShops(lastUserLocation.getLatitude(), lastUserLocation.getLongitude());
                 });
     }
 

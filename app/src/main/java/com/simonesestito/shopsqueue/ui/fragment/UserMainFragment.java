@@ -255,7 +255,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         getViewBinding().currentShopBottomSheet.starButton.setPressed(shop.isFavourite());
         getViewBinding().currentShopBottomSheet.starButton.setOnClickListener(v -> {
             v.setSelected(!v.isSelected());
-            // TODO Change favourites
+            viewModel.setFavouriteShop(shop.getId(), v.isSelected());
         });
 
         disableBookButtonIfAlreadyInQueue(shop);

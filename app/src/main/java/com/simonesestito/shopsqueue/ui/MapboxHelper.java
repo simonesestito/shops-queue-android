@@ -19,11 +19,9 @@
 package com.simonesestito.shopsqueue.ui;
 
 import android.content.Context;
-import android.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.collection.LongSparseArray;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -43,6 +41,7 @@ import com.simonesestito.shopsqueue.util.ThemeUtils;
 import com.simonesestito.shopsqueue.util.functional.Callback;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -58,8 +57,10 @@ public class MapboxHelper implements LifecycleObserver {
     private final MapView mapView;
     private final int currentZoom;
     private final Map<Integer, Symbol> symbols = new HashMap<>();
-    private final Map<Long, Runnable> markerClickCallbacks = new HashMap<>();
+    private final Map<LatLng, Runnable> markerClickCallbacks = new HashMap<>();
     private SymbolManager symbolManager;
+    private boolean isLoadingMap;
+    private List<Runnable> onMapLoadedCallbacks = new LinkedList<>();
 
     public MapboxHelper(MapView mapView, Fragment fragment) {
         this.mapView = mapView;
@@ -81,6 +82,14 @@ public class MapboxHelper implements LifecycleObserver {
     }
 
     private void initMap(@Nullable Runnable callback) {
+        if (callback != null)
+            onMapLoadedCallbacks.add(callback);
+
+        if (isLoadingMap)
+            return;
+
+        isLoadingMap = true;
+
         mapView.getMapAsync(mapboxMap -> {
             String style = ThemeUtils.isDarkTheme(mapView.getContext())
                     ? Style.DARK : Style.MAPBOX_STREETS;
@@ -91,7 +100,7 @@ public class MapboxHelper implements LifecycleObserver {
                         mapStyle
                 );
                 this.symbolManager.addClickListener(clickedSymbol -> {
-                    Runnable markerListener = markerClickCallbacks.get(clickedSymbol.getId());
+                    Runnable markerListener = markerClickCallbacks.get(clickedSymbol.getLatLng());
                     if (markerListener != null) {
                         markerListener.run();
                     }
@@ -100,14 +109,13 @@ public class MapboxHelper implements LifecycleObserver {
                 symbolManager.setIconAllowOverlap(true);
                 addMarkers(mapStyle);
 
-                if (callback != null)
-                    callback.run();
+                for (Runnable onMapLoadedCallback : onMapLoadedCallbacks) {
+                    onMapLoadedCallback.run();
+                }
+
+                isLoadingMap = false;
             });
         });
-    }
-
-    public void moveTo(Location location) {
-        moveTo(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
     public void moveTo(LatLng latLng) {
@@ -151,18 +159,18 @@ public class MapboxHelper implements LifecycleObserver {
             return;
         }
 
-        LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
-        for (int i = 0; i < symbols.size(); i++) {
-            Symbol symbol = symbols.get(i);
-            if (symbol != null && symbol.getLatLng().equals(latLng)) {
-                markerClickCallbacks.put(symbol.getId(), onClickListener);
-            }
+        if (markerClickCallbacks.containsKey(latLng)) {
+            // Marker already present at that location.
+            // There's no need to add another one
+            // We can just update the listener
+            markerClickCallbacks.put(latLng, onClickListener);
+            return;
         }
 
         mapView.getMapAsync(map -> {
             map.getStyle(style -> {
-                Symbol symbol = addMarker(symbolManager, latLng, MARKER_ICON_ID);
-                markerClickCallbacks.put(symbol.getId(), onClickListener);
+                addMarker(symbolManager, latLng, MARKER_ICON_ID);
+                markerClickCallbacks.put(latLng, onClickListener);
             });
         });
     }
@@ -193,9 +201,7 @@ public class MapboxHelper implements LifecycleObserver {
 
     public void onMapMoved(Callback<LatLng> callback) {
         mapView.getMapAsync(map -> {
-            map.addOnCameraIdleListener(() -> {
-                callback.onResult(map.getCameraPosition().target);
-            });
+            map.addOnCameraIdleListener(() -> callback.onResult(map.getCameraPosition().target));
         });
     }
 

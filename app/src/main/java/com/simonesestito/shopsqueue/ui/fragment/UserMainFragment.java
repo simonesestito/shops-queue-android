@@ -70,7 +70,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     private UserMainViewModel viewModel;
     private MapboxHelper mapboxHelper;
     private boolean shouldFitAll = false;
-    private DelayedExecutor<LatLng> mapMovedExecutor = new DelayedExecutor<>(2000, latLng -> {
+    private DelayedExecutor<LatLng> mapMovedExecutor = new DelayedExecutor<>(800, latLng -> {
         viewModel.loadNearShops(latLng.getLatitude(), latLng.getLongitude());
     });
 
@@ -236,7 +236,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
                 Toast.makeText(requireContext(), R.string.no_shops_found, Toast.LENGTH_LONG).show();
             }
             List<LatLng> latLngs = new LinkedList<>();
-            for (ShopResult shop : Objects.requireNonNull(event.getData())) {
+            for (ShopResult shop : shops) {
                 LatLng latLng = new LatLng(shop.getLatitude(), shop.getLongitude());
                 latLngs.add(latLng);
                 mapboxHelper.addMarker(latLng, () -> {

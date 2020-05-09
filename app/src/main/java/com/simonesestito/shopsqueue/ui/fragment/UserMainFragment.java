@@ -49,7 +49,6 @@ import com.simonesestito.shopsqueue.ui.MapboxHelper;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.UserBookingsAdapter;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
-import com.simonesestito.shopsqueue.util.DelayedExecutor;
 import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.util.MapUtils;
 import com.simonesestito.shopsqueue.util.NavUtils;
@@ -70,9 +69,6 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     private UserMainViewModel viewModel;
     private MapboxHelper mapboxHelper;
     private boolean shouldFitAll = false;
-    private DelayedExecutor<LatLng> mapMovedExecutor = new DelayedExecutor<>(800, latLng -> {
-        viewModel.loadNearShops(latLng.getLatitude(), latLng.getLongitude());
-    });
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,7 +97,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mapboxHelper = new MapboxHelper(getViewBinding().userShopsMap, this);
-        mapboxHelper.onMapMoved(mapMovedExecutor::execute);
+        mapboxHelper.onMapMoved(latLng -> viewModel.loadNearShops(latLng.getLatitude(), latLng.getLongitude()));
 
         UserBookingsAdapter adapter = new UserBookingsAdapter();
         adapter.setMenuItemListener(((menuItem, booking) -> {

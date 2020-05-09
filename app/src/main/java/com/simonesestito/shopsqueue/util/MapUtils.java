@@ -72,7 +72,11 @@ public class MapUtils {
      *
      * @param onLocationEnabled Callback
      */
-    public static void checkLocationSettings(Activity activity, Callback<Boolean> onLocationEnabled) {
+    public static void checkLocationSettings(Fragment fragment, Callback<Boolean> onLocationEnabled) {
+        if (!MapUtils.requestLocationPermission(fragment))
+            return;
+
+        Activity activity = fragment.requireActivity();
         LocationSettingsRequest settingsRequest = new LocationSettingsRequest.Builder()
                 .addLocationRequest(createLocationRequest())
                 .build();
@@ -98,15 +102,15 @@ public class MapUtils {
                 });
     }
 
-    public static void getCurrentLocation(Activity activity, OnSuccessListener<Location> callback) {
-        checkLocationSettings(activity, success -> {
+    public static void getCurrentLocation(Fragment fragment, OnSuccessListener<Location> callback) {
+        checkLocationSettings(fragment, success -> {
             if (!success) {
                 Log.w("MapUtils", "Unable to get user location");
                 return;
             }
 
             Log.d("MapUtils", "User location requested");
-            LocationServices.getFusedLocationProviderClient(activity)
+            LocationServices.getFusedLocationProviderClient(fragment.requireActivity())
                     .requestLocationUpdates(createLocationRequest(), new LocationCallback() {
                         @Override
                         public void onLocationResult(LocationResult locationResult) {
@@ -118,14 +122,14 @@ public class MapUtils {
     }
 
     public static void listenLocation(Fragment fragment, OnSuccessListener<Location> listener) {
-        checkLocationSettings(fragment.requireActivity(), success -> {
+        checkLocationSettings(fragment, success -> {
             if (!success) {
                 Log.w("MapUtils", "Unable to get user location");
                 return;
             }
 
             // To get a location immediately, also fire a single one-shot location request
-            MapUtils.getCurrentLocation(fragment.requireActivity(), listener);
+            MapUtils.getCurrentLocation(fragment, listener);
 
             FusedLocationProviderClient providerClient =
                     LocationServices.getFusedLocationProviderClient(fragment.requireActivity());

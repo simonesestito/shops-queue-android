@@ -131,7 +131,7 @@ public class LocationPickerFragment extends AbstractAppFragment<LocationPickerBi
 
     @SuppressWarnings("MissingPermission")
     private void showUserLocation() {
-        MapUtils.getCurrentLocation(requireActivity(), location -> {
+        MapUtils.getCurrentLocation(this, location -> {
             if (location == null) {
                 ErrorDialog.newInstance(getString(R.string.gps_disabled_error))
                         .show(getChildFragmentManager(), null);

@@ -185,6 +185,10 @@ public class MapboxHelper implements LifecycleObserver {
 
     public void showUserLocation(LatLng latLng) {
         showOrReplaceMarker(USER_LOCATION_MARKER_ID, latLng, USER_LOCATION_ICON_ID);
+        mapView.getMapAsync(map -> {
+            if (map.getCameraPosition().target.equals(new LatLng(0, 0, 0)))
+                moveTo(latLng);
+        });
     }
 
     public void onMapMoved(Callback<LatLng> callback) {

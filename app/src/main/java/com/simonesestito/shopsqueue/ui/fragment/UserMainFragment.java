@@ -172,7 +172,6 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         viewModel.clearQuery();
         mapboxHelper.showUserLocation(latLng);
-        mapboxHelper.moveTo(latLng);
         viewModel.updateUserLocation(latLng.getLatitude(), latLng.getLongitude());
     }
 
@@ -241,7 +240,6 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
                 LatLng latLng = new LatLng(shop.getLatitude(), shop.getLongitude());
                 latLngs.add(latLng);
                 mapboxHelper.addMarker(latLng, () -> {
-                    mapboxHelper.moveTo(latLng);
                     onShopMarkerClicked(shop);
                 });
             }
@@ -267,6 +265,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         getViewBinding().currentShopBottomSheet.currentShopAddress.setText(shop.getAddress());
 
         LatLng shopLatLng = new LatLng(shop.getLatitude(), shop.getLongitude());
+        mapboxHelper.moveTo(shopLatLng);
         double distance = shopLatLng.distanceTo(viewModel.getLastUserLocation()) / 1000;
         String displayDistance = getString(R.string.shop_distance_field, distance);
         getViewBinding().currentShopBottomSheet.currentShopDistance.setText(displayDistance);

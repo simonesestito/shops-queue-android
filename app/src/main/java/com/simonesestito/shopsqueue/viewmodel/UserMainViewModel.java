@@ -20,6 +20,7 @@ package com.simonesestito.shopsqueue.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
 import com.simonesestito.shopsqueue.api.dto.ShopResult;
 import com.simonesestito.shopsqueue.api.service.BookingService;
@@ -41,6 +42,7 @@ public class UserMainViewModel extends ViewModel {
     private LiveResource<Set<ShopResult>> shops = new LiveResource<>();
     private Set<ShopResult> lastShops = new LinkedHashSet<>();
     private String query;
+    private LatLng lastUserLocation;
 
     @Inject
     UserMainViewModel(BookingService bookingService, ShopService shopService) {
@@ -50,6 +52,9 @@ public class UserMainViewModel extends ViewModel {
     }
 
     public void loadNearShops(double lat, double lon) {
+        if (shops.getValue() != null && shops.getValue().isLoading())
+            return;
+
         lat = NumberUtils.roundCoordinate(lat);
         lon = NumberUtils.roundCoordinate(lon);
         shops.emitLoading();
@@ -98,6 +103,15 @@ public class UserMainViewModel extends ViewModel {
 
     public void clearQuery() {
         query = "";
+    }
+
+    public LatLng getLastUserLocation() {
+        return lastUserLocation;
+    }
+
+    public void updateUserLocation(double lat, double lon) {
+        lastUserLocation = new LatLng(lat, lon);
+        loadNearShops(lat, lon);
     }
 
     public LiveResource<List<BookingWithCount>> getBookings() {

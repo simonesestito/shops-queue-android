@@ -156,7 +156,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             viewModel.clearQuery();
             mapboxHelper.showUserLocation(latLng);
             mapboxHelper.moveTo(latLng);
-            viewModel.loadNearShops(location.getLatitude(), location.getLongitude());
+            viewModel.updateUserLocation(location.getLatitude(), location.getLongitude());
         });
     }
 
@@ -250,7 +250,9 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         getViewBinding().currentShopBottomSheet.currentShopName.setText(shop.getName());
         getViewBinding().currentShopBottomSheet.currentShopAddress.setText(shop.getAddress());
 
-        String displayDistance = getString(R.string.shop_distance_field, shop.getDistance());
+        LatLng shopLatLng = new LatLng(shop.getLatitude(), shop.getLongitude());
+        double distance = shopLatLng.distanceTo(viewModel.getLastUserLocation()) / 1000;
+        String displayDistance = getString(R.string.shop_distance_field, distance);
         getViewBinding().currentShopBottomSheet.currentShopDistance.setText(displayDistance);
 
         String queueCount = getResources().getQuantityString(

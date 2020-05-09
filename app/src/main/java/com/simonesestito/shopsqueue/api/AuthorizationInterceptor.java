@@ -43,7 +43,7 @@ public class AuthorizationInterceptor implements Interceptor {
 
         try {
             // TODO: Test only, remove me after development
-            Thread.sleep(800);
+            Thread.sleep(1400);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

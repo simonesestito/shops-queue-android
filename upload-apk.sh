@@ -20,7 +20,7 @@ ACCESS_TOKEN=`curl \
 curl \
     --fail \
     -X POST \
-    --data-binary "@${APK_PATH}" \
+    --data-binary "@${SIGNED_RELEASE_FILE}" \
     -H "Authorization: Bearer $ACCESS_TOKEN" \
     -H "Content-Type: application/vnd.android.package-archive" \
     "https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=${APK_STORAGE_NAME}" \

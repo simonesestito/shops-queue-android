@@ -35,7 +35,6 @@ jobs:
     - name: Upload APK to Firebase Storage
       run: bash ./upload-apk.sh
       env:
-        APK_PATH: app/build/outputs/apk/release/app-release-unsigned-signed.apk
         APK_STORAGE_NAME: app.apk
         OAUTH_CLIENT_ID: ${{ secrets.CLOUD_STORAGE_CLIENT_ID }}
         OAUTH_CLIENT_SECRET: ${{ secrets.CLOUD_STORAGE_CLIENT_SECRET }}

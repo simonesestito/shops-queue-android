@@ -23,6 +23,7 @@ import com.simonesestito.shopsqueue.api.ApiCallAdapter;
 import com.simonesestito.shopsqueue.api.AuthorizationInterceptor;
 import com.simonesestito.shopsqueue.api.service.BookingService;
 import com.simonesestito.shopsqueue.api.service.FavouritesService;
+import com.simonesestito.shopsqueue.api.service.FcmService;
 import com.simonesestito.shopsqueue.api.service.LoginService;
 import com.simonesestito.shopsqueue.api.service.ShopService;
 import com.simonesestito.shopsqueue.api.service.UserService;
@@ -84,5 +85,10 @@ public class RetrofitModule {
     @Provides
     UserService provideUserService(Retrofit retrofit) {
         return retrofit.create(UserService.class);
+    }
+
+    @Provides
+    FcmService provideFcmService(Retrofit retrofit) {
+        return retrofit.create(FcmService.class);
     }
 }

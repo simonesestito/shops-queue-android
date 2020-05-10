@@ -25,6 +25,7 @@ import com.simonesestito.shopsqueue.api.dto.AuthResponse;
 import com.simonesestito.shopsqueue.api.dto.NewSimpleUser;
 import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.api.dto.UserLogin;
+import com.simonesestito.shopsqueue.api.service.FcmService;
 import com.simonesestito.shopsqueue.api.service.LoginService;
 import com.simonesestito.shopsqueue.model.AuthUserHolder;
 import com.simonesestito.shopsqueue.model.HttpStatus;
@@ -34,18 +35,25 @@ import javax.inject.Inject;
 
 public class LoginViewModel extends ViewModel {
     private final LoginService loginService;
+    private final FcmService fcmService;
     private final SharedPreferencesStore sharedPreferencesStore;
     private final LiveResource<UserDetails> authStatus = new LiveResource<>();
     private final LiveResource<AuthResponse> loginRequest = new LiveResource<>();
 
     @Inject
-    public LoginViewModel(LoginService loginService, SharedPreferencesStore sharedPreferencesStore) {
+    public LoginViewModel(LoginService loginService, FcmService fcmService, SharedPreferencesStore sharedPreferencesStore) {
         this.loginService = loginService;
+        this.fcmService = fcmService;
         this.sharedPreferencesStore = sharedPreferencesStore;
         initAuthStatus();
         this.authStatus.observeForever(event -> {
             if (!event.isLoading())
                 AuthUserHolder.setCurrentUser(event.getData());
+
+            if (event.isSuccessful() && event.getData() != null) {
+                // Register FCM token
+                // TODO
+            }
         });
     }
 

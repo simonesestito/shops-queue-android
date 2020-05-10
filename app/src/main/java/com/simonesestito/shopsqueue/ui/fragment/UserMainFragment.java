@@ -200,6 +200,8 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.GONE);
             BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())
                     .setState(BottomSheetBehavior.STATE_HIDDEN);
+            BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot())
+                    .setState(BottomSheetBehavior.STATE_EXPANDED);
             return;
         }
 

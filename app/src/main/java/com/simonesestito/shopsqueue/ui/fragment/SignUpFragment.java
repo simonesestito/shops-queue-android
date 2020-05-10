@@ -32,7 +32,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
-import com.simonesestito.shopsqueue.api.dto.NewUser;
+import com.simonesestito.shopsqueue.api.dto.NewSimpleUser;
 import com.simonesestito.shopsqueue.databinding.SignUpFragmentBinding;
 import com.simonesestito.shopsqueue.model.ApiException;
 import com.simonesestito.shopsqueue.model.HttpStatus;
@@ -101,7 +101,7 @@ public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
         String email = getViewBinding().emailInputLayout.getEditText().getText().toString().trim();
         String password = getViewBinding().passwordInputLayout.getEditText().getText().toString().trim();
 
-        NewUser newUser = new NewUser(name, surname, email, password);
+        NewSimpleUser newUser = new NewSimpleUser(name, surname, email, password);
         loginViewModel.signUpAndLogin(newUser);
         disableSignUp();
     }

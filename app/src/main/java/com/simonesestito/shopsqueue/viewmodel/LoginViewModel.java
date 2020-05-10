@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.simonesestito.shopsqueue.SharedPreferencesStore;
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
-import com.simonesestito.shopsqueue.api.dto.NewUser;
+import com.simonesestito.shopsqueue.api.dto.NewSimpleUser;
 import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.api.dto.UserLogin;
 import com.simonesestito.shopsqueue.api.service.LoginService;
@@ -89,7 +89,7 @@ public class LoginViewModel extends ViewModel {
      *
      * @see LoginViewModel#loginRequest
      */
-    public void signUpAndLogin(NewUser newUser) {
+    public void signUpAndLogin(NewSimpleUser newUser) {
         loginRequest.emitLoading();
         this.loginService.registerUser(newUser)
                 .onResult(u -> this.login(newUser.getEmail(), newUser.getPassword()))

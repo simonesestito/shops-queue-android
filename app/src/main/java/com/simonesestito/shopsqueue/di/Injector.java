@@ -20,6 +20,7 @@ package com.simonesestito.shopsqueue.di;
 
 import android.content.Context;
 
+import com.simonesestito.shopsqueue.FcmReceiverService;
 import com.simonesestito.shopsqueue.di.module.RetrofitModule;
 import com.simonesestito.shopsqueue.di.module.SharedPreferencesModule;
 import com.simonesestito.shopsqueue.di.module.ViewModelModule;
@@ -71,6 +72,8 @@ public interface Injector {
     void inject(UserMainFragment userMainFragment);
 
     void inject(UserFavouriteShopsFragment userFavouriteShopsFragment);
+
+    void inject(FcmReceiverService fcmReceiverService);
 
     @Component.Builder
     interface Builder {

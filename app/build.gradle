@@ -83,4 +83,7 @@ dependencies {
 
     // Play Services
     implementation "com.google.android.gms:play-services-location:$versions.playServicesLocation"
+
+    // Firebase
+    implementation "com.google.firebase:firebase-messaging:$versions.firebaseFcm"
 }

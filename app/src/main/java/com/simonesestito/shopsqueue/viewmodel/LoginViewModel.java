@@ -20,8 +20,10 @@ package com.simonesestito.shopsqueue.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.simonesestito.shopsqueue.SharedPreferencesStore;
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
+import com.simonesestito.shopsqueue.api.dto.FcmToken;
 import com.simonesestito.shopsqueue.api.dto.NewSimpleUser;
 import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.api.dto.UserLogin;
@@ -41,7 +43,7 @@ public class LoginViewModel extends ViewModel {
     private final LiveResource<AuthResponse> loginRequest = new LiveResource<>();
 
     @Inject
-    public LoginViewModel(LoginService loginService, FcmService fcmService, SharedPreferencesStore sharedPreferencesStore) {
+    LoginViewModel(LoginService loginService, FcmService fcmService, SharedPreferencesStore sharedPreferencesStore) {
         this.loginService = loginService;
         this.fcmService = fcmService;
         this.sharedPreferencesStore = sharedPreferencesStore;
@@ -51,8 +53,12 @@ public class LoginViewModel extends ViewModel {
                 AuthUserHolder.setCurrentUser(event.getData());
 
             if (event.isSuccessful() && event.getData() != null) {
-                // Register FCM token
-                // TODO
+                FirebaseInstanceId.getInstance().getInstanceId()
+                        .addOnSuccessListener(instanceIdResult -> {
+                            String token = instanceIdResult.getToken();
+                            fcmService.addFcmToken(new FcmToken(token));
+                        })
+                        .addOnFailureListener(Throwable::printStackTrace);
             }
         });
     }

@@ -46,6 +46,7 @@ import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.api.dto.ShopResult;
 import com.simonesestito.shopsqueue.databinding.UserFragmentBinding;
 import com.simonesestito.shopsqueue.ui.MapboxHelper;
+import com.simonesestito.shopsqueue.ui.dialog.ConfirmDialog;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.UserBookingsAdapter;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
@@ -65,6 +66,8 @@ import java.util.Set;
 import javax.inject.Inject;
 
 public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
+    private static final String CANCEL_BOOKING_ID_KEY = "bookingId";
+    private static final int CANCEL_BOOKING_REQUEST_CODE = 2;
     @Inject ViewModelFactory viewModelFactory;
     private UserMainViewModel viewModel;
     private MapboxHelper mapboxHelper;
@@ -100,9 +103,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         mapboxHelper.onMapMoved(latLng -> viewModel.loadNearShops(latLng.getLatitude(), latLng.getLongitude()));
 
         UserBookingsAdapter adapter = new UserBookingsAdapter();
-        adapter.setMenuItemListener(((menuItem, booking) -> {
-            viewModel.deleteBooking(booking.getId());
-        }));
+        adapter.setMenuItemListener(((menuItem, booking) -> onAskCancelBooking(booking.getId())));
         getViewBinding().userBookingsBottomSheet.userBookingsList.setAdapter(adapter);
 
         viewModel.loadBookings();
@@ -182,9 +183,29 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == MapUtils.ENABLE_LOCATION_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            MapUtils.listenLocation(this, this::onNewUserLocation);
+        if (resultCode != Activity.RESULT_OK)
+            return;
+
+        switch (requestCode) {
+            case MapUtils.ENABLE_LOCATION_REQUEST_CODE:
+                MapUtils.listenLocation(this, this::onNewUserLocation);
+                break;
+            case CANCEL_BOOKING_REQUEST_CODE:
+                if (data == null)
+                    break;
+                int bookingId = data.getIntExtra(CANCEL_BOOKING_ID_KEY, -1);
+                if (bookingId == -1)
+                    break;
+                viewModel.cancelBooking(bookingId);
+                break;
         }
+    }
+
+    private void onAskCancelBooking(int bookingId) {
+        Bundle args = new Bundle();
+        args.putInt(CANCEL_BOOKING_ID_KEY, bookingId);
+        ConfirmDialog.showForResult(this, CANCEL_BOOKING_REQUEST_CODE,
+                getString(R.string.cancel_booking_confirm_message), args);
     }
 
     private void onBookingEvent(Resource<List<BookingWithCount>> event) {
@@ -278,24 +299,36 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             viewModel.setFavouriteShop(shop.getId(), v.isSelected());
         });
 
-        disableBookButtonIfAlreadyInQueue(shop);
-        getViewBinding().currentShopBottomSheet.currentShopBookButton
-                .setOnClickListener(v -> viewModel.book(shop.getId()));
+        adjustBookButton(shop);
     }
 
-    private void disableBookButtonIfAlreadyInQueue(Shop shop) {
+    private void adjustBookButton(Shop shop) {
+        int bookingId = -1;
         Resource<List<BookingWithCount>> currentState = viewModel.getBookings().getValue();
         if (currentState != null && currentState.isSuccessful()) {
             List<BookingWithCount> currentBookings = currentState.getData();
             if (currentBookings != null) {
                 for (BookingWithCount booking : currentBookings) {
                     if (booking.getShop().getId() == shop.getId()) {
-                        getViewBinding().currentShopBottomSheet.currentShopBookButton.setEnabled(false);
-                        return;
+                        bookingId = booking.getId();
+                        break;
                     }
                 }
             }
         }
-        getViewBinding().currentShopBottomSheet.currentShopBookButton.setEnabled(true);
+
+        if (bookingId == -1) {
+            getViewBinding().currentShopBottomSheet.currentShopBookButton.setVisibility(View.VISIBLE);
+            getViewBinding().currentShopBottomSheet.currentShopCancelButton.setVisibility(View.GONE);
+        } else {
+            getViewBinding().currentShopBottomSheet.currentShopBookButton.setVisibility(View.GONE);
+            getViewBinding().currentShopBottomSheet.currentShopCancelButton.setVisibility(View.VISIBLE);
+        }
+
+        getViewBinding().currentShopBottomSheet.currentShopBookButton
+                .setOnClickListener(v -> viewModel.book(shop.getId()));
+        int finalBookingId = bookingId;
+        getViewBinding().currentShopBottomSheet.currentShopCancelButton
+                .setOnClickListener(v -> onAskCancelBooking(finalBookingId));
     }
 }

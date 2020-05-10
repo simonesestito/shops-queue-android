@@ -92,4 +92,6 @@
     <string name="no_shops_found">No shops were found</string>
     <string name="shop_distance_field">Distance: %.2f KM</string>
     <string name="user_favourite_shops">Favourite shops</string>
+    <string name="cancel_booking_from_shop">Cancel</string>
+    <string name="cancel_booking_confirm_message">You will lose your booking. If you book again, you\'ll be at the end of the queue again</string>
 </resources>

@@ -86,7 +86,7 @@ public class UserMainViewModel extends ViewModel {
                 });
     }
 
-    public void deleteBooking(int id) {
+    public void cancelBooking(int id) {
         bookings.emitLoading();
         bookingService.deleteBooking(id)
                 .onResult(v -> loadBookings())

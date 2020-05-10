@@ -18,6 +18,7 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29

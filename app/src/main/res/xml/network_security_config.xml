@@ -21,5 +21,6 @@
         <!-- For development purposes only -->
         <domain includeSubdomains="true">localhost</domain>
         <domain includeSubdomains="true">192.168.1.100</domain>
+        <domain includeSubdomains="true">10.0.2.2</domain>
     </domain-config>
 </network-security-config>

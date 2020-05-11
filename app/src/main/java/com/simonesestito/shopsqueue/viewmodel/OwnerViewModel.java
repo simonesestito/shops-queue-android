@@ -20,7 +20,6 @@ package com.simonesestito.shopsqueue.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 
-import com.simonesestito.shopsqueue.api.dto.Booking;
 import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.api.service.BookingService;
 import com.simonesestito.shopsqueue.api.service.ShopService;
@@ -37,7 +36,6 @@ public class OwnerViewModel extends ViewModel {
     private final LiveResource<ShopOwnerDetails> shopData = new LiveResource<>();
     // Cached data, internal in the ViewModel
     private Shop currentShop;
-    private Booking latestCustomer;
 
     @Inject
     OwnerViewModel(ShopService shopService, BookingService bookingService) {
@@ -69,9 +67,8 @@ public class OwnerViewModel extends ViewModel {
 
         shopData.emitLoading();
         bookingService.getBookingsByShopId(currentShop.getId())
-                .onResult(bookings -> shopData.emitResult(new ShopOwnerDetails(
-                        currentShop, latestCustomer, bookings
-                )))
+                .onResult(bookings -> shopData.emitResult(
+                        new ShopOwnerDetails(currentShop, bookings)))
                 .onError(err -> {
                     err.printStackTrace();
                     shopData.emitError(err);
@@ -81,14 +78,10 @@ public class OwnerViewModel extends ViewModel {
     public void callNextUser() {
         shopData.emitLoading();
         bookingService.callNextUser(currentShop.getId())
-                .onResult(user -> {
-                    latestCustomer = user;
-                    refreshBookings();
-                })
+                .onResult(v -> refreshBookings())
                 .onError(err -> {
-                    latestCustomer = null;
+                    shopData.emitError(err);
                     refreshBookings();
-                    err.printStackTrace();
                 });
     }
 

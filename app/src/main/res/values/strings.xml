@@ -95,7 +95,9 @@
     <string name="cancel_booking_from_shop">Cancel</string>
     <string name="cancel_booking_confirm_message">You will lose your booking. If you book again, you\'ll be at the end of the queue again</string>
     <string name="notification_channel_booking_notice">Bookings notice</string>
-    <string name="notification_almost_turn_message">Harry up! It\'s almost your turn.</string>
     <string name="notification_booking_cancellation_message">Sorry, your booking has just been cancelled by the shop owner.</string>
+    <string name="notification_queue_notice_message">You\'ve %d people ahead in the queue.</string>
+    <string name="notification_next_turn_message">Harry up! You\'re the next person in the queue.</string>
     <string name="notification_your_turn_message">It\'s your turn! Go to the shop as fast as you can.</string>
+    <string name="user_your_turn_message"><b>It\'s your turn! Go to the shop as fast as you can.</b></string>
 </resources>

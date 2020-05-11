@@ -36,6 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.simonesestito.shopsqueue.api.dto.Booking;
+import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
 import com.simonesestito.shopsqueue.api.dto.FcmToken;
 import com.simonesestito.shopsqueue.api.service.FcmService;
 import com.simonesestito.shopsqueue.ui.MainActivity;
@@ -48,8 +49,7 @@ public class FcmReceiverService extends FirebaseMessagingService {
     private static final String TAG = "Shops Queue FCM";
     private static final String KEY_MESSAGE_TYPE = "type";
     private static final String KEY_MESSAGE_DATA = "data";
-    private static final String MESSAGE_TYPE_ALMOST_SHIFT = "almost-shift";
-    private static final String MESSAGE_TYPE_SHIFT = "shift-now";
+    private static final String MESSAGE_TYPE_QUEUE_NOTICE = "queue-notice";
     private static final String MESSAGE_TYPE_BOOKING_CANCELLED = "booking-cancelled";
     private static final String NOTIFICATION_CHANNEL_BOOKINGS_NOTICE_ID = "bookings-notice";
     @Inject FcmService fcmService;
@@ -82,6 +82,9 @@ public class FcmReceiverService extends FirebaseMessagingService {
         String messageType = message.get(KEY_MESSAGE_TYPE);
         String jsonData = message.get(KEY_MESSAGE_DATA);
 
+        Log.e(TAG, "" + messageType);
+        Log.e(TAG, "" + jsonData);
+
         NotificationManager notificationManager = ContextCompat
                 .getSystemService(this, NotificationManager.class);
         if (notificationManager == null)
@@ -96,11 +99,8 @@ public class FcmReceiverService extends FirebaseMessagingService {
         }
 
         switch (messageType != null ? messageType : "null") {
-            case MESSAGE_TYPE_ALMOST_SHIFT:
-                handleAlmostShift(jsonData);
-                break;
-            case MESSAGE_TYPE_SHIFT:
-                handleShift(jsonData);
+            case MESSAGE_TYPE_QUEUE_NOTICE:
+                handleQueueNotice(jsonData);
                 break;
             case MESSAGE_TYPE_BOOKING_CANCELLED:
                 handleBookingCancellation(jsonData);
@@ -110,65 +110,60 @@ public class FcmReceiverService extends FirebaseMessagingService {
         }
     }
 
-    private void handleAlmostShift(String jsonString) {
-        Booking data = jsonToBooking(jsonString);
+    private void handleQueueNotice(String jsonString) {
+        BookingWithCount data = parseJson(jsonString, BookingWithCount.class);
         if (data == null) {
             Log.e(TAG, "Received payload with empty Booking data");
             return;
         }
 
-        showNotification(
-                data.getShop().getName(),
-                getString(R.string.notification_almost_turn_message)
-        );
-    }
-
-    private void handleShift(String jsonString) {
-        Booking data = jsonToBooking(jsonString);
-        if (data == null) {
-            Log.e(TAG, "Received payload with empty Booking data");
-            return;
+        String message;
+        switch (data.getQueueCount()) {
+            case 0:
+                message = getString(R.string.notification_your_turn_message);
+                break;
+            case 1:
+                message = getString(R.string.notification_next_turn_message);
+                break;
+            default:
+                message = getString(R.string.notification_queue_notice_message, data.getQueueCount());
         }
 
-        showNotification(
-                data.getShop().getName(),
-                getString(R.string.notification_your_turn_message)
-        );
+        showNotification(data.getId(), data.getShop().getName(), message);
     }
 
     private void handleBookingCancellation(String jsonString) {
-        Booking data = jsonToBooking(jsonString);
+        Booking data = parseJson(jsonString, Booking.class);
         if (data == null) {
             Log.e(TAG, "Received payload with empty Booking data");
             return;
         }
 
         showNotification(
+                data.getId(),
                 data.getShop().getName(),
                 getString(R.string.notification_booking_cancellation_message)
         );
     }
 
     @Nullable
-    private Booking jsonToBooking(String json) {
+    private <T> T parseJson(String json, Class<T> clazz) {
         if (json == null || json.isEmpty())
             return null;
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            return objectMapper.readerFor(Booking.class).readValue(json);
+            return objectMapper.readerFor(clazz).readValue(json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    private void showNotification(String title, String text) {
-        int randomId = (int) (Math.random() * Integer.MAX_VALUE);
-
+    private void showNotification(int id, String title, String text) {
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this,
-                randomId,
+                id,
                 new Intent(this, MainActivity.class),
                 PendingIntent.FLAG_ONE_SHOT
         );
@@ -177,6 +172,7 @@ public class FcmReceiverService extends FirebaseMessagingService {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setContentTitle(title)
                 .setContentText(text)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -186,7 +182,7 @@ public class FcmReceiverService extends FirebaseMessagingService {
 
         NotificationManager notificationManager = ContextCompat.getSystemService(this, NotificationManager.class);
         if (notificationManager != null) {
-            notificationManager.notify(randomId, notification);
+            notificationManager.notify(id, notification);
         }
     }
 }

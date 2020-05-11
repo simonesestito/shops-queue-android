@@ -18,8 +18,6 @@
 
 package com.simonesestito.shopsqueue.model;
 
-import androidx.annotation.Nullable;
-
 import com.simonesestito.shopsqueue.api.dto.Booking;
 import com.simonesestito.shopsqueue.api.dto.Shop;
 
@@ -32,12 +30,10 @@ import java.util.List;
  */
 public class ShopOwnerDetails {
     private Shop shop;
-    @Nullable private Booking currentUser;
     private List<Booking> queue;
 
-    public ShopOwnerDetails(Shop shop, @Nullable Booking currentUser, List<Booking> queue) {
+    public ShopOwnerDetails(Shop shop, List<Booking> queue) {
         this.shop = shop;
-        this.currentUser = currentUser;
         this.queue = queue;
     }
 
@@ -47,15 +43,6 @@ public class ShopOwnerDetails {
 
     public void setShop(Shop shop) {
         this.shop = shop;
-    }
-
-    @Nullable
-    public Booking getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(@Nullable Booking currentUser) {
-        this.currentUser = currentUser;
     }
 
     public List<Booking> getQueue() {

@@ -41,6 +41,7 @@ import com.simonesestito.shopsqueue.ui.recyclerview.OwnerBookingsAdapter;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -132,25 +133,33 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
         getViewBinding().ownerQueueRefreshLayout.setRefreshing(false);
         requireActivity().setTitle(data.getShop().getName());
 
-        Booking booking = data.getCurrentUser();
-        if (booking == null) {
+        Booking currentUser;
+        List<Booking> nextUsers;
+        if (data.getQueue().size() == 0) {
+            currentUser = null;
+            nextUsers = Collections.emptyList();
+        } else {
+            currentUser = data.getQueue().get(0);
+            nextUsers = data.getQueue().subList(1, data.getQueue().size());
+        }
+
+        if (currentUser == null) {
             getViewBinding().ownerCurrentCalledUser.ownerLatestUserCalled.setVisibility(View.INVISIBLE);
             getViewBinding().ownerCurrentCalledUser.ownerNoLatestUserMessage.setVisibility(View.VISIBLE);
         } else {
             getViewBinding().ownerCurrentCalledUser.ownerLatestUserCalled.setVisibility(View.VISIBLE);
             getViewBinding().ownerCurrentCalledUser.ownerNoLatestUserMessage.setVisibility(View.GONE);
             getViewBinding().ownerCurrentCalledUser.ownerLatestUserCalledName
-                    .setText(booking.getUser().getName());
+                    .setText(currentUser.getUser().getName());
         }
 
-        List<Booking> queue = data.getQueue();
-        if (queue.isEmpty()) {
+        if (nextUsers.isEmpty()) {
             queueBinding.ownerNextUsersEmpty.setVisibility(View.VISIBLE);
         } else {
             queueBinding.ownerNextUsersEmpty.setVisibility(View.GONE);
         }
         OwnerBookingsAdapter adapter = (OwnerBookingsAdapter) queueBinding.ownerNextUsers.getAdapter();
         Objects.requireNonNull(adapter);
-        adapter.updateDataSet(queue);
+        adapter.updateDataSet(nextUsers);
     }
 }

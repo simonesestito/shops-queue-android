@@ -31,7 +31,7 @@ import retrofit2.http.Path;
 
 public interface BookingService {
     @POST("/shops/{shopId}/bookings")
-    ApiResponse<Booking> addBookingToShop(@Path("shopId") int shopId);
+    ApiResponse<BookingWithCount> addBookingToShop(@Path("shopId") int shopId);
 
     @GET("/shops/{shopId}/bookings")
     ApiResponse<List<Booking>> getBookingsByShopId(@Path("shopId") int shopId);
@@ -43,7 +43,7 @@ public interface BookingService {
     ApiResponse<Void> deleteBooking(@Path("id") int bookingId);
 
     @POST("/shops/{shopId}/bookings/next")
-    ApiResponse<Booking> callNextUser(@Path("shopId") int shopId);
+    ApiResponse<Void> callNextUser(@Path("shopId") int shopId);
 
     @DELETE("/shops/{shopId}/bookings")
     ApiResponse<Void> deleteBookingsByShop(@Path("shopId") int shopId);

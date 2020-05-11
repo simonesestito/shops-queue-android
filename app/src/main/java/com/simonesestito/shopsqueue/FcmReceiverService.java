@@ -171,6 +171,7 @@ public class FcmReceiverService extends FirebaseMessagingService {
         Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_BOOKINGS_NOTICE_ID)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setContentTitle(title)
+                .setColor(getResources().getColor(R.color.green_500))
                 .setContentText(text)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
                 .setAutoCancel(true)

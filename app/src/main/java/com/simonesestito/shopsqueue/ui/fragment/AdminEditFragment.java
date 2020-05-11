@@ -27,7 +27,6 @@ import androidx.viewbinding.ViewBinding;
 
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
-@SuppressWarnings("WeakerAccess")
 public abstract class AdminEditFragment<T, V extends ViewBinding> extends AbstractAppFragment<V> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -102,17 +101,5 @@ public abstract class AdminEditFragment<T, V extends ViewBinding> extends Abstra
 
     protected LiveResource<T> getLiveData() {
         return null;
-    }
-
-    @Override
-    protected void onOnline() {
-        super.onOnline();
-        getSaveButton().setEnabled(true);
-    }
-
-    @Override
-    protected void onOffline() {
-        super.onOffline();
-        getSaveButton().setEnabled(false);
     }
 }

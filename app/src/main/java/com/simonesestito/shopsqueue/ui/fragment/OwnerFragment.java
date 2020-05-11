@@ -110,18 +110,6 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
             ownerViewModel.cancelAllBookings();
     }
 
-    @Override
-    protected void onOffline() {
-        super.onOffline();
-        getViewBinding().ownerCallNextUser.setEnabled(false);
-    }
-
-    @Override
-    protected void onOnline() {
-        super.onOnline();
-        ownerViewModel.refreshBookings();
-    }
-
     private void onProgress() {
         getViewBinding().ownerQueueRefreshLayout.setRefreshing(true);
         getViewBinding().ownerCallNextUser.setEnabled(false);

@@ -50,13 +50,14 @@ import java.util.Objects;
 @SuppressWarnings("WeakerAccess")
 public abstract class AbstractAppFragment<T extends ViewBinding> extends Fragment {
     private static final String LATEST_INTERNET_CHECK = "internet_check";
+    private final Handler uiThread = new Handler(Looper.getMainLooper());
     private boolean isAppbarHidden = false;
     private boolean isAppbarElevated = true;
     private ConnectivityManager.NetworkCallback callback;
-    private final Handler uiThread = new Handler(Looper.getMainLooper());
     private boolean latestInternetCheck = true;
     private T viewBinding;
 
+    @NonNull
     protected abstract T onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container);
 
     protected void requestToHideAppbar() {

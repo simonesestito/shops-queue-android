@@ -72,6 +72,7 @@ public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
         });
     }
 
+    @NonNull
     @Override
     protected SignUpFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return SignUpFragmentBinding.inflate(layoutInflater, container, false);

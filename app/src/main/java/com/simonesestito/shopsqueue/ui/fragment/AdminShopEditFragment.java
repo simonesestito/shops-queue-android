@@ -70,6 +70,7 @@ public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, A
         viewModel = new ViewModelProvider(this, viewModelFactory).get(AdminShopEditViewModel.class);
     }
 
+    @NonNull
     @Override
     protected AdminShopEditBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return AdminShopEditBinding.inflate(layoutInflater, container, false);

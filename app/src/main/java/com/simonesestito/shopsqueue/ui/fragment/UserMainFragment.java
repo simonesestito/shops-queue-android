@@ -81,6 +81,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         viewModel = new ViewModelProvider(this, viewModelFactory).get(UserMainViewModel.class);
     }
 
+    @NonNull
     @Override
     protected UserFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return UserFragmentBinding.inflate(layoutInflater, container, false);

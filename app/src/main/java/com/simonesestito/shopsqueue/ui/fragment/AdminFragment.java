@@ -38,6 +38,7 @@ public class AdminFragment extends AbstractAppFragment<AdminFragmentBinding> {
         requestUnelevatedAppbar();
     }
 
+    @NonNull
     @Override
     protected AdminFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return AdminFragmentBinding.inflate(layoutInflater, container, false);

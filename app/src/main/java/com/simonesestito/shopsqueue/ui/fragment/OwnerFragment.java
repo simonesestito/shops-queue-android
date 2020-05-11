@@ -59,6 +59,7 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
         ShopsQueueApplication.getInjector().inject(this);
     }
 
+    @NonNull
     @Override
     protected OwnerFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return OwnerFragmentBinding.inflate(layoutInflater, container, false);

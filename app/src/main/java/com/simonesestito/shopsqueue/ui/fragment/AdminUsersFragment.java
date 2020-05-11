@@ -56,6 +56,7 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminChildFragmentBi
         ShopsQueueApplication.getInjector().inject(this);
     }
 
+    @NonNull
     @Override
     protected AdminChildFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return AdminChildFragmentBinding.inflate(layoutInflater, container, false);

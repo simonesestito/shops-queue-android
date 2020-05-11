@@ -49,6 +49,7 @@ public class UserFavouriteShopsFragment extends AbstractAppFragment<UserFavourit
         ShopsQueueApplication.getInjector().inject(this);
     }
 
+    @NonNull
     @Override
     protected UserFavouriteShopsBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return UserFavouriteShopsBinding.inflate(layoutInflater, container, false);

@@ -51,6 +51,7 @@ public class ShopPickerFragment extends AbstractAppFragment<ShopPickerBinding> {
         ShopsQueueApplication.getInjector().inject(this);
     }
 
+    @NonNull
     @Override
     protected ShopPickerBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return ShopPickerBinding.inflate(layoutInflater, container, false);

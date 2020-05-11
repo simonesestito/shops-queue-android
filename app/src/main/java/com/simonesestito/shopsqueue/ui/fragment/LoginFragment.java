@@ -69,6 +69,7 @@ public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
         });
     }
 
+    @NonNull
     @Override
     protected LoginFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return LoginFragmentBinding.inflate(layoutInflater, container, false);

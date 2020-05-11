@@ -59,6 +59,7 @@ public class AdminUserEditFragment extends AdminEditFragment<UserDetails, AdminU
         ShopsQueueApplication.getInjector().inject(this);
     }
 
+    @NonNull
     @Override
     protected AdminUserEditBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return AdminUserEditBinding.inflate(layoutInflater, container, false);

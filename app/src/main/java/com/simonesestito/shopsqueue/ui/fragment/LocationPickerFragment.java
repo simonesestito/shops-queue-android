@@ -66,6 +66,7 @@ public class LocationPickerFragment extends AbstractAppFragment<LocationPickerBi
         ShopsQueueApplication.getInjector().inject(this);
     }
 
+    @NonNull
     @Override
     protected LocationPickerBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return LocationPickerBinding.inflate(layoutInflater, container, false);

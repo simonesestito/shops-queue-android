@@ -27,6 +27,7 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -80,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
         loginViewModel.getAuthStatus().observeUnhandled(this, event -> {
             if (event.isSuccessful()) {
                 onNewAuthStatus(event.getData());
+                if (event.getData() == null) {
+                    // Cancel notifications on logout
+                    NotificationManagerCompat.from(this).cancelAll();
+                }
                 return true;
             }
             return false;

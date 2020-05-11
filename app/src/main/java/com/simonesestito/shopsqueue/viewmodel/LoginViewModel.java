@@ -53,14 +53,18 @@ public class LoginViewModel extends ViewModel {
                 AuthUserHolder.setCurrentUser(event.getData());
 
             if (event.isSuccessful() && event.getData() != null) {
-                FirebaseInstanceId.getInstance().getInstanceId()
-                        .addOnSuccessListener(instanceIdResult -> {
-                            String token = instanceIdResult.getToken();
-                            fcmService.addFcmToken(new FcmToken(token));
-                        })
-                        .addOnFailureListener(Throwable::printStackTrace);
+                updateFcmToken();
             }
         });
+    }
+
+    private void updateFcmToken() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnSuccessListener(instanceIdResult -> {
+                    String token = instanceIdResult.getToken();
+                    fcmService.addFcmToken(new FcmToken(token));
+                })
+                .addOnFailureListener(Throwable::printStackTrace);
     }
 
     private void initAuthStatus() {
@@ -85,6 +89,7 @@ public class LoginViewModel extends ViewModel {
 
     /**
      * Do a login request.
+     *
      * @see LoginViewModel#loginRequest
      */
     public void login(String email, String password) {

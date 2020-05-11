@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +42,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.User;
+import com.simonesestito.shopsqueue.util.ThemeUtils;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -80,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
 
         loginViewModel.getAuthStatus().observeUnhandled(this, event -> {
             if (event.isSuccessful()) {
+                // Time to hide splash screen
+                @ColorInt int backgroundColor = ThemeUtils.getThemeColor(this, android.R.attr.colorBackground);
+                findViewById(R.id.navHostFragment).setBackgroundColor(backgroundColor);
+
                 onNewAuthStatus(event.getData());
                 if (event.getData() == null) {
                     // Cancel notifications on logout

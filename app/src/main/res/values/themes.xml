@@ -24,6 +24,7 @@
         <item name="colorSecondary">@color/green_500</item>
         <item name="colorOnSecondary">@color/white</item>
         <item name="colorError">@color/red_a400</item>
+        <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
         <item name="android:statusBarColor">?colorPrimarySurface</item>
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>

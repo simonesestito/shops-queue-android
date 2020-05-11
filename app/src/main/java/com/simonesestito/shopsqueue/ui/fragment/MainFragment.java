@@ -23,11 +23,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewbinding.ViewBinding;
 
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
-import com.simonesestito.shopsqueue.databinding.MainFragmentBinding;
+import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -37,18 +39,21 @@ import javax.inject.Inject;
  * Main fragment
  * It shows a loading indicator until the activity navigates away
  */
-public class MainFragment extends AbstractAppFragment<MainFragmentBinding> {
+public class MainFragment extends AbstractAppFragment<ViewBinding> {
     @Inject ViewModelFactory viewModelFactory;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestToHideAppbar();
         ShopsQueueApplication.getInjector().inject(this);
     }
 
+    @NonNull
     @Override
-    protected MainFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
-        return MainFragmentBinding.inflate(layoutInflater, container, false);
+    protected ViewBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
+        // Empty view
+        return () -> new View(requireContext());
     }
 
     @Override
@@ -57,11 +62,9 @@ public class MainFragment extends AbstractAppFragment<MainFragmentBinding> {
         LoginViewModel loginViewModel = new ViewModelProvider(requireActivity(), viewModelFactory)
                 .get(LoginViewModel.class);
         loginViewModel.getAuthStatus().observe(getViewLifecycleOwner(), event -> {
-            if (!event.isSuccessful() && !event.isLoading()) {
-                // Show network error
-                getViewBinding().loadingProgress.setVisibility(View.GONE);
-                getViewBinding().networkError.setVisibility(View.VISIBLE);
-            }
+            if (event.isFailed())
+                ErrorDialog.newInstance(requireContext(), event.getError())
+                        .show(getChildFragmentManager(), null);
         });
     }
 }

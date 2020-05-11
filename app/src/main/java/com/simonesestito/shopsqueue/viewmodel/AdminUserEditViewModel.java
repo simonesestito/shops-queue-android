@@ -23,7 +23,6 @@ import androidx.lifecycle.ViewModel;
 import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.api.dto.UserDetails;
-import com.simonesestito.shopsqueue.api.dto.UserUpdate;
 import com.simonesestito.shopsqueue.api.service.UserService;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
@@ -56,9 +55,9 @@ public class AdminUserEditViewModel extends ViewModel {
                 .onError(liveUser::emitError);
     }
 
-    public void updateUser(int liveUserId, UserUpdate liveUserUpdate) {
+    public void updateUser(int liveUserId, NewUser userUpdate) {
         liveUser.emitLoading();
-        userService.updateUser(liveUserId, liveUserUpdate)
+        userService.updateUser(liveUserId, userUpdate)
                 .onResult(user -> liveUser.emitResult(null))
                 .onError(liveUser::emitError);
     }

@@ -22,7 +22,6 @@ import com.simonesestito.shopsqueue.api.ApiResponse;
 import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.api.dto.Page;
 import com.simonesestito.shopsqueue.api.dto.UserDetails;
-import com.simonesestito.shopsqueue.api.dto.UserUpdate;
 
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -51,5 +50,5 @@ public interface UserService {
 
     @PUT("/users/{id}")
     ApiResponse<UserDetails> updateUser(@Path("id") int id,
-                                        @Body UserUpdate update);
+                                        @Body NewUser update);
 }

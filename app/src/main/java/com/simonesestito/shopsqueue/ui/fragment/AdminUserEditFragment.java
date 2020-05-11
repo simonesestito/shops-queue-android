@@ -32,7 +32,6 @@ import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.api.dto.UserDetails;
-import com.simonesestito.shopsqueue.api.dto.UserUpdate;
 import com.simonesestito.shopsqueue.databinding.AdminUserEditBinding;
 import com.simonesestito.shopsqueue.model.UserRole;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
@@ -162,12 +161,11 @@ public class AdminUserEditFragment extends AdminEditFragment<UserDetails, AdminU
         if (password.isEmpty())
             password = null;
 
+        NewUser newUser = new NewUser(name, surname, email, password, shopId, role);
         if (getArgumentId() == 0) {
-            NewUser newUser = new NewUser(name, surname, email, password, shopId, role);
             viewModel.saveNewUser(newUser);
         } else {
-            UserUpdate userUpdate = new UserUpdate(name, surname, email, password, shopId, role);
-            viewModel.updateUser(getArgumentId(), userUpdate);
+            viewModel.updateUser(getArgumentId(), newUser);
         }
     }
 

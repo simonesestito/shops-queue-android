@@ -105,4 +105,9 @@
     <string name="action_show_licenses">Mostra licenze librerie open source</string>
     <string name="license_title">Licenza</string>
     <string name="about_fragment_title">Informazioni</string>
+    <string name="booking_item_created_at_date">In coda dalle %s</string>
+    <string name="shops_queue_count_singular">%d persona in coda</string>
+    <string name="shops_queue_count_plural">%d persone in coda</string>
+    <string name="user_booking_queue_count_singular">%d persona davanti a te in coda</string>
+    <string name="user_booking_queue_count_plural">%d persone davanti a te in coda</string>
 </resources>

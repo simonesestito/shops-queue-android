@@ -18,11 +18,11 @@
 
 <resources>
     <plurals name="shop_queue_count">
-        <item quantity="one">%d person in the queue</item>
-        <item quantity="other">%d people in the queue</item>
+        <item quantity="one">@string/shops_queue_count_singular</item>
+        <item quantity="other">@string/shops_queue_count_plural</item>
     </plurals>
     <plurals name="user_booking_queue_count">
-        <item quantity="one">%d person ahead in the queue</item>
-        <item quantity="other">%d people ahead in the queue</item>
+        <item quantity="one">@string/user_booking_queue_count_singular</item>
+        <item quantity="other">@string/user_booking_queue_count_plural</item>
     </plurals>
 </resources>

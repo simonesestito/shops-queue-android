@@ -109,6 +109,8 @@ public class MapboxHelper implements LifecycleObserver {
                 symbolManager.setIconAllowOverlap(true);
                 addMarkers(mapStyle);
 
+                mapboxMap.getUiSettings().setCompassEnabled(false);
+
                 for (Runnable onMapLoadedCallback : onMapLoadedCallbacks) {
                     onMapLoadedCallback.run();
                 }

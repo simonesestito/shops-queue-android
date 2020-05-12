@@ -100,4 +100,5 @@
     <string name="notification_next_turn_message">Harry up! You\'re the next person in the queue.</string>
     <string name="notification_your_turn_message">It\'s your turn! Go to the shop as fast as you can.</string>
     <string name="user_your_turn_message"><b>It\'s your turn! Go to the shop as fast as you can.</b></string>
+    <string name="user_booking_already_present">You\'ve already in the queue</string>
 </resources>

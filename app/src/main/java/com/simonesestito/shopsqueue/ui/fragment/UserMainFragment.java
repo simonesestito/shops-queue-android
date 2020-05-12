@@ -45,6 +45,8 @@ import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
 import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.api.dto.ShopResult;
 import com.simonesestito.shopsqueue.databinding.UserFragmentBinding;
+import com.simonesestito.shopsqueue.model.ApiException;
+import com.simonesestito.shopsqueue.model.HttpStatus;
 import com.simonesestito.shopsqueue.ui.MapboxHelper;
 import com.simonesestito.shopsqueue.ui.dialog.ConfirmDialog;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
@@ -231,9 +233,15 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
         if (event.isFailed()) {
             if (event.hasToBeHandled()) {
-                ErrorDialog.newInstance(requireContext(), event.getError())
-                        .show(getChildFragmentManager(), null);
                 event.handle();
+                if (event.getError() instanceof ApiException &&
+                        ((ApiException) event.getError()).getStatusCode() == HttpStatus.HTTP_CONFLICT) {
+                    ErrorDialog.newInstance(getString(R.string.user_booking_already_present))
+                            .show(getChildFragmentManager(), null);
+                } else {
+                    ErrorDialog.newInstance(requireContext(), event.getError())
+                            .show(getChildFragmentManager(), null);
+                }
             }
             return;
         }

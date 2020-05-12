@@ -19,7 +19,9 @@
 package com.simonesestito.shopsqueue.ui;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             if (event.isSuccessful()) {
                 // Time to hide splash screen
                 @ColorInt int backgroundColor = ThemeUtils.getThemeColor(this, android.R.attr.colorBackground);
-                findViewById(R.id.navHostFragment).setBackgroundColor(backgroundColor);
+                findViewById(R.id.navHostFragment).setBackground(new ColorDrawable(backgroundColor));
 
                 onNewAuthStatus(event.getData());
                 if (event.getData() == null) {
@@ -103,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         GoogleApiAvailability api = GoogleApiAvailability.getInstance();
         int apiResult = api.isGooglePlayServicesAvailable(this);
         if (apiResult != ConnectionResult.SUCCESS) {
-            // Google Play Services not available
+            Log.e("Shops Queue", "Google Play Services not available");
             api.getErrorDialog(this, apiResult,
                     PLAY_SERVICES_AVAILABILITY_REQUEST_CODE,
                     d -> checkPlayServicesOrFinish()

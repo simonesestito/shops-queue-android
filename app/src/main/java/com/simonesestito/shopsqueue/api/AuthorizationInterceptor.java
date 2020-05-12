@@ -41,13 +41,6 @@ public class AuthorizationInterceptor implements Interceptor {
         Request request = chain.request();
         String accessToken = sharedPreferencesStore.getAccessToken();
 
-        try {
-            // TODO: Test only, remove me after development
-            Thread.sleep(1400);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         if (accessToken != null) {
             request = request
                     .newBuilder()

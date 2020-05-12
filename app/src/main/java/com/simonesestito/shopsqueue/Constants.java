@@ -20,7 +20,9 @@ package com.simonesestito.shopsqueue;
 
 @SuppressWarnings("WeakerAccess")
 public class Constants {
-    public static final String API_BASE_URL = "http://192.168.1.100:1234/";
+    public static final String API_BASE_URL = BuildConfig.DEBUG
+                                            ? "http://192.168.1.100:1234/"
+                                            : "https://shopsqueue.simonesestito.com";
     public static final String SHARED_PREFERENCES_FILE = BuildConfig.APPLICATION_ID + "_preferences";
     public static final String SHARED_PREFERENCES_TOKEN_KEY = "api_access_token";
     public static final int COORDINATES_DIGITS_PRECISION = 6;

@@ -82,8 +82,8 @@ public class FcmReceiverService extends FirebaseMessagingService {
         String messageType = message.get(KEY_MESSAGE_TYPE);
         String jsonData = message.get(KEY_MESSAGE_DATA);
 
-        Log.e(TAG, "" + messageType);
-        Log.e(TAG, "" + jsonData);
+        Log.e(TAG, "Type: " + messageType);
+        Log.e(TAG, "Data: " + jsonData);
 
         NotificationManager notificationManager = ContextCompat
                 .getSystemService(this, NotificationManager.class);

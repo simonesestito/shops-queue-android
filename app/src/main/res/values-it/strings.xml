@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2020 Simone Sestito
+  ~ This file is part of Shops Queue.
+  ~
+  ~ Shops Queue is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Shops Queue is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name">Shops Queue</string>
+    <string name="input_email_hint">Indirizzo e-mail</string>
+    <string name="input_password_hint">Password</string>
+    <string name="login_fragment_title">Accedi</string>
+    <string name="login_form_submit">Accedi</string>
+    <string name="form_field_required">Campo richiesto</string>
+    <string name="form_invalid_email_field">Indirizzo e-mail non valido</string>
+    <string name="sign_up_form_submit">Registrati</string>
+    <string name="sign_up_fragment_title">Ciao, nuovo utente!</string>
+    <string name="input_name_hint">Nome</string>
+    <string name="input_surname_hint">Cognome</string>
+    <string name="form_field_too_short">Valore inserito troppo corto</string>
+    <string name="back_button_description">Indietro</string>
+    <string name="form_field_too_long">Valore inserito troppo lungo</string>
+    <string name="ok_button">OK</string>
+    <string name="error_dialog_title">Errore</string>
+    <string name="error_login_invalid">Login non valido</string>
+    <string name="error_network_offline">Controlla la tua connessione ad Internet</string>
+    <string name="error_sign_up_duplicate_email">Indirizzo e-mail già usato</string>
+    <string name="menu_item_logout">Esci</string>
+    <string name="owner_latest_user_called_title">Ultimo cliente chiamato:</string>
+    <string name="owner_no_user_called">Nessun cliente chiamato</string>
+    <string name="owner_call_next_user">Chiama prossimo cliente</string>
+    <string name="error_fetch_shop_info">Si è verificato un errore cercando il negozio corrente</string>
+    <string name="owner_fragment_title">Commerciante</string>
+    <string name="admin_fragment_title">Pannello di amministrazione</string>
+    <string name="owner_next_users_empty_view">Non c\'è nessun cliente in coda.\nProva a ricaricare la pagina</string>
+    <string name="owner_next_users_title">Prossimi clienti in coda:</string>
+    <string name="bookings_cancel_all">Annulla tutto</string>
+    <string name="confirm_dialog_title">Sei sicuro?</string>
+    <string name="confirm_no_button">No</string>
+    <string name="confirm_yes_button">Si</string>
+    <string name="owner_cancel_all_message">Tutte le prenotazioni verranno annullate</string>
+    <string name="admin_tab_users">Utenti</string>
+    <string name="admin_tab_shops">Negozi</string>
+    <string name="menu_delete_action">Elimina</string>
+    <string name="user_delete_confirm_message">Questo utente e tutti i suoi dati verranno eliminati</string>
+    <string name="role_user">Utente</string>
+    <string name="role_admin">Amministratore</string>
+    <string name="role_owner">Commerciante</string>
+    <string name="error_result_not_found">Elemento richiesto non trovato</string>
+    <string name="shop_picker_fragment_title">Scegli un negozio</string>
+    <string name="new_user_title">Aggiungi nuovo utente</string>
+    <string name="user_edit_save">Salva utente</string>
+    <string name="input_shop_for_owner">Negozio</string>
+    <string name="shop_delete_confirm_message">Questo negozio, il proprietario e tutti i dati correlati verranno eliminati</string>
+    <string name="shop_edit_save">Salva negozio</string>
+    <string name="new_shop_title">Aggiungi nuovo negozio</string>
+    <string name="map_empty_selection_message">Premi per scegliere un luogo</string>
+    <string name="map_location_search">Cerca luogo…</string>
+    <string name="permission_dialog_title">Permesso richiesto</string>
+    <string name="permission_dialog_message">La funzionalità che stai provando a usare non può funzionare senza questo permesso</string>
+    <string name="permission_dialog_allow_button">Consenti</string>
+    <string name="permission_dialog_deny_button">Nega</string>
+    <string name="gps_disabled_error">Impossibile ottenere la posizione.</string>
+    <string name="location_picker_fragment_title">Scegli un luogo</string>
+    <string name="pick_location_required">Devi prima scegliere un luogo</string>
+    <string name="error_invalid_request_body">Errore nell\'invio della richiesta</string>
+    <string name="error_forbidden">Non sei autorizzato ad eseguire questa azione</string>
+    <string name="error_api_conflict">I dati che stai inserendo esistono già</string>
+    <string name="error_api_server">C\'è stato un errore sul server. Ci dispiace per l\'incoveniente</string>
+    <string name="shop_owners_list_title">Commercianti</string>
+    <string name="shop_owners_list_empty">Nessun utente possiede questo negozio.\nVai ai dettagli di un utente per assegnarglielo.</string>
+    <string name="address_input_hint">Indirizzo</string>
+    <string name="menu_user_location">Mostra posizione utente</string>
+    <string name="menu_user_refresh_bookings">Aggiorna prenotazioni</string>
+    <string name="user_bookings_title">Le tue prenotazioni</string>
+    <string name="user_bookings_empty">Nessuna prenotazione trovata.</string>
+    <string name="add_booking_to_shop">Prenota</string>
+    <string name="shop_name_search_input_hint">Nome negozio</string>
+    <string name="no_shops_found">Nessun negozio trovato</string>
+    <string name="shop_distance_field">Distanza: %.2f KM</string>
+    <string name="user_favourite_shops">Negozi preferiti</string>
+    <string name="cancel_booking_from_shop">Annulla</string>
+    <string name="cancel_booking_confirm_message">Perderai tutte le tue prenotazioni. Se ti prenoti di nuovo, tornerai in fondo alla coda.</string>
+    <string name="notification_channel_booking_notice">Avvisi prenotazioni</string>
+    <string name="notification_booking_cancellation_message">Ci dispiace ma la tua prenotazione è stata annullata dal proprietario del negozio.</string>
+    <string name="notification_queue_notice_message">Hai %d persone davanti.</string>
+    <string name="notification_next_turn_message">Sbrigati! Sei la prossima persona in coda.</string>
+    <string name="notification_your_turn_message">È il tuo turno! Recati in negozio il prima possibile.</string>
+    <string name="user_your_turn_message"><b>È il tuo turno! Recati in negozio il prima possibile.</b></string>
+    <string name="user_booking_already_present">Sei già in coda</string>
+    <string name="action_download_apk">Scarica l\'ultimo APK disponibile</string>
+    <string name="action_share_app">Condividi app</string>
+    <string name="action_source_code">Mostra codice sorgente</string>
+    <string name="action_show_licenses">Mostra licenze librerie open source</string>
+    <string name="license_title">Licenza</string>
+    <string name="about_fragment_title">Informazioni</string>
+</resources>

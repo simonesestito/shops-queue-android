@@ -41,7 +41,7 @@
     <string name="owner_no_user_called">No user has been called</string>
     <string name="owner_call_next_user">Call next customer</string>
     <string name="error_fetch_shop_info">An error occurred fetching the current shop</string>
-    <string name="user_fragment_title">@string/app_name</string>
+    <string name="user_fragment_title" translatable="false">@string/app_name</string>
     <string name="owner_fragment_title">Shop Owner</string>
     <string name="admin_fragment_title">Administration panel</string>
     <string name="booking_item_created_at_date">In queue since %s</string>
@@ -64,10 +64,10 @@
     <string name="new_user_title">Add new user</string>
     <string name="user_edit_save">Save user</string>
     <string name="input_shop_for_owner">Shop</string>
-    <string name="shop_delete_confirm_message">This shop will be deleted irrevocably</string>
-    <string name="shop_edit_save">Save</string>
+    <string name="shop_delete_confirm_message">This shop, its owner and all of their data will be deleted</string>
+    <string name="shop_edit_save">Save shop</string>
     <string name="new_shop_title">Add a new shop</string>
-    <string name="map_empty_selection_message">Click to pick a location</string>
+    <string name="map_empty_selection_message">Tap to pick a location</string>
     <string name="map_location_search">Search location…</string>
     <string name="permission_dialog_title">Permission required</string>
     <string name="permission_dialog_message">The feature you\'re trying to use can\'t work without this permission</string>

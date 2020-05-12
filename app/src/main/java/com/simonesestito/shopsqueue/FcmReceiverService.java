@@ -129,7 +129,7 @@ public class FcmReceiverService extends FirebaseMessagingService {
                 message = getString(R.string.notification_queue_notice_message, data.getQueueCount());
         }
 
-        showNotification(data.getId(), data.getShop().getName(), message);
+        showNotification(data.getShop().getId(), data.getShop().getName(), message);
     }
 
     private void handleBookingCancellation(String jsonString) {
@@ -140,7 +140,7 @@ public class FcmReceiverService extends FirebaseMessagingService {
         }
 
         showNotification(
-                data.getId(),
+                data.getShop().getId(),
                 data.getShop().getName(),
                 getString(R.string.notification_booking_cancellation_message)
         );
@@ -165,7 +165,7 @@ public class FcmReceiverService extends FirebaseMessagingService {
                 this,
                 id,
                 new Intent(this, MainActivity.class),
-                PendingIntent.FLAG_ONE_SHOT
+                PendingIntent.FLAG_UPDATE_CURRENT
         );
 
         Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_BOOKINGS_NOTICE_ID)
@@ -177,8 +177,7 @@ public class FcmReceiverService extends FirebaseMessagingService {
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                // TODO Use the real app icon
-                .setSmallIcon(R.drawable.ic_shopping_cart_black_24dp)
+                .setSmallIcon(R.drawable.ic_notification)
                 .build();
 
         NotificationManager notificationManager = ContextCompat.getSystemService(this, NotificationManager.class);

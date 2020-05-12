@@ -55,6 +55,10 @@ public class UserMainViewModel extends ViewModel {
         loadBookings();
     }
 
+    private void loadNearShops() {
+        loadNearShops(lastUserLocation.getLatitude(), lastUserLocation.getLongitude());
+    }
+
     public void loadNearShops(double lat, double lon) {
         lat = NumberUtils.roundCoordinate(lat);
         lon = NumberUtils.roundCoordinate(lon);
@@ -79,7 +83,10 @@ public class UserMainViewModel extends ViewModel {
     public void book(int shopId) {
         bookings.emitLoading();
         bookingService.addBookingToShop(shopId)
-                .onResult(booking -> loadBookings())
+                .onResult(booking -> {
+                    loadBookings();
+                    loadNearShops();
+                })
                 .onError(err -> {
                     bookings.emitError(err);
                     loadBookings();
@@ -102,10 +109,10 @@ public class UserMainViewModel extends ViewModel {
         ApiResponse<Void> response = isFavourite
                 ? favouritesService.addShopToUserFavourites(userId, shopId)
                 : favouritesService.removeShopFromUserFavourites(userId, shopId);
-        response.onResult(v -> loadNearShops(lastUserLocation.getLatitude(), lastUserLocation.getLongitude()))
+        response.onResult(v -> loadNearShops())
                 .onError(err -> {
                     shops.emitError(err);
-                    loadNearShops(lastUserLocation.getLatitude(), lastUserLocation.getLongitude());
+                    loadNearShops();
                 });
     }
 

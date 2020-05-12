@@ -109,7 +109,6 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         adapter.setMenuItemListener(((menuItem, booking) -> onAskCancelBooking(booking.getId())));
         getViewBinding().userBookingsBottomSheet.userBookingsList.setAdapter(adapter);
 
-        viewModel.loadBookings();
         viewModel.getBookings().observe(getViewLifecycleOwner(), this::onBookingEvent);
         viewModel.getShops().observe(getViewLifecycleOwner(), this::onShopsEvent);
 

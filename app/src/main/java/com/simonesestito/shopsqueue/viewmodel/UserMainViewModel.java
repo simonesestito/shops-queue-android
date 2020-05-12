@@ -45,7 +45,7 @@ public class UserMainViewModel extends ViewModel {
     private LiveResource<Set<ShopResult>> shops = new LiveResource<>();
     private Set<ShopResult> lastShops = new LinkedHashSet<>();
     private String query;
-    private LatLng lastUserLocation;
+    private LatLng lastUserLocation = new LatLng(0, 0);
 
     @Inject
     UserMainViewModel(BookingService bookingService, ShopService shopService, FavouritesService favouritesService) {

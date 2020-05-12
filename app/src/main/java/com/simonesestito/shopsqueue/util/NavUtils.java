@@ -22,6 +22,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
@@ -62,8 +63,14 @@ public class NavUtils {
     public static <T> T getFragmentResult(Fragment fragment, String key) {
         NavController navController = NavHostFragment.findNavController(fragment);
         NavBackStackEntry backStackEntry = navController.getCurrentBackStackEntry();
-        Objects.requireNonNull(backStackEntry);
-        return backStackEntry.getSavedStateHandle().get(key);
+        SavedStateHandle savedStateHandle = Objects.requireNonNull(backStackEntry).getSavedStateHandle();
+        if (savedStateHandle.contains(key)) {
+            T result = backStackEntry.getSavedStateHandle().get(key);
+            savedStateHandle.remove(key);
+            return result;
+        } else {
+            return null;
+        }
     }
 
     public static void setFragmentResult(Fragment fragment, String key, Parcelable value) {

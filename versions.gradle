@@ -35,5 +35,7 @@ versions.playServices = '4.3.3'
 versions.playServicesLocation = '17.0.0'
 versions.crypto = '1.0.0-rc01'
 versions.firebaseFcm = '20.1.7'
+versions.licensesPlugin = '0.10.2'
+versions.licensesLib = '17.0.0'
 
 ext.versions = versions

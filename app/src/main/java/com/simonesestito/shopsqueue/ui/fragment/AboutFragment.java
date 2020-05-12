@@ -31,6 +31,7 @@ import androidx.annotation.Nullable;
 import com.simonesestito.shopsqueue.Constants;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.databinding.AboutFragmentBinding;
+import com.simonesestito.shopsqueue.util.NavUtils;
 
 public class AboutFragment extends AbstractAppFragment<AboutFragmentBinding> {
     @NonNull
@@ -69,6 +70,6 @@ public class AboutFragment extends AbstractAppFragment<AboutFragmentBinding> {
     }
 
     private void showLicenses() {
-        // TODO
+        NavUtils.navigate(this, AboutFragmentDirections.actionAboutFragmentToOpenSourceLicenses());
     }
 }

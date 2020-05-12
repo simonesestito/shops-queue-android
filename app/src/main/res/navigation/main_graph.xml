@@ -31,14 +31,24 @@
         android:id="@+id/aboutFragment"
         android:name="com.simonesestito.shopsqueue.ui.fragment.AboutFragment"
         android:label="@string/about_fragment_title"
-        tools:layout="@layout/about_fragment" />
+        tools:layout="@layout/about_fragment">
+        <action
+            android:id="@+id/action_aboutFragment_to_openSourceLicenses"
+            app:destination="@id/openSourceLicenses" />
+    </fragment>
 
     <action
         android:id="@+id/openAbout"
         app:destination="@id/aboutFragment" />
 
+    <activity
+        android:id="@+id/openSourceLicenses"
+        android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+        android:label="" />
+
     <include app:graph="@navigation/login_graph" />
     <include app:graph="@navigation/user_graph" />
     <include app:graph="@navigation/owner_graph" />
     <include app:graph="@navigation/admin_graph" />
+
 </navigation>

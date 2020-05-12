@@ -26,4 +26,6 @@ public class Constants {
     public static final String SHARED_PREFERENCES_FILE = BuildConfig.APPLICATION_ID + "_preferences";
     public static final String SHARED_PREFERENCES_TOKEN_KEY = "api_access_token";
     public static final int COORDINATES_DIGITS_PRECISION = 6;
+    public static final String APK_DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/shops-queue.appspot.com/o/app.apk?alt=media";
+    public static final String GITHUB_REPO_URL = "https://github.com/simonesestito/shops-queue-android";
 }

@@ -25,8 +25,17 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.simonesestito.shopsqueue.ui.fragment.MainFragment"
-        android:label="@string/app_name"
-        tools:layout="@layout/main_fragment" />
+        android:label="@string/app_name" />
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.simonesestito.shopsqueue.ui.fragment.AboutFragment"
+        android:label="@string/about_fragment_title"
+        tools:layout="@layout/about_fragment" />
+
+    <action
+        android:id="@+id/openAbout"
+        app:destination="@id/aboutFragment" />
 
     <include app:graph="@navigation/login_graph" />
     <include app:graph="@navigation/user_graph" />

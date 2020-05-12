@@ -38,4 +38,14 @@
         <item name="android:paddingTop">@dimen/bottomsheet_padding</item>
         <item name="android:paddingBottom">@dimen/bottomsheet_padding</item>
     </style>
+
+    <style name="Widget.App.ListView.Item" parent="">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body1</item>
+        <item name="android:paddingTop">@dimen/form_element_margin</item>
+        <item name="android:paddingBottom">@dimen/form_element_margin</item>
+        <item name="drawableTint">?colorSecondary</item>
+        <item name="android:drawablePadding">@dimen/list_item_margin</item>
+    </style>
 </resources>

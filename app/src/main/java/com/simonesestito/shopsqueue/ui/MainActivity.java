@@ -41,6 +41,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.simonesestito.shopsqueue.MainGraphDirections;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.User;
@@ -134,6 +135,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menuItemLogout:
                 loginViewModel.logout();
                 return true;
+            case R.id.menuItemAbout:
+                navController.navigate(
+                        MainGraphDirections.openAbout(),
+                        getNavOptions().build()
+                );
+                return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -187,14 +194,17 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        NavOptions navOptions = new NavOptions.Builder()
+        NavOptions navOptions = getNavOptions()
                 .setPopUpTo(R.id.main_graph, true)
+                .build();
+        navController.navigate(destinationGraph, null, navOptions);
+    }
+
+    private NavOptions.Builder getNavOptions() {
+        return new NavOptions.Builder()
                 .setEnterAnim(R.anim.nav_default_enter_anim)
                 .setExitAnim(R.anim.nav_default_exit_anim)
                 .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-                .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
-                .build();
-
-        navController.navigate(destinationGraph, null, navOptions);
+                .setPopExitAnim(R.anim.nav_default_pop_exit_anim);
     }
 }

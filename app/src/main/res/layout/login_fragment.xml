@@ -23,8 +23,8 @@
 
     <ImageView
         android:id="@+id/appLogo"
-        android:layout_width="@dimen/app_logo_login_form_size"
-        android:layout_height="@dimen/app_logo_login_form_size"
+        android:layout_width="@dimen/app_logo_size"
+        android:layout_height="@dimen/app_logo_size"
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_launcher_round"
         app:layout_constraintBottom_toTopOf="@id/emailInputLayout"

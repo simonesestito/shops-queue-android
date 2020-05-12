@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ Copyright 2020 Simone Sestito
   ~ This file is part of Shops Queue.
   ~
@@ -16,12 +16,12 @@
   ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/menuItemLogout"
-        android:title="@string/menu_item_logout" />
-
-    <item
-        android:id="@+id/menuItemAbout"
-        android:title="@string/about_fragment_title" />
-</menu>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="@dimen/list_item_image_size"
+    android:height="@dimen/list_item_image_size"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M19,9h-4V3H9v6H5l7,7 7,-7zM5,18v2h14v-2H5z" />
+</vector>

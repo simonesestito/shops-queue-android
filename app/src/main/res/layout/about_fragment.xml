@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2020 Simone Sestito
+  ~ This file is part of Shops Queue.
+  ~
+  ~ Shops Queue is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Shops Queue is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
+    tools:background="?android:colorBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_content_margin">
+
+        <ImageView
+            android:id="@+id/appLogo"
+            android:layout_width="@dimen/app_logo_size"
+            android:layout_height="@dimen/app_logo_size"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/form_element_margin"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_launcher_round" />
+
+        <TextView
+            android:id="@+id/appName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="@dimen/form_element_margin"
+            android:text="@string/app_name"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/downloadApkListItem"
+            style="@style/Widget.App.ListView.Item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/action_download_apk"
+            app:drawableStartCompat="@drawable/ic_download_list_icon_height" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/shareAppListItem"
+            style="@style/Widget.App.ListView.Item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/action_share_app"
+            app:drawableStartCompat="@drawable/ic_share_list_icon_height" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/githubListItem"
+            style="@style/Widget.App.ListView.Item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/action_source_code"
+            app:drawableStartCompat="@drawable/ic_github_list_icon_height" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/openLicensesListItem"
+            style="@style/Widget.App.ListView.Item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/action_show_licenses"
+            app:drawableStartCompat="@drawable/ic_license_list_icon_height" />
+
+        <TextView
+            android:id="@+id/copyrightNoticeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/activity_content_margin"
+            android:text="@string/license_title"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+
+        <TextView
+            android:id="@+id/copyrightNotice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/activity_content_margin"
+            android:text="@string/license"
+            android:typeface="monospace" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

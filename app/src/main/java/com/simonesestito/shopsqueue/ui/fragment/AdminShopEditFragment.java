@@ -58,7 +58,7 @@ import javax.inject.Inject;
 
 import static com.simonesestito.shopsqueue.util.MapUtils.LOCATION_PERMISSION_REQUEST_CODE;
 
-public class AdminShopEditFragment extends AdminEditFragment<ShopAdminDetails, AdminShopEditBinding> {
+public class AdminShopEditFragment extends EditFragment<ShopAdminDetails, AdminShopEditBinding> {
     @Inject ViewModelFactory viewModelFactory;
     private AdminShopEditViewModel viewModel;
     private MapboxHelper mapboxHelper;

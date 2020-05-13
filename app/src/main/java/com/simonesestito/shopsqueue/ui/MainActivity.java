@@ -148,6 +148,12 @@ public class MainActivity extends AppCompatActivity {
                         getNavOptions().build()
                 );
                 return true;
+            case R.id.menuItemCurrentUserProfile:
+                navController.navigate(
+                        MainGraphDirections.showCurrentUserProfile(),
+                        getNavOptions().build()
+                );
+                return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;

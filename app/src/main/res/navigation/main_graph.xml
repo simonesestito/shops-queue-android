@@ -41,6 +41,15 @@
         android:id="@+id/openAbout"
         app:destination="@id/aboutFragment" />
 
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.simonesestito.shopsqueue.ui.fragment.UserProfileFragment"
+        android:label="@string/app_name" />
+
+    <action
+        android:id="@+id/showCurrentUserProfile"
+        app:destination="@id/userProfileFragment" />
+
     <activity
         android:id="@+id/openSourceLicenses"
         android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"

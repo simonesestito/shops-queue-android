@@ -32,6 +32,7 @@ import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ShopPickerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.UserFavouriteShopsViewModel;
 import com.simonesestito.shopsqueue.viewmodel.UserMainViewModel;
+import com.simonesestito.shopsqueue.viewmodel.UserProfileViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
 import dagger.Binds;
@@ -92,4 +93,9 @@ public interface ViewModelModule {
     @IntoMap
     @ViewModelKey(UserFavouriteShopsViewModel.class)
     ViewModel bindUserFavouriteShopsViewModel(UserFavouriteShopsViewModel userFavouriteShopsViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(UserProfileViewModel.class)
+    ViewModel bindUserProfileViewModel(UserProfileViewModel userProfileViewModel);
 }

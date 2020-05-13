@@ -18,6 +18,10 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/menuItemCurrentUserProfile"
+        android:title="@string/menu_item_current_user_profile" />
+
+    <item
         android:id="@+id/menuItemLogout"
         android:title="@string/menu_item_logout" />
 

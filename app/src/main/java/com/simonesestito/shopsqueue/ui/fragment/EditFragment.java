@@ -27,7 +27,7 @@ import androidx.viewbinding.ViewBinding;
 
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
-public abstract class AdminEditFragment<T, V extends ViewBinding> extends AbstractAppFragment<V> {
+public abstract class EditFragment<T, V extends ViewBinding> extends AbstractAppFragment<V> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

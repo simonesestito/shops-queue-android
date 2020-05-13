@@ -37,6 +37,7 @@ import com.simonesestito.shopsqueue.ui.fragment.ShopPickerFragment;
 import com.simonesestito.shopsqueue.ui.fragment.SignUpFragment;
 import com.simonesestito.shopsqueue.ui.fragment.UserFavouriteShopsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.UserMainFragment;
+import com.simonesestito.shopsqueue.ui.fragment.UserProfileFragment;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -74,6 +75,8 @@ public interface Injector {
     void inject(UserFavouriteShopsFragment userFavouriteShopsFragment);
 
     void inject(FcmReceiverService fcmReceiverService);
+
+    void inject(UserProfileFragment userProfileFragment);
 
     @Component.Builder
     interface Builder {

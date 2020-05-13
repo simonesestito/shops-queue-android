@@ -111,4 +111,5 @@
     <string name="user_booking_queue_count_singular">%d persona davanti a te in coda</string>
     <string name="user_booking_queue_count_plural">%d persone davanti a te in coda</string>
     <string name="user_favourite_shops_empty_message">Nessun negozio preferito trovato</string>
+    <string name="menu_item_current_user_profile">Il tuo profilo</string>
 </resources>

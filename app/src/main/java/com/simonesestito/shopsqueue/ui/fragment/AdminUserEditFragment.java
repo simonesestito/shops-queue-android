@@ -48,7 +48,7 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
-public class AdminUserEditFragment extends AdminEditFragment<UserDetails, AdminUserEditBinding> {
+public class AdminUserEditFragment extends EditFragment<UserDetails, AdminUserEditBinding> {
     @Inject ViewModelFactory viewModelFactory;
     private AdminUserEditViewModel viewModel;
 

@@ -113,5 +113,6 @@
     <string name="user_booking_queue_count_singular">%d person ahead in the queue</string>
     <string name="user_booking_queue_count_plural">%d people ahead in the queue</string>
     <string name="user_favourite_shops_empty_message">No favourite shops found</string>
+    <string name="menu_item_current_user_profile">Your profile</string>
 
 </resources>

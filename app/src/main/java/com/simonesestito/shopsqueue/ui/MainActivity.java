@@ -85,9 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         loginViewModel.getAuthStatus().observeUnhandled(this, event -> {
             if (event.isSuccessful()) {
-                // Time to hide splash screen
-                @ColorInt int backgroundColor = ThemeUtils.getThemeColor(this, android.R.attr.colorBackground);
-                findViewById(R.id.navHostFragment).setBackground(new ColorDrawable(backgroundColor));
+                hideSplashBackground();
 
                 onNewAuthStatus(event.getData());
                 if (event.getData() == null) {
@@ -98,6 +96,15 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (loginViewModel.getAuthStatus().getValue() != null &&
+                loginViewModel.getAuthStatus().getValue().isSuccessful()) {
+            hideSplashBackground();
+        }
     }
 
     @Override
@@ -156,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
             checkPlayServicesOrFinish();
         } else {
             handleFragmentActivityResult(requestCode, resultCode, data);
-
         }
     }
 
@@ -206,5 +212,10 @@ public class MainActivity extends AppCompatActivity {
                 .setExitAnim(R.anim.nav_default_exit_anim)
                 .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
                 .setPopExitAnim(R.anim.nav_default_pop_exit_anim);
+    }
+
+    private void hideSplashBackground() {
+        @ColorInt int backgroundColor = ThemeUtils.getThemeColor(this, android.R.attr.colorBackground);
+        findViewById(R.id.navHostFragment).setBackground(new ColorDrawable(backgroundColor));
     }
 }

@@ -18,11 +18,13 @@
 
 package com.simonesestito.shopsqueue;
 
+import android.os.Build;
+
 @SuppressWarnings("WeakerAccess")
 public class Constants {
     public static final String API_BASE_URL = BuildConfig.DEBUG
-                                            ? "http://192.168.1.100:1234/"
-                                            : "https://shopsqueue.simonesestito.com";
+            ? Build.PRODUCT.equals("sdk") ? "http://10.0.2.2:1234" : "http://192.168.1.100:1234"
+            : "https://shopsqueue.simonesestito.com";
     public static final String SHARED_PREFERENCES_FILE = BuildConfig.APPLICATION_ID + "_preferences";
     public static final String SHARED_PREFERENCES_TOKEN_KEY = "api_access_token";
     public static final int COORDINATES_DIGITS_PRECISION = 6;

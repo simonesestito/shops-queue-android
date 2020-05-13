@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_content_margin"
+        app:boxBackgroundColor="?colorSurface"
         app:layout_constraintTop_toTopOf="parent"
         app:startIconDrawable="@drawable/ic_search_black_24dp">
 
@@ -39,8 +40,8 @@
             android:id="@+id/locationSearchEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionSearch"
             android:hint="@string/address_input_hint"
+            android:imeOptions="actionSearch"
             android:inputType="textCapWords"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>

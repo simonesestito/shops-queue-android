@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:layout_margin="@dimen/activity_content_margin"
+        app:boxBackgroundColor="?colorSurface"
         app:startIconDrawable="@drawable/ic_search_black_24dp">
 
         <com.google.android.material.textfield.TextInputEditText

@@ -20,6 +20,7 @@ package com.simonesestito.shopsqueue.util;
 
 import android.os.Parcelable;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.SavedStateHandle;
@@ -30,6 +31,7 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.simonesestito.shopsqueue.R;
+import com.simonesestito.shopsqueue.util.functional.Handler;
 
 import java.util.Objects;
 
@@ -81,5 +83,21 @@ public class NavUtils {
                 .getSavedStateHandle()
                 .set(key, value);
         fragment.requireActivity().onBackPressed();
+    }
+
+    public static void onBackPressed(Fragment fragment, Handler<Void> callback) {
+        fragment.requireActivity()
+                .getOnBackPressedDispatcher()
+                .addCallback(fragment.getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        if (!callback.handle(null)) {
+                            // Not handled
+                            boolean popped = NavHostFragment.findNavController(fragment).popBackStack();
+                            if (!popped)
+                                fragment.requireActivity().finish();
+                        }
+                    }
+                });
     }
 }

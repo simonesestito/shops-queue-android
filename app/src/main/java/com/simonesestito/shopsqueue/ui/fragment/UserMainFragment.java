@@ -74,6 +74,8 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     private UserMainViewModel viewModel;
     private MapboxHelper mapboxHelper;
     private boolean shouldFitAll = false;
+    private BottomSheetBehavior currentShopBottomSheet;
+    private BottomSheetBehavior userBookingsBottomSheet;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,6 +107,9 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         mapboxHelper = new MapboxHelper(getViewBinding().userShopsMap, this);
         mapboxHelper.onMapMoved(latLng -> viewModel.loadNearShops(latLng.getLatitude(), latLng.getLongitude()));
 
+        currentShopBottomSheet = BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot());
+        userBookingsBottomSheet = BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot());
+
         UserBookingsAdapter adapter = new UserBookingsAdapter();
         adapter.setMenuItemListener(((menuItem, booking) -> onAskCancelBooking(booking.getId())));
         getViewBinding().userBookingsBottomSheet.userBookingsList.setAdapter(adapter);
@@ -114,8 +119,17 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
         MapUtils.listenLocation(this, this::onNewUserLocation);
 
-        BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())
-                .setState(BottomSheetBehavior.STATE_HIDDEN);
+        currentShopBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        NavUtils.onBackPressed(this, a -> {
+            if (currentShopBottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED ||
+                    userBookingsBottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                currentShopBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+                userBookingsBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                return true;
+            }
+            return false;
+        });
 
         getViewBinding().shopSearchEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId != EditorInfo.IME_ACTION_SEARCH)
@@ -160,10 +174,8 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         viewModel.loadBookings();
         mapboxHelper.moveTo(viewModel.getLastUserLocation());
         getViewBinding().shopSearchEditText.setText("");
-        BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())
-                .setState(BottomSheetBehavior.STATE_HIDDEN);
-        BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot())
-                .setState(BottomSheetBehavior.STATE_EXPANDED);
+        currentShopBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        userBookingsBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
     private void onUserFavouritesMenuClicked() {
@@ -224,10 +236,8 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             getViewBinding().userBookingsBottomSheet.userBookingsLoading.setVisibility(View.VISIBLE);
             getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.GONE);
             getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.GONE);
-            BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())
-                    .setState(BottomSheetBehavior.STATE_HIDDEN);
-            BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot())
-                    .setState(BottomSheetBehavior.STATE_EXPANDED);
+            currentShopBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+            userBookingsBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
             return;
         }
 
@@ -286,10 +296,8 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     }
 
     private void onShopMarkerClicked(ShopResult shop) {
-        BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot())
-                .setState(BottomSheetBehavior.STATE_COLLAPSED);
-        BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())
-                .setState(BottomSheetBehavior.STATE_EXPANDED);
+        userBookingsBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        currentShopBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
 
         getViewBinding().currentShopBottomSheet.currentShopName.setText(shop.getName());
         getViewBinding().currentShopBottomSheet.currentShopAddress.setText(shop.getAddress());

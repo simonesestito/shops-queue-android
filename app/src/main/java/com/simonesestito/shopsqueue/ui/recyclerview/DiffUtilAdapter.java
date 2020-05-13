@@ -20,6 +20,7 @@ package com.simonesestito.shopsqueue.ui.recyclerview;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +30,7 @@ import com.simonesestito.shopsqueue.util.functional.Callback;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -81,7 +83,9 @@ public abstract class DiffUtilAdapter<T extends Identifiable, VH extends Recycle
     }
 
     @MainThread
-    public void updateDataSet(List<T> newList) {
+    public void updateDataSet(@Nullable List<T> newList) {
+        if (newList == null)
+            newList = Collections.emptyList();
         listDiffer.submitList(newList);
     }
 

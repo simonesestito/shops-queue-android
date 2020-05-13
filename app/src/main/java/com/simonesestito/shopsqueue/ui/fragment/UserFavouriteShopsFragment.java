@@ -28,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
+import com.simonesestito.shopsqueue.api.dto.Shop;
 import com.simonesestito.shopsqueue.databinding.UserFavouriteShopsBinding;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.ShopsAdapter;
@@ -35,6 +36,8 @@ import com.simonesestito.shopsqueue.util.NavUtils;
 import com.simonesestito.shopsqueue.util.ViewUtils;
 import com.simonesestito.shopsqueue.viewmodel.UserFavouriteShopsViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -81,7 +84,13 @@ public class UserFavouriteShopsFragment extends AbstractAppFragment<UserFavourit
                 ErrorDialog.newInstance(requireContext(), event.getError())
                         .show(getChildFragmentManager(), null);
             } else if (event.isSuccessful()) {
-                adapter.updateDataSet(event.getData());
+                List<Shop> shops = event.getData();
+                if (shops == null || shops.isEmpty()) {
+                    getViewBinding().userFavouriteShopsEmptyView.setVisibility(View.VISIBLE);
+                } else {
+                    getViewBinding().userFavouriteShopsEmptyView.setVisibility(View.GONE);
+                }
+                adapter.updateDataSet(shops);
             }
         });
     }

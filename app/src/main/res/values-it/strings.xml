@@ -112,4 +112,10 @@
     <string name="user_booking_queue_count_plural">%d persone davanti a te in coda</string>
     <string name="user_favourite_shops_empty_message">Nessun negozio preferito trovato</string>
     <string name="menu_item_current_user_profile">Il tuo profilo</string>
+    <string name="sessionsFragmentTitle">Sessioni attive</string>
+    <string name="session_id_title">Sessione #%d</string>
+    <string name="session_login_date">Data di creazione: %s</string>
+    <string name="session_last_usage">Ultimo utilizzo: %s</string>
+    <string name="revoke_session_message">Dovrai accedere di nuovo da quel dispositivo</string>
+    <string name="current_session_badge_text">Attuale</string>
 </resources>

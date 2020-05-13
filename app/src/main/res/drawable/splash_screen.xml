@@ -22,7 +22,9 @@
     <item
         android:width="@dimen/splash_icon_size"
         android:height="@dimen/splash_icon_size"
-        android:drawable="@drawable/ic_launcher_foreground"
-        android:gravity="center"
-        tools:ignore="UnusedAttribute" />
+        tools:ignore="UnusedAttribute">
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/ic_launcher_foreground" />
+    </item>
 </layer-list>

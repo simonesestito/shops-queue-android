@@ -119,5 +119,6 @@
     <string name="session_login_date">Creation date: %s</string>
     <string name="session_last_usage">Last usage date: %s</string>
     <string name="revoke_session_message">You\'ll need to login again on that device</string>
+    <string name="current_session_badge_text">Current</string>
 
 </resources>

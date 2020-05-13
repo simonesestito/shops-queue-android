@@ -56,14 +56,13 @@
         app:layout_constraintTop_toBottomOf="@id/sessionLoginDate"
         tools:text="Last usage date: 13/05/2020 13:25" />
 
-    <ImageView
+    <TextView
+        style="@style/Widget.App.BadgeText"
         android:id="@+id/sessionIsCurrent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/list_item_margin"
-        android:src="@drawable/ic_account_box_black_24dp"
-        android:tint="?colorSecondary"
+        android:text="@string/current_session_badge_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

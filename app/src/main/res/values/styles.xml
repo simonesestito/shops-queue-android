@@ -48,4 +48,15 @@
         <item name="drawableTint">?colorSecondary</item>
         <item name="android:drawablePadding">@dimen/list_item_margin</item>
     </style>
+
+    <style name="Widget.App.BadgeText" parent="">
+        <item name="android:background">@drawable/rounded_rect</item>
+        <item name="android:backgroundTint">?colorPrimaryVariant</item>
+        <item name="android:textColor">?colorOnSurface</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+    </style>
 </resources>

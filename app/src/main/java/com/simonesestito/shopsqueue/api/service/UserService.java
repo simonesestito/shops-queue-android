@@ -19,6 +19,7 @@
 package com.simonesestito.shopsqueue.api.service;
 
 import com.simonesestito.shopsqueue.api.ApiResponse;
+import com.simonesestito.shopsqueue.api.dto.NewSimpleUser;
 import com.simonesestito.shopsqueue.api.dto.NewUser;
 import com.simonesestito.shopsqueue.api.dto.Page;
 import com.simonesestito.shopsqueue.api.dto.UserDetails;
@@ -51,4 +52,7 @@ public interface UserService {
     @PUT("/users/{id}")
     ApiResponse<UserDetails> updateUser(@Path("id") int id,
                                         @Body NewUser update);
+
+    @PUT("/users/me")
+    ApiResponse<UserDetails> updateCurrentUser(@Body NewSimpleUser update);
 }

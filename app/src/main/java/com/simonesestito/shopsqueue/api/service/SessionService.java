@@ -31,6 +31,6 @@ public interface SessionService {
     @GET("/users/me/sessions")
     ApiResponse<List<Session>> listCurrentUserSessions();
 
-    @DELETE("/sessions/:id")
+    @DELETE("/sessions/{id}")
     ApiResponse<Void> revokeSession(@Path("id") int id);
 }

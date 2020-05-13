@@ -114,6 +114,9 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
         MapUtils.listenLocation(this, this::onNewUserLocation);
 
+        BottomSheetBehavior.from(getViewBinding().currentShopBottomSheet.getRoot())
+                .setState(BottomSheetBehavior.STATE_HIDDEN);
+
         getViewBinding().shopSearchEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId != EditorInfo.IME_ACTION_SEARCH)
                 return false;

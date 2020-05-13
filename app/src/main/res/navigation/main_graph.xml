@@ -44,11 +44,22 @@
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.simonesestito.shopsqueue.ui.fragment.UserProfileFragment"
-        android:label="@string/app_name" />
+        android:label="@string/app_name"
+        tools:layout="@layout/user_profile_fragment" />
 
     <action
         android:id="@+id/showCurrentUserProfile"
         app:destination="@id/userProfileFragment" />
+
+    <fragment
+        android:id="@+id/userSessionsFragment"
+        android:name="com.simonesestito.shopsqueue.ui.fragment.SessionsFragment"
+        android:label="@string/sessionsFragmentTitle"
+        tools:layout="@layout/sessions_fragment" />
+
+    <action
+        android:id="@+id/showUserSessions"
+        app:destination="@id/userSessionsFragment" />
 
     <activity
         android:id="@+id/openSourceLicenses"

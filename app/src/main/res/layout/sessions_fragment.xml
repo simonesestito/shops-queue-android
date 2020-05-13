@@ -15,21 +15,21 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
   -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/menuItemCurrentUserProfile"
-        android:title="@string/menu_item_current_user_profile" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userSessionsList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    <item
-        android:id="@+id/menuItemSessions"
-        android:title="@string/sessionsFragmentTitle" />
-
-    <item
-        android:id="@+id/menuItemLogout"
-        android:title="@string/menu_item_logout" />
-
-    <item
-        android:id="@+id/menuItemAbout"
-        android:title="@string/about_fragment_title" />
-</menu>
+    <ProgressBar
+        android:id="@+id/userSessionsLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+</FrameLayout>

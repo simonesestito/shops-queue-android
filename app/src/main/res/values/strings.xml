@@ -114,5 +114,9 @@
     <string name="user_booking_queue_count_plural">%d people ahead in the queue</string>
     <string name="user_favourite_shops_empty_message">No favourite shops found</string>
     <string name="menu_item_current_user_profile">Your profile</string>
+    <string name="sessionsFragmentTitle">Active sessions</string>
+    <string name="session_id_title">Session #%d</string>
+    <string name="session_login_date">Creation date: %s</string>
+    <string name="session_last_usage">Last usage date: %s</string>
 
 </resources>

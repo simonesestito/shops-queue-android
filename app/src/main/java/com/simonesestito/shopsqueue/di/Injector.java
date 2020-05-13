@@ -33,6 +33,7 @@ import com.simonesestito.shopsqueue.ui.fragment.LocationPickerFragment;
 import com.simonesestito.shopsqueue.ui.fragment.LoginFragment;
 import com.simonesestito.shopsqueue.ui.fragment.MainFragment;
 import com.simonesestito.shopsqueue.ui.fragment.OwnerFragment;
+import com.simonesestito.shopsqueue.ui.fragment.SessionsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.ShopPickerFragment;
 import com.simonesestito.shopsqueue.ui.fragment.SignUpFragment;
 import com.simonesestito.shopsqueue.ui.fragment.UserFavouriteShopsFragment;
@@ -77,6 +78,8 @@ public interface Injector {
     void inject(FcmReceiverService fcmReceiverService);
 
     void inject(UserProfileFragment userProfileFragment);
+
+    void inject(SessionsFragment sessionsFragment);
 
     @Component.Builder
     interface Builder {

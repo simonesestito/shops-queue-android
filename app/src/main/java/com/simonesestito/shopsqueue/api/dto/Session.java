@@ -18,9 +18,11 @@
 
 package com.simonesestito.shopsqueue.api.dto;
 
+import com.simonesestito.shopsqueue.model.Identifiable;
+
 import java.util.Date;
 
-public class Session {
+public class Session implements Identifiable {
     private int id;
     private boolean currentSession;
     private Date loginDate;

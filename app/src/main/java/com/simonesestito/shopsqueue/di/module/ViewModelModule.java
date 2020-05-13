@@ -29,6 +29,7 @@ import com.simonesestito.shopsqueue.viewmodel.AdminUsersViewModel;
 import com.simonesestito.shopsqueue.viewmodel.LocationPickerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
+import com.simonesestito.shopsqueue.viewmodel.SessionsViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ShopPickerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.UserFavouriteShopsViewModel;
 import com.simonesestito.shopsqueue.viewmodel.UserMainViewModel;
@@ -98,4 +99,9 @@ public interface ViewModelModule {
     @IntoMap
     @ViewModelKey(UserProfileViewModel.class)
     ViewModel bindUserProfileViewModel(UserProfileViewModel userProfileViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SessionsViewModel.class)
+    ViewModel bindSessionsViewModel(SessionsViewModel sessionsViewModel);
 }

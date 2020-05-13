@@ -16,11 +16,13 @@
   ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="?android:colorBackground" />
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/ic_launcher_round" />
-    </item>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item android:drawable="@mipmap/ic_launcher_background" />
+    <item
+        android:width="@dimen/splash_icon_size"
+        android:height="@dimen/splash_icon_size"
+        android:drawable="@drawable/ic_launcher_foreground"
+        android:gravity="center"
+        tools:ignore="UnusedAttribute" />
 </layer-list>

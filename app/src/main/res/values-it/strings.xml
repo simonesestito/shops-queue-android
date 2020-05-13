@@ -91,7 +91,7 @@
     <string name="shop_distance_field">Distanza: %.2f KM</string>
     <string name="user_favourite_shops">Negozi preferiti</string>
     <string name="cancel_booking_from_shop">Annulla</string>
-    <string name="cancel_booking_confirm_message">Perderai tutte le tue prenotazioni. Se ti prenoti di nuovo, tornerai in fondo alla coda.</string>
+    <string name="cancel_booking_confirm_message">Perderai la tua prenotazione. Se ti prenoti di nuovo, tornerai in fondo alla coda.</string>
     <string name="notification_channel_booking_notice">Avvisi prenotazioni</string>
     <string name="notification_booking_cancellation_message">Ci dispiace ma la tua prenotazione è stata annullata dal proprietario del negozio.</string>
     <string name="notification_queue_notice_message">Hai %d persone davanti.</string>
@@ -110,4 +110,5 @@
     <string name="shops_queue_count_plural">%d persone in coda</string>
     <string name="user_booking_queue_count_singular">%d persona davanti a te in coda</string>
     <string name="user_booking_queue_count_plural">%d persone davanti a te in coda</string>
+    <string name="user_favourite_shops_empty_message">Nessun negozio preferito trovato</string>
 </resources>

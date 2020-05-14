@@ -22,6 +22,7 @@
     <item
         android:width="@dimen/splash_icon_size"
         android:height="@dimen/splash_icon_size"
+        android:gravity="center"
         tools:ignore="UnusedAttribute">
         <bitmap
             android:gravity="center"

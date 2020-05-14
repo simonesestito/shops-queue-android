@@ -83,6 +83,10 @@ This project uses a custom LiveData, called [LiveResource](https://github.com/si
 
 Then, we have the *Model* layer, where all the data comes from. In this specific app we have no local SQL databases, so this layer includes SharedPreferences and Retrofit classes.
 
+**General data flow in the app:**
+
+[![App data flow](https://github.com/simonesestito/shops-queue-android/blob/master/.github/mvvm_data_flow.png?raw=true)]
+
 <a name="navigation"></a>
 ## Navigation
 

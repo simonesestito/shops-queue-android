@@ -33,6 +33,8 @@ import com.simonesestito.shopsqueue.model.AuthUserHolder;
 import com.simonesestito.shopsqueue.model.HttpStatus;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 public class LoginViewModel extends ViewModel {
@@ -116,11 +118,14 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void logout() {
+        final String oldToken = sharedPreferencesStore.getAccessToken();
         this.loginService.logout()
                 .onResult(v -> {
+                    if (Objects.equals(oldToken, sharedPreferencesStore.getAccessToken())) {
+                        sharedPreferencesStore.setAccessToken(null);
+                    }
                 })
                 .onError(Throwable::printStackTrace);
-        this.sharedPreferencesStore.setAccessToken(null);
         this.authStatus.emitResult(null);
     }
 

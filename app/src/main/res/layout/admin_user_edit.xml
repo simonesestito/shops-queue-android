@@ -44,6 +44,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/input_form_margin"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -51,7 +52,6 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/input_form_margin"
                 android:layout_marginVertical="@dimen/form_element_margin"
                 android:hint="@string/input_name_hint">
 
@@ -68,7 +68,6 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/input_form_margin"
                 android:layout_marginVertical="@dimen/form_element_margin"
                 android:hint="@string/input_surname_hint">
 
@@ -85,7 +84,6 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/input_form_margin"
                 android:layout_marginVertical="@dimen/form_element_margin"
                 android:hint="@string/input_email_hint">
 
@@ -102,7 +100,6 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/input_form_margin"
                 android:layout_marginVertical="@dimen/form_element_margin"
                 android:hint="@string/input_password_hint"
                 app:endIconMode="password_toggle">
@@ -119,7 +116,6 @@
                 android:id="@+id/adminUserRole"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/input_form_margin"
                 android:layout_marginVertical="@dimen/form_element_margin" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -127,7 +123,6 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/input_form_margin"
                 android:layout_marginVertical="@dimen/form_element_margin"
                 android:hint="@string/input_shop_for_owner"
                 android:visibility="gone">
@@ -140,6 +135,13 @@
                     android:focusable="false"
                     tools:ignore="KeyboardInaccessibleWidget" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/userActive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/form_element_margin"
+                android:text="@string/user_active_account_input" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

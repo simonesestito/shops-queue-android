@@ -25,11 +25,13 @@ import com.simonesestito.shopsqueue.model.UserRole;
 public class NewUser extends NewSimpleUser {
     @Nullable private Integer shopId;
     private UserRole role;
+    private boolean active;
 
-    public NewUser(String name, String surname, String email, String password, @Nullable Integer shopId, UserRole role) {
+    public NewUser(String name, String surname, String email, String password, @Nullable Integer shopId, UserRole role, boolean active) {
         super(name, surname, email, password);
         this.shopId = shopId;
         this.role = role;
+        this.active = active;
     }
 
     @Nullable
@@ -47,5 +49,13 @@ public class NewUser extends NewSimpleUser {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

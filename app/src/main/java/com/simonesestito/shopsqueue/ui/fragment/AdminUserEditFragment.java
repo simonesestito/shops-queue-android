@@ -97,6 +97,7 @@ public class AdminUserEditFragment extends EditFragment<UserDetails, AdminUserEd
             getViewBinding().nameInput.setText(user.getName());
             getViewBinding().surnameInput.setText(user.getSurname());
             getViewBinding().emailInput.setText(user.getEmail());
+            getViewBinding().userActive.setChecked(user.isActive());
 
             int roleIndex = Arrays.asList(UserRole.values()).indexOf(user.getRole());
             getViewBinding().adminUserRole.setSelection(roleIndex);
@@ -157,11 +158,12 @@ public class AdminUserEditFragment extends EditFragment<UserDetails, AdminUserEd
         String email = getViewBinding().emailInputLayout.getEditText().getText().toString().trim();
         String password = getViewBinding().passwordInputLayout.getEditText().getText().toString().trim();
         Integer shopId = role.equals(UserRole.OWNER) ? viewModel.pickedShop.getId() : null;
+        boolean active = getViewBinding().userActive.isChecked();
 
         if (password.isEmpty())
             password = null;
 
-        NewUser newUser = new NewUser(name, surname, email, password, shopId, role);
+        NewUser newUser = new NewUser(name, surname, email, password, shopId, role, active);
         if (getArgumentId() == 0) {
             viewModel.saveNewUser(newUser);
         } else {

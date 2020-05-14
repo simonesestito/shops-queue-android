@@ -44,6 +44,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <nav-graph android:value="@navigation/main_graph" />
         </activity>
         <service
             android:name=".FcmReceiverService"

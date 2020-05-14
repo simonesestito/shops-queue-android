@@ -1,4 +1,4 @@
-# Shops Queue (Android app)
+# <img src="https://github.com/simonesestito/shops-queue-android/blob/master/.github/app_logo.png" width="64"> Shops Queue (Android app)
 
 [![Android CI](https://github.com/simonesestito/shops-queue-android/workflows/Android%20CI/badge.svg)](https://github.com/simonesestito/shops-queue-android/actions?query=workflow%3A%22Android+CI%22)
 

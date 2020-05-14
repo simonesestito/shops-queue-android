@@ -85,7 +85,7 @@ Then, we have the *Model* layer, where all the data comes from. In this specific
 
 **General data flow in the app:**
 
-[![App data flow](https://github.com/simonesestito/shops-queue-android/blob/master/.github/mvvm_data_flow.png?raw=true)]
+![App data flow](https://github.com/simonesestito/shops-queue-android/blob/master/.github/mvvm_data_flow.png?raw=true)
 
 <a name="navigation"></a>
 ## Navigation
@@ -94,9 +94,6 @@ This project follows the **Single Activity Architecture** and the **Jetpack Navi
 
 It has a single Activity, which is the entrypoint of the app. Every other piece of the user's flow is implemented as a Fragment.
 Every part of the app is divided in [different sub-graphs](https://github.com/simonesestito/shops-queue-android/tree/master/app/src/main/res/navigation).
-
-Here you can see the full navigation graph:
-*TODO: Add navigation graph*
 
 The app uses **Deep Links** to go immediately to the login fragment. It's used as a redirect URI after the email address is validated.
 

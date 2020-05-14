@@ -13,6 +13,11 @@ Other related repositories:
 
 - [Introduction](#introduction)
 - [Features](#features)
+- [Project Architecture](#arch)
+- [UI Design](#ui)
+- [Navigation](#navigation)
+- [Dependency Injection](#di)
+- [Continuous Deployment](#cd)
 - [License](#license)
 
 <a name="introduction"></a>
@@ -53,6 +58,64 @@ After that, he can manage the queue of his shop and call the next customer.
 
 An administrator can manage all accounts (both users and shop owners) and all shops.
 
+For every user, the access token returned from the server during the login phase,
+it's stored on the device using [EncryptedSharedPreferences](https://github.com/simonesestito/shops-queue-android/blob/master/app/src/main/java/com/simonesestito/shopsqueue/di/module/SharedPreferencesModule.java).
+
+<a name="ui"></a>
+## UI Design
+
+The app heavily uses the Google Material Components library.
+
+The app graphical layout is based on the principles of the Material Design.
+
+It provides both a light and a dark theme. The theme to use is determined by looking at the current theme the user applied on the entire phone, if any.
+By default, it uses the light theme.
+
+<a name="arch"></a>
+## Project architecture
+
+This app follows the **MVVM** pattern, as recommended by Google in the last years.
+
+The *View* layer is responsible for the interaction with the user. It handles click events and displays the data.
+
+It stores and works with the data available in the *ViewModel* layer. A ViewModel is a special class which exposes the current state of the View, often using a LiveData object.
+This project uses a custom LiveData, called [LiveResource](https://github.com/simonesestito/shops-queue-android/blob/master/app/src/main/java/com/simonesestito/shopsqueue/util/livedata/LiveResource.java).
+
+Then, we have the *Model* layer, where all the data comes from. In this specific app we have no local SQL databases, so this layer includes SharedPreferences and Retrofit classes.
+
+<a name="navigation"></a>
+## Navigation
+
+This project follows the **Single Activity Architecture** and the **Jetpack Navigation Library**.
+
+It has a single Activity, which is the entrypoint of the app. Every other piece of the user's flow is implemented as a Fragment.
+Every part of the app is divided in [different sub-graphs](https://github.com/simonesestito/shops-queue-android/tree/master/app/src/main/res/navigation).
+
+Here you can see the full navigation graph:
+*TODO: Add navigation graph*
+
+The app uses **Deep Links** to go immediately to the login fragment. It's used as a redirect URI after the email address is validated.
+
+<a name="di"></a>
+## Dependency Injection
+
+Dependency Injection is a design pattern used in Object Oriented Programming. It allows the instatiation of a class which depends on another, and so on.
+
+This project uses **Google Dagger**.
+
+Everything that concerns dependency injection, is located [here](https://github.com/simonesestito/shops-queue-android/tree/master/app/src/main/java/com/simonesestito/shopsqueue/di).
+
+<a name="cd"></a>
+## Continuous Deployment (CD)
+
+It's a release process that automatically deploys new versions of the software.
+
+This project uses **GitHub Actions**.
+
+Every time a new commit is pushed to this repository, a workflow is triggered.
+A new version of the app is compiled on GitHub servers, shrinked using Android R8, signed with the release certificate and, finally, pushed to the app's storage bucket to let everyone download it.
+
+The file which describes the workflow and the build process is [android.yaml](https://github.com/simonesestito/shops-queue-android/blob/master/.github/workflows/android.yml)
 
 <a name="license"></a>
 ## License

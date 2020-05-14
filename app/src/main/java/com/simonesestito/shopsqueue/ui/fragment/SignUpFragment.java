@@ -116,6 +116,10 @@ public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
         if (error instanceof ApiException && ((ApiException) error).getStatusCode() == HttpStatus.HTTP_CONFLICT) {
             ErrorDialog.newInstance(getString(R.string.error_sign_up_duplicate_email))
                     .show(getChildFragmentManager(), null);
+        } else if (error instanceof ApiException
+                && ((ApiException) error).getStatusCode() == HttpStatus.HTTP_FORBIDDEN) {
+            ErrorDialog.newInstance(getString(R.string.login_email_not_confirmed))
+                    .show(getChildFragmentManager(), null);
         } else {
             ErrorDialog.newInstance(requireContext(), error)
                     .show(getChildFragmentManager(), null);

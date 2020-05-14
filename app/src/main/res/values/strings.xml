@@ -120,5 +120,6 @@
     <string name="session_last_usage">Last usage date: %s</string>
     <string name="revoke_session_message">You\'ll need to login again on that device</string>
     <string name="current_session_badge_text">Current</string>
+    <string name="login_email_not_confirmed">Please, verify your email</string>
 
 </resources>

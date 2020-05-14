@@ -21,7 +21,16 @@ package com.simonesestito.shopsqueue.api.dto;
 import androidx.annotation.Nullable;
 
 public class UserDetails extends User {
+    private boolean active;
     @Nullable private Shop shop;
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     @Nullable
     public Shop getShop() {

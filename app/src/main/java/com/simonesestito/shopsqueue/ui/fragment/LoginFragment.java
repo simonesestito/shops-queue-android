@@ -29,9 +29,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.AuthResponse;
 import com.simonesestito.shopsqueue.databinding.LoginFragmentBinding;
+import com.simonesestito.shopsqueue.model.ApiException;
+import com.simonesestito.shopsqueue.model.HttpStatus;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
@@ -105,8 +108,14 @@ public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
             return;
 
         event.handle();
-        ErrorDialog.newInstance(requireContext(), error)
-                .show(getChildFragmentManager(), null);
+        if (error instanceof ApiException
+                && ((ApiException) error).getStatusCode() == HttpStatus.HTTP_FORBIDDEN) {
+            ErrorDialog.newInstance(getString(R.string.login_email_not_confirmed))
+                    .show(getChildFragmentManager(), null);
+        } else {
+            ErrorDialog.newInstance(requireContext(), error)
+                    .show(getChildFragmentManager(), null);
+        }
     }
 
     @SuppressWarnings("ConstantConditions")

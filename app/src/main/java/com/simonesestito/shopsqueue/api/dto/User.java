@@ -78,7 +78,6 @@ public class User implements Identifiable {
     }
 
     @Nullable
-    @SuppressWarnings("WeakerAccess")
     public Integer getShopId() {
         return shopId;
     }

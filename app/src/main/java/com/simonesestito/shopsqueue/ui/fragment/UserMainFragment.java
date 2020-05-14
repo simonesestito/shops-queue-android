@@ -122,12 +122,18 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         currentShopBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         NavUtils.onBackPressed(this, a -> {
+            if (getViewBinding().shopSearchEditText.getText().toString().trim().length() > 0) {
+                onUserRefreshMenuClicked();
+                return true;
+            }
+
             if (currentShopBottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED ||
                     userBookingsBottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                 currentShopBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
                 userBookingsBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 return true;
             }
+
             return false;
         });
 
@@ -148,6 +154,13 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             viewModel.searchShops(location.getLatitude(), location.getLongitude(), query);
             return true;
         });
+    }
+
+    private void cancelQuery() {
+        getViewBinding().shopSearchEditText.setText("");
+        viewModel.clearQuery();
+        LatLng latLng = viewModel.getLastUserLocation();
+        viewModel.loadNearShops(latLng.getLatitude(), latLng.getLongitude());
     }
 
     @Override
@@ -173,7 +186,6 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     private void onUserRefreshMenuClicked() {
         viewModel.loadBookings();
         mapboxHelper.moveTo(viewModel.getLastUserLocation());
-        getViewBinding().shopSearchEditText.setText("");
         currentShopBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
         userBookingsBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
     }

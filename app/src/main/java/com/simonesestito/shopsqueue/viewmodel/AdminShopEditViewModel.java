@@ -24,8 +24,8 @@ import com.simonesestito.shopsqueue.api.dto.NewShop;
 import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.api.service.ShopService;
 import com.simonesestito.shopsqueue.api.service.UserService;
-import com.simonesestito.shopsqueue.di.module.ShopAdminDetails;
 import com.simonesestito.shopsqueue.model.PickedLocation;
+import com.simonesestito.shopsqueue.model.ShopAdminDetails;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
 import java.util.List;

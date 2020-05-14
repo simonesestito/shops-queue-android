@@ -24,6 +24,7 @@ import com.simonesestito.shopsqueue.api.dto.NewSimpleUser;
 import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.api.service.UserService;
 import com.simonesestito.shopsqueue.model.AuthUserHolder;
+import com.simonesestito.shopsqueue.model.EmailRevokedException;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
 import javax.inject.Inject;
@@ -40,10 +41,15 @@ public class UserProfileViewModel extends ViewModel {
 
     public void updateUser(NewSimpleUser update) {
         currentUser.emitLoading();
+        UserDetails oldUser = AuthUserHolder.getCurrentUser();
         userService.updateCurrentUser(update)
                 .onResult(user -> {
                     AuthUserHolder.setCurrentUser(user);
-                    currentUser.emitResult(null);
+                    if (!oldUser.getEmail().equals(user.getEmail())) {
+                        currentUser.emitError(new EmailRevokedException());
+                    } else {
+                        currentUser.emitResult(null);
+                    }
                 })
                 .onError(err -> currentUser.emitError(err));
     }

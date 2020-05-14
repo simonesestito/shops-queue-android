@@ -22,19 +22,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.NewSimpleUser;
 import com.simonesestito.shopsqueue.api.dto.UserDetails;
 import com.simonesestito.shopsqueue.databinding.UserProfileFragmentBinding;
 import com.simonesestito.shopsqueue.model.AuthUserHolder;
+import com.simonesestito.shopsqueue.model.EmailRevokedException;
+import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
+import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
 import com.simonesestito.shopsqueue.viewmodel.UserProfileViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -43,6 +48,7 @@ import javax.inject.Inject;
 public class UserProfileFragment extends EditFragment<UserDetails, UserProfileFragmentBinding> {
     @Inject ViewModelFactory viewModelFactory;
     private UserProfileViewModel viewModel;
+    private LoginViewModel loginViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +61,13 @@ public class UserProfileFragment extends EditFragment<UserDetails, UserProfileFr
     @Override
     protected UserProfileFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return UserProfileFragmentBinding.inflate(layoutInflater, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        loginViewModel = new ViewModelProvider(requireActivity(), viewModelFactory)
+                .get(LoginViewModel.class);
     }
 
     @Override
@@ -98,6 +111,19 @@ public class UserProfileFragment extends EditFragment<UserDetails, UserProfileFr
     }
 
     //region AdminEditFragment
+
+
+    @Override
+    protected void handleError(Throwable error) {
+        super.handleError(error);
+        if (error instanceof EmailRevokedException) {
+            Toast.makeText(requireActivity(), R.string.login_email_not_confirmed, Toast.LENGTH_LONG).show();
+            loginViewModel.logout();
+        } else {
+            ErrorDialog.newInstance(requireContext(), error)
+                    .show(getChildFragmentManager(), null);
+        }
+    }
 
     @Override
     protected View getSaveButton() {

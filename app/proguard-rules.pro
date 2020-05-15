@@ -20,10 +20,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep enum * { *; }
--keep public class com.simonesestito.shopsqueue.api.dto.** {
-    public void set*(***);
-    public *** get*();
-}
+-keep public class com.simonesestito.shopsqueue.api.dto.** { *; }
 
 # Jetpack Crypto Library rules
 -keep class com.google.crypto.tink.** { *; }

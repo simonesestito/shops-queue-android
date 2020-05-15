@@ -30,7 +30,7 @@ An idea to save time and avoid queues outside supermarkets and other shops in ge
 This is a project made for my graduation exam.
 In the last year we usually study Java, and that's what determined the language to use for the app, instead of Kotlin.
 
-It was created during Coronavirus lockdown in Italy. The idea came from [a post on Facebook](https://m.facebook.com/story.php?story_fbid=2814783488643375&id=310949775693438) written in March 2020 by the Italian minister of Agricultural, Food and Forestry Policies. It's also inspired by the system most post offices already use to save time.
+It was created during the Coronavirus lockdown in Italy. The idea came from [a post on Facebook](https://m.facebook.com/story.php?story_fbid=2814783488643375&id=310949775693438) written in March 2020 by the Italian Minister of Agricultural, Food and Forestry Policies. It's also inspired by the system most post offices already use to save time.
 
 <a name="features"></a>
 ## Features
@@ -52,7 +52,7 @@ A user will receive a push notification (via Firebase Cloud Messaging) when it's
 
 ### Shop owner
 
-A shop owner must reach out an administrator to receive an appropriate account and to register his business in the platform.
+A shop owner must reach out to an administrator to receive an appropriate account and to register his business on the platform.
 
 After that, he can manage the queue of his shop and call the next customer.
 
@@ -60,8 +60,14 @@ After that, he can manage the queue of his shop and call the next customer.
 
 An administrator can manage all accounts (both users and shop owners) and all shops.
 
-For every user, the access token returned from the server during the login phase,
-it's stored on the device using [EncryptedSharedPreferences](https://github.com/simonesestito/shops-queue-android/blob/master/app/src/main/java/com/simonesestito/shopsqueue/di/module/SharedPreferencesModule.java).
+<a name="security"></a>
+## Security
+
+A user must verify its e-mail address after signing up.
+
+When the user logs in, its password is NEVER saved on the user's device. Instead, an access token is securely stored in SharedPreferences. Other installed apps aren't allowed to access SharedPreferences, apart from rooted devices. Whenever it's possible, the access token is encrypted using [Jetpack Security library](https://developer.android.com/topic/security/data).
+
+If the access token is sniffed, a user will be able to immediately revoke it from the "Active sessions" menu. The password will never be discovered by an attacker.
 
 <a name="ui"></a>
 ## UI Design
@@ -94,15 +100,15 @@ Then, we have the *Model* layer, where all the data comes from. In this specific
 
 This project follows the **Single Activity Architecture** and the **Jetpack Navigation Library**.
 
-It has a single Activity, which is the entrypoint of the app. Every other piece of the user's flow is implemented as a Fragment.
-Every part of the app is divided in [different sub-graphs](https://github.com/simonesestito/shops-queue-android/tree/master/app/src/main/res/navigation).
+It has a single Activity, which is the entry point of the app. Every other piece of the user's flow is implemented as a Fragment.
+Every part of the app is divided into [different sub-graphs](https://github.com/simonesestito/shops-queue-android/tree/master/app/src/main/res/navigation).
 
 The app uses **Deep Links** to go immediately to the login fragment. It's used as a redirect URI after the email address is validated.
 
 <a name="di"></a>
 ## Dependency Injection
 
-Dependency Injection is a design pattern used in Object Oriented Programming. It allows the instatiation of a class which depends on another, and so on.
+Dependency Injection is a design pattern used in Object-Oriented Programming. It allows the instantiation of a class which depends on another, and so on.
 
 This project uses **Google Dagger**.
 
@@ -116,7 +122,7 @@ It's a release process that automatically deploys new versions of the software.
 This project uses **GitHub Actions**.
 
 Every time a new commit is pushed to this repository, a workflow is triggered.
-A new version of the app is compiled on GitHub servers, shrinked using Android R8, signed with the release certificate and, finally, pushed to the app's storage bucket to let everyone download it.
+A new version of the app is compiled on GitHub servers, shrank using Android R8, signed with the release certificate and, finally, pushed to the app's storage bucket to let everyone download it.
 
 The file which describes the workflow and the build process is [android.yaml](https://github.com/simonesestito/shops-queue-android/blob/master/.github/workflows/android.yml)
 

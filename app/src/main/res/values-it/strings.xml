@@ -118,7 +118,7 @@
     <string name="session_last_usage">Ultimo utilizzo: %s</string>
     <string name="revoke_session_message">Dovrai accedere di nuovo da quel dispositivo</string>
     <string name="current_session_badge_text">Attuale</string>
-    <string name="login_email_not_confirmed">Per favore, verifica la tua mail</string>
+    <string name="login_email_not_confirmed">Controlla la tua casella e-mail: dovresti aver ricevuto una mail per confermare il tuo account.</string>
     <string name="user_active_account_input">Attiva account</string>
 
 </resources>

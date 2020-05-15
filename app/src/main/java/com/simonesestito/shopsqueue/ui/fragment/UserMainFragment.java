@@ -184,6 +184,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     }
 
     private void onUserRefreshMenuClicked() {
+        cancelQuery();
         viewModel.loadBookings();
         mapboxHelper.moveTo(viewModel.getLastUserLocation());
         currentShopBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -196,7 +197,6 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
     private void onNewUserLocation(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        viewModel.clearQuery();
         mapboxHelper.showUserLocation(latLng);
         viewModel.updateUserLocation(latLng.getLatitude(), latLng.getLongitude());
     }

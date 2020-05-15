@@ -18,6 +18,7 @@
 
 package com.simonesestito.shopsqueue.ui.fragment;
 
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -84,6 +85,14 @@ public class LoginFragment extends AbstractAppFragment<LoginFragmentBinding> {
         getViewBinding().loginButton.setOnClickListener(v -> onLoginSubmit());
         getViewBinding().signUpButton.setOnClickListener(v ->
                 NavUtils.navigate(this, LoginFragmentDirections.actionLoginFragmentToSignUpFragment()));
+
+        // Retrieve e-mail address from deep link
+        Uri uri = requireActivity().getIntent().getData();
+        if (uri != null) {
+            String[] parts = uri.toString().split("/");
+            if (parts.length >= 4)
+                getViewBinding().emailInput.setText(parts[3]);
+        }
     }
 
     @SuppressWarnings("ConstantConditions")

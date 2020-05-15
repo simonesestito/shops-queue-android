@@ -31,7 +31,7 @@
             app:destination="@id/signUpFragment" />
         <deepLink
             android:id="@+id/deepLink"
-            app:uri="shopsqueue://login/" />
+            app:uri="shopsqueue://login/{}" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"

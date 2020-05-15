@@ -1,4 +1,4 @@
-# <img src="https://github.com/simonesestito/shops-queue-android/blob/master/.github/app_logo.png" width="64"> Shops Queue (Android app)
+# ![App logo](https://github.com/simonesestito/shops-queue-android/blob/master/.github/app_logo.png?raw=true) Shops Queue (Android app)
 
 [![Android CI](https://github.com/simonesestito/shops-queue-android/workflows/Android%20CI/badge.svg)](https://github.com/simonesestito/shops-queue-android/actions?query=workflow%3A%22Android+CI%22)
 
@@ -19,6 +19,8 @@ Other related repositories:
 - [Dependency Injection](#di)
 - [Continuous Deployment](#cd)
 - [License](#license)
+
+![Screenshots](https://raw.githubusercontent.com/simonesestito/shops-queue-android/master/.github/screenshots.png)
 
 <a name="introduction"></a>
 ## Introduction

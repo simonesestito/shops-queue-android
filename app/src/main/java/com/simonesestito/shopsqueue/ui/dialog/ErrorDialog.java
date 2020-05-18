@@ -34,6 +34,7 @@ import com.simonesestito.shopsqueue.model.HttpStatus;
 
 public class ErrorDialog extends DialogFragment {
     private static final String EXTRA_MESSAGE = "error_message";
+    @StringRes private int title = R.string.error_dialog_title;
 
     public static ErrorDialog newInstance(String message) {
         ErrorDialog errorDialog = new ErrorDialog();
@@ -78,9 +79,19 @@ public class ErrorDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         String message = requireArguments().getString(EXTRA_MESSAGE);
         return new MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.error_dialog_title)
+                .setTitle(getTitle())
                 .setMessage(message)
                 .setPositiveButton(R.string.ok_button, null)
                 .create();
+    }
+
+    @StringRes
+    public int getTitle() {
+        return title;
+    }
+
+    public ErrorDialog setTitle(@StringRes int title) {
+        this.title = title;
+        return this;
     }
 }

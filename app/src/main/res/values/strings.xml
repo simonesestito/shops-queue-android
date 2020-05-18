@@ -122,5 +122,6 @@
     <string name="current_session_badge_text">Current</string>
     <string name="login_email_not_confirmed">Check your e-mail box: you should have received an e-mail to confirm your account.</string>
     <string name="user_active_account_input">Activate account</string>
+    <string name="sign_up_confirm_email_dialog_title">Confirm your e-mail address</string>
 
 </resources>

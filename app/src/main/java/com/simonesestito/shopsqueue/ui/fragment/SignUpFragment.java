@@ -119,6 +119,7 @@ public class SignUpFragment extends AbstractAppFragment<SignUpFragmentBinding> {
         } else if (error instanceof ApiException
                 && ((ApiException) error).getStatusCode() == HttpStatus.HTTP_FORBIDDEN) {
             ErrorDialog.newInstance(getString(R.string.login_email_not_confirmed))
+                    .setTitle(R.string.sign_up_confirm_email_dialog_title)
                     .show(getChildFragmentManager(), null);
         } else {
             ErrorDialog.newInstance(requireContext(), error)

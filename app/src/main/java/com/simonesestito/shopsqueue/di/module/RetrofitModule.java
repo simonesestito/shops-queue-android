@@ -21,6 +21,7 @@ package com.simonesestito.shopsqueue.di.module;
 import com.simonesestito.shopsqueue.BuildConfig;
 import com.simonesestito.shopsqueue.api.ApiCallAdapter;
 import com.simonesestito.shopsqueue.api.AuthorizationInterceptor;
+import com.simonesestito.shopsqueue.api.DateJsonAdapter;
 import com.simonesestito.shopsqueue.api.service.BookingService;
 import com.simonesestito.shopsqueue.api.service.FavouritesService;
 import com.simonesestito.shopsqueue.api.service.FcmService;
@@ -28,13 +29,14 @@ import com.simonesestito.shopsqueue.api.service.LoginService;
 import com.simonesestito.shopsqueue.api.service.SessionService;
 import com.simonesestito.shopsqueue.api.service.ShopService;
 import com.simonesestito.shopsqueue.api.service.UserService;
+import com.squareup.moshi.Moshi;
 
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 
 import static com.simonesestito.shopsqueue.Constants.API_BASE_URL;
 
@@ -54,10 +56,17 @@ public class RetrofitModule {
     }
 
     @Provides
-    Retrofit provideRetrofit(OkHttpClient okHttpClient) {
+    Moshi provideMoshi(DateJsonAdapter dateJsonAdapter) {
+        return new Moshi.Builder()
+                .add(dateJsonAdapter)
+                .build();
+    }
+
+    @Provides
+    Retrofit provideRetrofit(OkHttpClient okHttpClient, Moshi moshi) {
         return new Retrofit.Builder()
                 .client(okHttpClient)
-                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .addCallAdapterFactory(new ApiCallAdapter.Factory())
                 .baseUrl(API_BASE_URL)
                 .build();

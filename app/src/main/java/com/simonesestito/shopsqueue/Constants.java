@@ -22,12 +22,21 @@ import android.os.Build;
 
 @SuppressWarnings("WeakerAccess")
 public class Constants {
-    public static final String API_BASE_URL = BuildConfig.DEBUG
-            ? Build.PRODUCT.equals("sdk") ? "http://10.0.2.2:1234" : "http://192.168.1.100:1234"
-            : "https://shopsqueue.simonesestito.com";
+    public static final boolean IS_EMULATOR = Build.PRODUCT.equals("sdk");
+    public static final String API_BASE_URL = getApiBaseUrl();
     public static final String SHARED_PREFERENCES_FILE = BuildConfig.APPLICATION_ID + "_preferences";
     public static final String SHARED_PREFERENCES_TOKEN_KEY = "api_access_token";
     public static final int COORDINATES_DIGITS_PRECISION = 6;
     public static final String APK_DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/shops-queue.appspot.com/o/app.apk?alt=media";
     public static final String GITHUB_REPO_URL = "https://github.com/simonesestito/shops-queue-android";
+
+
+    private static String getApiBaseUrl() {
+        if (!BuildConfig.DEBUG)
+            return "https://shopsqueue.simonesestito.com";
+        else if (IS_EMULATOR)
+            return "http://10.0.2.2:1234";
+        else
+            return "http://192.168.1.100:1234";
+    }
 }

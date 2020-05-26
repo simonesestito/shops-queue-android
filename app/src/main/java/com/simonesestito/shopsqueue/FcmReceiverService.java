@@ -31,8 +31,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.simonesestito.shopsqueue.api.dto.Booking;
@@ -40,6 +38,7 @@ import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
 import com.simonesestito.shopsqueue.api.dto.FcmToken;
 import com.simonesestito.shopsqueue.api.service.FcmService;
 import com.simonesestito.shopsqueue.ui.MainActivity;
+import com.squareup.moshi.Moshi;
 
 import java.util.Map;
 
@@ -151,11 +150,13 @@ public class FcmReceiverService extends FirebaseMessagingService {
         if (json == null || json.isEmpty())
             return null;
 
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            return objectMapper.readerFor(clazz).readValue(json);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            return new Moshi.Builder()
+                    .build()
+                    .adapter(clazz)
+                    .fromJson(json);
+        } catch (Exception e) {
+            Log.e("FcmReceiverService", "Unable to read FCM JSON", e);
             return null;
         }
     }

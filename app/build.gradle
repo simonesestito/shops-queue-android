@@ -88,4 +88,9 @@ dependencies {
 
     // Firebase
     implementation "com.google.firebase:firebase-messaging:$versions.firebaseFcm"
+
+    // Testing libs
+    testImplementation "junit:junit:$versions.junit"
+    androidTestImplementation "androidx.test.ext:junit:$versions.junitExt"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
 }

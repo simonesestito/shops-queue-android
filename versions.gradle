@@ -38,4 +38,8 @@ versions.firebaseFcm = '20.1.7'
 versions.licensesPlugin = '0.10.2'
 versions.licensesLib = '17.0.0'
 
+versions.junit = '4.12'
+versions.junitExt = '1.1.1'
+versions.espresso = '3.2.0'
+
 ext.versions = versions

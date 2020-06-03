@@ -24,10 +24,10 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.android.tools.build:gradle:4.0.0'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$versions.navigation"
         classpath "com.google.gms:google-services:$versions.playServices"
         classpath "com.google.android.gms:oss-licenses-plugin:$versions.licensesPlugin"

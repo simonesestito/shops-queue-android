@@ -32,11 +32,12 @@ public class Constants {
 
 
     private static String getApiBaseUrl() {
-        if (!BuildConfig.DEBUG)
-            return "https://shopsqueue.simonesestito.com";
-        else if (IS_EMULATOR)
-            return "http://10.0.2.2:1234";
-        else
-            return "http://192.168.1.100:1234";
+        return "https://shopsqueue.simonesestito.com";
+        //if (!BuildConfig.DEBUG)
+        //    return "https://shopsqueue.simonesestito.com";
+        //else if (IS_EMULATOR)
+        //    return "http://10.0.2.2:1234";
+        //else
+        //    return "http://192.168.1.100:1234";
     }
 }

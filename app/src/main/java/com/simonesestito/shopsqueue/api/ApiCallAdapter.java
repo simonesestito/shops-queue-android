@@ -25,12 +25,14 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
+import okhttp3.internal.annotations.EverythingIsNonNull;
 import retrofit2.Call;
 import retrofit2.CallAdapter;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+@EverythingIsNonNull
 public class ApiCallAdapter<T> implements CallAdapter<T, ApiResponse<T>> {
     private final Type responseType;
 

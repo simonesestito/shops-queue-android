@@ -41,5 +41,7 @@ versions.licensesLib = '17.0.0'
 versions.junit = '4.12'
 versions.junitExt = '1.1.1'
 versions.espresso = '3.2.0'
+versions.mockito = '3.3.3'
+versions.powermock = '2.0.2'
 
 ext.versions = versions

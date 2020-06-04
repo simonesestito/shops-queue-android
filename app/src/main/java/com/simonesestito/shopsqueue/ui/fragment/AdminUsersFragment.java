@@ -66,10 +66,10 @@ public class AdminUsersFragment extends AbstractAppFragment<AdminChildFragmentBi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         AdminUsersAdapter adapter = new AdminUsersAdapter();
-        adapter.setMenuItemListener((menuItem, userId) -> {
+        adapter.setMenuItemListener((menuItem, user) -> {
             if (menuItem.getItemId() == R.id.deleteUserMenuAction) {
                 Bundle data = new Bundle();
-                data.putInt(EXTRA_CLICKED_USER_ID, userId);
+                data.putInt(EXTRA_CLICKED_USER_ID, user.getId());
                 ConfirmDialog.showForResult(this,
                         REQUEST_DELETE_USER,
                         getString(R.string.user_delete_confirm_message),

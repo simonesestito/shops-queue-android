@@ -20,7 +20,6 @@ package com.simonesestito.shopsqueue.ui.recyclerview;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -38,7 +37,7 @@ import java.util.Locale;
 public class UserBookingsAdapter extends DiffUtilAdapter<BookingWithCount, UserBookingsAdapter.ViewHolder> {
     private static final String DATE_FORMAT = "HH:mm";
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
-    private MenuItemListener menuItemListener;
+    private MenuItemListener<BookingWithCount> menuItemListener;
 
     @NonNull
     @Override
@@ -89,15 +88,11 @@ public class UserBookingsAdapter extends DiffUtilAdapter<BookingWithCount, UserB
         }
     }
 
-    public void setMenuItemListener(MenuItemListener menuItemListener) {
+    public void setMenuItemListener(MenuItemListener<BookingWithCount> menuItemListener) {
         this.menuItemListener = menuItemListener;
     }
 
-    public interface MenuItemListener {
-        void onClick(MenuItem menuItem, BookingWithCount booking);
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final UserBookingItemBinding view;
 
         ViewHolder(UserBookingItemBinding userBookingItemBinding) {

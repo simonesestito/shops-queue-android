@@ -19,7 +19,6 @@
 package com.simonesestito.shopsqueue.ui.recyclerview;
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -33,7 +32,7 @@ import com.simonesestito.shopsqueue.databinding.AdminShopItemBinding;
 
 
 public class ShopsAdapter extends DiffUtilAdapter<Shop, ShopsAdapter.ViewHolder> {
-    private MenuItemListener menuItemListener;
+    private MenuItemListener<Shop> menuItemListener;
 
     @NonNull
     @Override
@@ -65,7 +64,7 @@ public class ShopsAdapter extends DiffUtilAdapter<Shop, ShopsAdapter.ViewHolder>
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     int index = holder.getAdapterPosition();
                     Shop clickedShop = getItemAt(index);
-                    menuItemListener.onClick(menuItem, clickedShop.getId());
+                    menuItemListener.onClick(menuItem, clickedShop);
                     return true;
                 });
                 popupMenu.show();
@@ -73,15 +72,11 @@ public class ShopsAdapter extends DiffUtilAdapter<Shop, ShopsAdapter.ViewHolder>
         }
     }
 
-    public void setMenuItemListener(MenuItemListener menuItemListener) {
+    public void setMenuItemListener(MenuItemListener<Shop> menuItemListener) {
         this.menuItemListener = menuItemListener;
     }
 
-    public interface MenuItemListener {
-        void onClick(MenuItem menuItem, int userId);
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final AdminShopItemBinding view;
 
         ViewHolder(AdminShopItemBinding view) {

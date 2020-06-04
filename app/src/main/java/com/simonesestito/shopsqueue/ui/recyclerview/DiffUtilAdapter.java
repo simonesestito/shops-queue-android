@@ -18,6 +18,8 @@
 
 package com.simonesestito.shopsqueue.ui.recyclerview;
 
+import android.view.MenuItem;
+
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -92,5 +94,9 @@ public abstract class DiffUtilAdapter<T extends Identifiable, VH extends Recycle
     @MainThread
     public void updateDataSet(Collection<T> newList) {
         this.updateDataSet(new ArrayList<>(newList));
+    }
+
+    public interface MenuItemListener<T> {
+        void onClick(MenuItem menuItem, T item);
     }
 }

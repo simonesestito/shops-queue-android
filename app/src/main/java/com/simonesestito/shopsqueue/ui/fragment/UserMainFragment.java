@@ -48,6 +48,7 @@ import com.simonesestito.shopsqueue.api.dto.ShopResult;
 import com.simonesestito.shopsqueue.databinding.UserFragmentBinding;
 import com.simonesestito.shopsqueue.model.ApiException;
 import com.simonesestito.shopsqueue.model.HttpStatus;
+import com.simonesestito.shopsqueue.model.Identifiable;
 import com.simonesestito.shopsqueue.ui.MapboxHelper;
 import com.simonesestito.shopsqueue.ui.dialog.ConfirmDialog;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
@@ -117,7 +118,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         adapter.setMenuItemListener((menuItem, item) -> onAskCancelBooking(item.getId()));
         getViewBinding().userBookingsBottomSheet.userBookingsList.setAdapter(adapter);
 
-        viewModel.getBookings().observe(getViewLifecycleOwner(), this::onBookingEvent);
+        viewModel.getAllBookings().observe(getViewLifecycleOwner(), this::onBookingEvent);
         viewModel.getShops().observe(getViewLifecycleOwner(), this::onShopsEvent);
 
         MapUtils.listenLocation(this, this::onNewUserLocation);
@@ -241,7 +242,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
                 getString(R.string.cancel_booking_confirm_message), args);
     }
 
-    private void onBookingEvent(Resource<List<BookingWithCount>> event) {
+    private void onBookingEvent(Resource<List<Identifiable>> event) {
         UserBookingsAdapter adapter = (UserBookingsAdapter) getViewBinding()
                 .userBookingsBottomSheet
                 .userBookingsList
@@ -274,7 +275,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             return;
         }
 
-        List<BookingWithCount> bookings = Objects.requireNonNull(event.getData());
+        List<Identifiable> bookings = Objects.requireNonNull(event.getData());
         adapter.updateDataSet(bookings);
         if (bookings.isEmpty()) {
             getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.GONE);
@@ -339,12 +340,12 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
     private void adjustBookButton(Shop shop) {
         int bookingId = -1;
-        Resource<List<BookingWithCount>> currentState = viewModel.getBookings().getValue();
+        Resource<List<Identifiable>> currentState = viewModel.getAllBookings().getValue();
         if (currentState != null && currentState.isSuccessful()) {
-            List<BookingWithCount> currentBookings = currentState.getData();
+            List<Identifiable> currentBookings = currentState.getData();
             if (currentBookings != null) {
-                for (BookingWithCount booking : currentBookings) {
-                    if (booking.getShop().getId() == shop.getId()) {
+                for (Identifiable booking : currentBookings) {
+                    if (booking instanceof BookingWithCount && ((BookingWithCount) booking).getShop().getId() == shop.getId()) {
                         bookingId = booking.getId();
                         break;
                     }

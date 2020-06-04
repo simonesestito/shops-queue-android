@@ -136,5 +136,8 @@
     <string name="shop_order_items">Order items</string>
     <string name="user_shop_products">Products</string>
     <string name="products_empty_message">No products available</string>
+    <string name="shopping_order_created_at_date">Order with %d items made at %s</string>
+    <string name="shopping_order_ready"><b>Your order is ready!</b></string>
+    <string name="shopping_order_not_ready">Not ready yet</string>
 
 </resources>

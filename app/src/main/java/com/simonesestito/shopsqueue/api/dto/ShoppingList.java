@@ -18,10 +18,12 @@
 
 package com.simonesestito.shopsqueue.api.dto;
 
+import com.simonesestito.shopsqueue.model.Identifiable;
+
 import java.util.Date;
 import java.util.List;
 
-public class ShoppingList {
+public class ShoppingList implements Identifiable {
     private int id;
     private Date createdAt;
     private int userId;

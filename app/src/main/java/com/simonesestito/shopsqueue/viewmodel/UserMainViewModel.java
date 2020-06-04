@@ -22,15 +22,17 @@ import androidx.lifecycle.ViewModel;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.simonesestito.shopsqueue.api.ApiResponse;
-import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
 import com.simonesestito.shopsqueue.api.dto.ShopResult;
 import com.simonesestito.shopsqueue.api.service.BookingService;
 import com.simonesestito.shopsqueue.api.service.FavouritesService;
 import com.simonesestito.shopsqueue.api.service.ShopService;
+import com.simonesestito.shopsqueue.api.service.ShoppingListService;
 import com.simonesestito.shopsqueue.model.AuthUserHolder;
+import com.simonesestito.shopsqueue.model.Identifiable;
 import com.simonesestito.shopsqueue.util.NumberUtils;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,17 +43,22 @@ public class UserMainViewModel extends ViewModel {
     private final BookingService bookingService;
     private final ShopService shopService;
     private final FavouritesService favouritesService;
-    private LiveResource<List<BookingWithCount>> bookings = new LiveResource<>();
+    private final ShoppingListService shoppingListService;
+    private LiveResource<List<Identifiable>> bookings = new LiveResource<>();
     private LiveResource<Set<ShopResult>> shops = new LiveResource<>();
     private Set<ShopResult> lastShops = new LinkedHashSet<>();
     private String query;
     private LatLng lastUserLocation = new LatLng(0, 0);
 
     @Inject
-    UserMainViewModel(BookingService bookingService, ShopService shopService, FavouritesService favouritesService) {
+    UserMainViewModel(BookingService bookingService,
+                      ShopService shopService,
+                      FavouritesService favouritesService,
+                      ShoppingListService shoppingListService) {
         this.bookingService = bookingService;
         this.shopService = shopService;
         this.favouritesService = favouritesService;
+        this.shoppingListService = shoppingListService;
         loadBookings();
     }
 
@@ -75,8 +82,17 @@ public class UserMainViewModel extends ViewModel {
 
     public void loadBookings() {
         bookings.emitLoading();
+
         bookingService.getBookingsByUserId(AuthUserHolder.getCurrentUser().getId())
-                .onResult(bookings::emitResult)
+                .onResult(bookings -> {
+                    List<Identifiable> result = new ArrayList<>(bookings);
+                    shoppingListService.getMyShoppingLists()
+                            .onResult(lists -> {
+                                result.addAll(lists);
+                                this.bookings.emitResult(result);
+                            })
+                            .onError(this.bookings::emitError);
+                })
                 .onError(bookings::emitError);
     }
 
@@ -135,7 +151,7 @@ public class UserMainViewModel extends ViewModel {
         loadNearShops(lat, lon);
     }
 
-    public LiveResource<List<BookingWithCount>> getBookings() {
+    public LiveResource<List<Identifiable>> getAllBookings() {
         return bookings;
     }
 

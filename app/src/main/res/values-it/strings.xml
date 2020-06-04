@@ -132,5 +132,8 @@
     <string name="shop_order_items">Ordina prodotti</string>
     <string name="user_shop_products">Prodotti</string>
     <string name="products_empty_message">Nessun prodotto disponibile</string>
+    <string name="shopping_order_created_at_date">Ordine di %d prodotti fatto alle %s</string>
+    <string name="shopping_order_ready"><b>Il tuo ordine è pronto</b></string>
+    <string name="shopping_order_not_ready">Non ancora pronto</string>
 
 </resources>

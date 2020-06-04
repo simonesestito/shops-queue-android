@@ -41,6 +41,7 @@ import com.simonesestito.shopsqueue.ui.fragment.SignUpFragment;
 import com.simonesestito.shopsqueue.ui.fragment.UserFavouriteShopsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.UserMainFragment;
 import com.simonesestito.shopsqueue.ui.fragment.UserProfileFragment;
+import com.simonesestito.shopsqueue.ui.fragment.UserShopProductsFragment;
 
 import javax.inject.Singleton;
 
@@ -89,6 +90,8 @@ public interface Injector {
     void inject(OwnerProductsFragment ownerProductsFragment);
 
     void inject(OwnerProductEditFragment ownerProductEditFragment);
+
+    void inject(UserShopProductsFragment userShopProductsFragment);
 
     @Component.Builder
     interface Builder {

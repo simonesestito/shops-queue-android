@@ -36,6 +36,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -124,7 +125,8 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         currentShopBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         NavUtils.onBackPressed(this, a -> {
-            if (getViewBinding().shopSearchEditText.getText().toString().trim().length() > 0) {
+            if (Objects.requireNonNull(getViewBinding().shopSearchEditText.getText())
+                    .toString().trim().length() > 0) {
                 onUserRefreshMenuClicked();
                 return true;
             }
@@ -362,10 +364,15 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
         getViewBinding().currentShopBottomSheet.currentShopBookButton
                 .setOnClickListener(v -> viewModel.book(shop.getId()));
-        int finalBookingId = bookingId;
+
+        final int finalBookingId = bookingId;
         getViewBinding().currentShopBottomSheet.currentShopCancelButton
                 .setOnClickListener(v -> onAskCancelBooking(finalBookingId));
 
-        // TODO On shopping button click
+        getViewBinding().currentShopBottomSheet.shoppingButton.setOnClickListener(v -> {
+            NavDirections directions = UserMainFragmentDirections
+                    .actionUserMainFragmentToUserShopProductsFragment(shop.getId());
+            NavUtils.navigate(this, directions);
+        });
     }
 }

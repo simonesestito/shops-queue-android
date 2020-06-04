@@ -18,8 +18,6 @@
 
 package com.simonesestito.shopsqueue.ui.fragment;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,32 +26,31 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
 
-import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
+import com.simonesestito.shopsqueue.api.dto.NewShoppingList;
 import com.simonesestito.shopsqueue.databinding.ProductsListBinding;
-import com.simonesestito.shopsqueue.ui.dialog.ConfirmDialog;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.ProductsAdapter;
-import com.simonesestito.shopsqueue.util.NavUtils;
 import com.simonesestito.shopsqueue.util.ViewUtils;
-import com.simonesestito.shopsqueue.viewmodel.OwnerProductsViewModel;
+import com.simonesestito.shopsqueue.viewmodel.UserShopProductsViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
+
+import java.util.Set;
 
 import javax.inject.Inject;
 
-public class OwnerProductsFragment extends AbstractAppFragment<ProductsListBinding> {
-    private static final String EXTRA_CLICKED_PRODUCT_ID = "product_id";
-    private static final int REQUEST_DELETE_PRODUCT = 1;
+public class UserShopProductsFragment extends AbstractAppFragment<ProductsListBinding> {
     @Inject ViewModelFactory viewModelFactory;
-    private OwnerProductsViewModel viewModel;
+    private UserShopProductsViewModel viewModel;
     private ProductsAdapter adapter;
+    private UserShopProductsFragmentArgs args;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ShopsQueueApplication.getInjector().inject(this);
+        args = UserShopProductsFragmentArgs.fromBundle(requireArguments());
     }
 
     @NonNull
@@ -65,13 +62,15 @@ public class OwnerProductsFragment extends AbstractAppFragment<ProductsListBindi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(UserShopProductsViewModel.class);
         adapter = new ProductsAdapter();
         getViewBinding().productsList.setAdapter(adapter);
         ViewUtils.addDivider(getViewBinding().productsList);
 
-        viewModel = new ViewModelProvider(this, viewModelFactory).get(OwnerProductsViewModel.class);
-        viewModel.loadProducts();
-        viewModel.getProducts().observe(this, event -> {
+        getViewBinding().addOwnerProductFab.setVisibility(View.GONE);
+        onSelectedItem();
+
+        viewModel.getProductsByShopId(args.getShopId()).observe(this, event -> {
             if (event.isLoading()) {
                 getViewBinding().productsLoading.setVisibility(View.VISIBLE);
                 getViewBinding().productsEmptyView.setVisibility(View.INVISIBLE);
@@ -92,44 +91,38 @@ public class OwnerProductsFragment extends AbstractAppFragment<ProductsListBindi
                 } else {
                     getViewBinding().productsEmptyView.setVisibility(View.GONE);
                 }
+            } else {
+                requireActivity().onBackPressed();
             }
         });
 
         adapter.setItemClickListener(product -> {
-            NavDirections directions = OwnerProductsFragmentDirections
-                    .actionOwnerProductsFragmentToOwnerProductEditFragment()
-                    .setProductId(product.getId());
-            NavUtils.navigate(this, directions);
+            Set<Integer> selections = viewModel.getSelectedProductIds();
+            if (selections.contains(product.getId()))
+                selections.remove(product.getId());
+            else
+                selections.add(product.getId());
+            adapter.setSelectedIds(selections);
+            onSelectedItem();
         });
 
-        adapter.setMenuListener((menuItem, item) -> {
-            if (menuItem.getItemId() == R.id.deleteMenuAction) {
-                Bundle data = new Bundle();
-                data.putInt(EXTRA_CLICKED_PRODUCT_ID, item.getId());
-                ConfirmDialog.showForResult(this,
-                        REQUEST_DELETE_PRODUCT,
-                        getString(R.string.product_delete_confirm_message),
-                        data);
-            }
-        });
+        getViewBinding().sendOrder.setOnClickListener(v -> {
+            int[] productIds = new int[viewModel.getSelectedProductIds().size()];
+            int i = 0;
+            for (int id : viewModel.getSelectedProductIds())
+                productIds[i++] = id;
 
-        getViewBinding().addOwnerProductFab.setOnClickListener(v -> {
-            NavDirections directions = OwnerProductsFragmentDirections
-                    .actionOwnerProductsFragmentToOwnerProductEditFragment();
-            NavUtils.navigate(this, directions);
+            NewShoppingList shoppingList = new NewShoppingList(productIds);
+            viewModel.sendOrder(shoppingList);
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_DELETE_PRODUCT
-                && resultCode == Activity.RESULT_OK
-                && data != null) {
-            int productId = data.getIntExtra(EXTRA_CLICKED_PRODUCT_ID, 0);
-            if (productId > 0) {
-                viewModel.deleteProduct(productId);
-            }
+    private void onSelectedItem() {
+        Set<Integer> selections = viewModel.getSelectedProductIds();
+        if (selections.size() > 0) {
+            getViewBinding().sendOrder.show();
+        } else {
+            getViewBinding().sendOrder.hide();
         }
     }
 }

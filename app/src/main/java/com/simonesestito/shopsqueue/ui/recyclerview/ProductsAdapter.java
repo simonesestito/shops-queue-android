@@ -18,10 +18,13 @@
 
 package com.simonesestito.shopsqueue.ui.recyclerview;
 
+import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,9 +32,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.api.dto.Product;
 import com.simonesestito.shopsqueue.databinding.ProductListItemBinding;
+import com.simonesestito.shopsqueue.util.ThemeUtils;
 
-public class OwnerProductsAdapter extends DiffUtilAdapter<Product, OwnerProductsAdapter.ViewHolder> {
+import java.util.Set;
+
+public class ProductsAdapter extends DiffUtilAdapter<Product, ProductsAdapter.ViewHolder> {
     private MenuItemListener<Product> menuListener;
+    private Set<Integer> selectedIds;
 
     @NonNull
     @Override
@@ -50,6 +57,14 @@ public class OwnerProductsAdapter extends DiffUtilAdapter<Product, OwnerProducts
         String displayPrice = holder.itemView.getContext().getString(R.string.price_label, product.getPrice());
         holder.binding.productPrice.setText(displayPrice);
 
+        // We should use ColorStateList instead
+        boolean isSelected = selectedIds != null && selectedIds.contains(product.getId());
+        Activity activity = (Activity) holder.itemView.getContext();
+        @ColorInt int background = isSelected
+                ? ThemeUtils.getThemeColor(activity, R.attr.colorPrimaryVariant)
+                : Color.TRANSPARENT;
+        holder.binding.getRoot().setBackgroundColor(background);
+
         if (menuListener == null) {
             holder.binding.productMenu.setVisibility(View.GONE);
         } else {
@@ -65,6 +80,11 @@ public class OwnerProductsAdapter extends DiffUtilAdapter<Product, OwnerProducts
                 popupMenu.show();
             });
         }
+    }
+
+    public void setSelectedIds(Set<Integer> selectedIds) {
+        this.selectedIds = selectedIds;
+        notifyDataSetChanged();
     }
 
     public void setMenuListener(MenuItemListener<Product> menuListener) {

@@ -134,5 +134,7 @@
     <string name="invalid_ean_input">Invalid EAN-13 code</string>
     <string name="invalid_price_input">Invalid price</string>
     <string name="shop_order_items">Order items</string>
+    <string name="user_shop_products">Products</string>
+    <string name="products_empty_message">No products available</string>
 
 </resources>

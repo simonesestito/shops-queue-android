@@ -129,5 +129,6 @@
     <string name="new_product_title">Nuovo prodotto</string>
     <string name="invalid_ean_input">Codice EAN-13 non valido</string>
     <string name="invalid_price_input">Prezzo non valido</string>
+    <string name="shop_order_items">Ordina prodotti</string>
 
 </resources>

@@ -74,7 +74,9 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     private UserMainViewModel viewModel;
     private MapboxHelper mapboxHelper;
     private boolean shouldFitAll = false;
+    @SuppressWarnings("rawtypes")
     private BottomSheetBehavior currentShopBottomSheet;
+    @SuppressWarnings("rawtypes")
     private BottomSheetBehavior userBookingsBottomSheet;
 
     @Override
@@ -350,9 +352,11 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
         if (bookingId == -1) {
             getViewBinding().currentShopBottomSheet.currentShopBookButton.setVisibility(View.VISIBLE);
+            getViewBinding().currentShopBottomSheet.shoppingButton.setVisibility(View.VISIBLE);
             getViewBinding().currentShopBottomSheet.currentShopCancelButton.setVisibility(View.GONE);
         } else {
             getViewBinding().currentShopBottomSheet.currentShopBookButton.setVisibility(View.GONE);
+            getViewBinding().currentShopBottomSheet.shoppingButton.setVisibility(View.GONE);
             getViewBinding().currentShopBottomSheet.currentShopCancelButton.setVisibility(View.VISIBLE);
         }
 
@@ -361,5 +365,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         int finalBookingId = bookingId;
         getViewBinding().currentShopBottomSheet.currentShopCancelButton
                 .setOnClickListener(v -> onAskCancelBooking(finalBookingId));
+
+        // TODO On shopping button click
     }
 }

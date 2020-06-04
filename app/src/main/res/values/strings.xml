@@ -133,5 +133,6 @@
     <string name="new_product_title">New product</string>
     <string name="invalid_ean_input">Invalid EAN-13 code</string>
     <string name="invalid_price_input">Invalid price</string>
+    <string name="shop_order_items">Order items</string>
 
 </resources>

@@ -18,6 +18,8 @@
 
 package com.simonesestito.shopsqueue.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +29,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.databinding.ProductsListBinding;
+import com.simonesestito.shopsqueue.ui.dialog.ConfirmDialog;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.OwnerProductsAdapter;
 import com.simonesestito.shopsqueue.util.ViewUtils;
@@ -38,6 +42,8 @@ import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 import javax.inject.Inject;
 
 public class OwnerProductsFragment extends AbstractAppFragment<ProductsListBinding> {
+    private static final String EXTRA_CLICKED_PRODUCT_ID = "product_id";
+    private static final int REQUEST_DELETE_PRODUCT = 1;
     @Inject ViewModelFactory viewModelFactory;
     private OwnerProductsViewModel viewModel;
     private OwnerProductsAdapter adapter;
@@ -66,7 +72,6 @@ public class OwnerProductsFragment extends AbstractAppFragment<ProductsListBindi
         viewModel.getProducts().observe(this, event -> {
             if (event.isLoading()) {
                 getViewBinding().productsLoading.setVisibility(View.VISIBLE);
-                getViewBinding().productsList.setVisibility(View.INVISIBLE);
                 getViewBinding().productsEmptyView.setVisibility(View.INVISIBLE);
                 return;
             }
@@ -93,11 +98,31 @@ public class OwnerProductsFragment extends AbstractAppFragment<ProductsListBindi
         });
 
         adapter.setMenuListener((menuItem, item) -> {
-            // TODO
+            if (menuItem.getItemId() == R.id.deleteMenuAction) {
+                Bundle data = new Bundle();
+                data.putInt(EXTRA_CLICKED_PRODUCT_ID, item.getId());
+                ConfirmDialog.showForResult(this,
+                        REQUEST_DELETE_PRODUCT,
+                        getString(R.string.product_delete_confirm_message),
+                        data);
+            }
         });
 
         getViewBinding().addOwnerProductFab.setOnClickListener(v -> {
             // TODO
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_DELETE_PRODUCT
+                && resultCode == Activity.RESULT_OK
+                && data != null) {
+            int productId = data.getIntExtra(EXTRA_CLICKED_PRODUCT_ID, 0);
+            if (productId > 0) {
+                viewModel.deleteProduct(productId);
+            }
+        }
     }
 }

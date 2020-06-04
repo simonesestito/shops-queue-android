@@ -123,5 +123,9 @@
     <string name="login_email_not_confirmed">Check your e-mail box: you should have received an e-mail to confirm your account.</string>
     <string name="user_active_account_input">Activate account</string>
     <string name="sign_up_confirm_email_dialog_title">Confirm your e-mail address</string>
+    <string name="price_label" translatable="false">€ %.2f</string>
+    <string name="show_owner_products">Show products</string>
+    <string name="owner_products_title">Your products</string>
+    <string name="product_delete_confirm_message">This product will be deleted irrevocably</string>
 
 </resources>

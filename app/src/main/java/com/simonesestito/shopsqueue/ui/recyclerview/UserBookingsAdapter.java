@@ -73,7 +73,7 @@ public class UserBookingsAdapter extends DiffUtilAdapter<BookingWithCount, UserB
                 PopupMenu popupMenu = new PopupMenu(
                         holder.view.bookingItemMenu.getContext(),
                         holder.view.bookingItemMenu);
-                popupMenu.inflate(R.menu.admin_shops_popup_menu);
+                popupMenu.inflate(R.menu.list_popup_delete_menu);
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     int index = holder.getAdapterPosition();
                     BookingWithCount clickedBooking = getItemAt(index);

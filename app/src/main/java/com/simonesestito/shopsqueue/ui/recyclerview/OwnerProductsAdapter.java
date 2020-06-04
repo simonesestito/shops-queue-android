@@ -27,42 +27,39 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.simonesestito.shopsqueue.R;
-import com.simonesestito.shopsqueue.api.dto.User;
-import com.simonesestito.shopsqueue.api.dto.UserDetails;
-import com.simonesestito.shopsqueue.databinding.AdminUsersItemBinding;
+import com.simonesestito.shopsqueue.api.dto.Product;
+import com.simonesestito.shopsqueue.databinding.ProductListItemBinding;
 
-
-public class AdminUsersAdapter extends DiffUtilAdapter<UserDetails, AdminUsersAdapter.ViewHolder> {
-    private MenuItemListener<UserDetails> menuItemListener;
+public class OwnerProductsAdapter extends DiffUtilAdapter<Product, OwnerProductsAdapter.ViewHolder> {
+    private MenuItemListener<Product> menuListener;
 
     @NonNull
     @Override
-    public AdminUsersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        AdminUsersItemBinding binding = AdminUsersItemBinding.inflate(inflater, parent, false);
-        return new AdminUsersAdapter.ViewHolder(binding);
+        ProductListItemBinding binding = ProductListItemBinding.inflate(inflater, parent, false);
+        return new ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdminUsersAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        User user = getItemAt(position);
-        holder.view.userItemName.setText(user.getFullName());
-        holder.view.userItemEmail.setText(user.getEmail());
-        holder.view.userItemIcon.setImageResource(user.getRole().getIcon());
-        holder.view.userItemRole.setText(user.getRole().getDisplayName());
+        Product product = getItemAt(position);
+        holder.binding.productEan.setText(product.getEan());
+        holder.binding.productName.setText(product.getName());
+        String displayPrice = holder.itemView.getContext().getString(R.string.price_label, product.getPrice());
+        holder.binding.productPrice.setText(displayPrice);
 
-        if (menuItemListener == null) {
-            holder.view.userItemMenu.setVisibility(View.GONE);
+        if (menuListener == null) {
+            holder.binding.productMenu.setVisibility(View.GONE);
         } else {
-            holder.view.userItemMenu.setVisibility(View.VISIBLE);
-            holder.view.userItemMenu.setOnClickListener(menuIcon -> {
+            holder.binding.productMenu.setVisibility(View.VISIBLE);
+            holder.binding.productMenu.setOnClickListener(menuIcon -> {
                 PopupMenu popupMenu = new PopupMenu(menuIcon.getContext(), menuIcon);
                 popupMenu.inflate(R.menu.list_popup_delete_menu);
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     int index = holder.getAdapterPosition();
-                    UserDetails clickedUser = getItemAt(index);
-                    menuItemListener.onClick(menuItem, clickedUser);
+                    menuListener.onClick(menuItem, getItemAt(index));
                     return true;
                 });
                 popupMenu.show();
@@ -70,16 +67,16 @@ public class AdminUsersAdapter extends DiffUtilAdapter<UserDetails, AdminUsersAd
         }
     }
 
-    public void setMenuItemListener(MenuItemListener<UserDetails> menuItemListener) {
-        this.menuItemListener = menuItemListener;
+    public void setMenuListener(MenuItemListener<Product> menuListener) {
+        this.menuListener = menuListener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final AdminUsersItemBinding view;
+        private ProductListItemBinding binding;
 
-        ViewHolder(AdminUsersItemBinding view) {
-            super(view.getRoot());
-            this.view = view;
+        public ViewHolder(ProductListItemBinding itemView) {
+            super(itemView.getRoot());
+            this.binding = itemView;
         }
     }
 }

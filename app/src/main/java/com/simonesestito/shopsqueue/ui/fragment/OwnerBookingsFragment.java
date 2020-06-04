@@ -22,12 +22,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
 
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
@@ -38,6 +42,7 @@ import com.simonesestito.shopsqueue.model.ShopOwnerDetails;
 import com.simonesestito.shopsqueue.ui.dialog.ConfirmDialog;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.OwnerBookingsAdapter;
+import com.simonesestito.shopsqueue.util.NavUtils;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -47,7 +52,7 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
+public class OwnerBookingsFragment extends AbstractAppFragment<OwnerFragmentBinding> {
     private static final int REQUEST_CANCEL_ALL = 1;
     @Inject ViewModelFactory viewModelFactory;
     private OwnerViewModel ownerViewModel;
@@ -57,6 +62,7 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ShopsQueueApplication.getInjector().inject(this);
+        setHasOptionsMenu(true);
     }
 
     @NonNull
@@ -108,6 +114,23 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CANCEL_ALL && resultCode == Activity.RESULT_OK)
             ownerViewModel.cancelAllBookings();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.owner_fragment_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.ownerProducts) {
+            NavDirections directions = OwnerBookingsFragmentDirections.actionOwnerBookingsFragmentToOwnerProductsFragment();
+            NavUtils.navigate(this, directions);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private void onProgress() {

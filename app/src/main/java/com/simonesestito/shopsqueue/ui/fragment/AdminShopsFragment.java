@@ -67,7 +67,7 @@ public class AdminShopsFragment extends AbstractAppFragment<AdminChildFragmentBi
         super.onViewCreated(view, savedInstanceState);
         ShopsAdapter adapter = new ShopsAdapter();
         adapter.setMenuItemListener((menuItem, shop) -> {
-            if (menuItem.getItemId() == R.id.deleteShopMenuAction) {
+            if (menuItem.getItemId() == R.id.deleteMenuAction) {
                 Bundle data = new Bundle();
                 data.putInt(EXTRA_CLICKED_SHOP_ID, shop.getId());
                 ConfirmDialog.showForResult(this,

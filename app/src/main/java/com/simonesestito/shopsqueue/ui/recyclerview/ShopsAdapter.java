@@ -60,7 +60,7 @@ public class ShopsAdapter extends DiffUtilAdapter<Shop, ShopsAdapter.ViewHolder>
             holder.view.userItemMenu.setVisibility(View.VISIBLE);
             holder.view.userItemMenu.setOnClickListener(menuIcon -> {
                 PopupMenu popupMenu = new PopupMenu(menuIcon.getContext(), menuIcon);
-                popupMenu.inflate(R.menu.admin_shops_popup_menu);
+                popupMenu.inflate(R.menu.list_popup_delete_menu);
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     int index = holder.getAdapterPosition();
                     Shop clickedShop = getItemAt(index);

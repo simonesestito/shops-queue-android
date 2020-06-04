@@ -18,7 +18,9 @@
 
 package com.simonesestito.shopsqueue.api.dto;
 
-public class Product {
+import com.simonesestito.shopsqueue.model.Identifiable;
+
+public class Product implements Identifiable {
     private int id;
     private String name;
     private String ean;

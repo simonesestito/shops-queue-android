@@ -32,7 +32,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface ProductService {
-    @GET("/shops/{id}/products")
+    @GET("/shops/{shopId}/products")
     ApiResponse<List<Product>> getProductsByShopId(@Path("shopId") int shopId);
 
     @POST("/products")

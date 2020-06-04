@@ -121,5 +121,8 @@
     <string name="login_email_not_confirmed">Controlla la tua casella e-mail: dovresti aver ricevuto una mail per confermare il tuo account.</string>
     <string name="user_active_account_input">Attiva account</string>
     <string name="sign_up_confirm_email_dialog_title">Conferma il tuo indirizzo e-mail</string>
+    <string name="show_owner_products">Mostra prodotti</string>
+    <string name="owner_products_title">I tuoi prodotti</string>
+    <string name="product_delete_confirm_message">Questo prodotto verrà eliminato irrevocabilmente</string>
 
 </resources>

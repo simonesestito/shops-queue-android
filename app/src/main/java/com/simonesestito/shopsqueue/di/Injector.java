@@ -32,13 +32,16 @@ import com.simonesestito.shopsqueue.ui.fragment.AdminUsersFragment;
 import com.simonesestito.shopsqueue.ui.fragment.LocationPickerFragment;
 import com.simonesestito.shopsqueue.ui.fragment.LoginFragment;
 import com.simonesestito.shopsqueue.ui.fragment.MainFragment;
-import com.simonesestito.shopsqueue.ui.fragment.OwnerFragment;
+import com.simonesestito.shopsqueue.ui.fragment.OwnerBookingsFragment;
+import com.simonesestito.shopsqueue.ui.fragment.OwnerProductsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.SessionsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.ShopPickerFragment;
 import com.simonesestito.shopsqueue.ui.fragment.SignUpFragment;
 import com.simonesestito.shopsqueue.ui.fragment.UserFavouriteShopsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.UserMainFragment;
 import com.simonesestito.shopsqueue.ui.fragment.UserProfileFragment;
+
+import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -48,6 +51,7 @@ import dagger.Component;
         SharedPreferencesModule.class,
         ViewModelModule.class
 })
+@Singleton
 public interface Injector {
     void inject(MainActivity mainActivity);
 
@@ -57,7 +61,7 @@ public interface Injector {
 
     void inject(SignUpFragment signUpFragment);
 
-    void inject(OwnerFragment ownerFragment);
+    void inject(OwnerBookingsFragment ownerBookingsFragment);
 
     void inject(AdminUsersFragment adminUsersFragment);
 
@@ -80,6 +84,8 @@ public interface Injector {
     void inject(UserProfileFragment userProfileFragment);
 
     void inject(SessionsFragment sessionsFragment);
+
+    void inject(OwnerProductsFragment ownerProductsFragment);
 
     @Component.Builder
     interface Builder {

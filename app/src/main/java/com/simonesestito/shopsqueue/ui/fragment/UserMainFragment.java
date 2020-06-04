@@ -71,7 +71,9 @@ import javax.inject.Inject;
 
 public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     private static final String CANCEL_BOOKING_ID_KEY = "bookingId";
+    private static final String CANCEL_ORDER_ID_KEY = "bookingId";
     private static final int CANCEL_BOOKING_REQUEST_CODE = 2;
+    private static final int CANCEL_ORDER_REQUEST_CODE = 3;
     @Inject ViewModelFactory viewModelFactory;
     private UserMainViewModel viewModel;
     private MapboxHelper mapboxHelper;
@@ -115,7 +117,12 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         userBookingsBottomSheet = BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot());
 
         UserBookingsAdapter adapter = new UserBookingsAdapter();
-        adapter.setMenuItemListener((menuItem, item) -> onAskCancelBooking(item.getId()));
+        adapter.setMenuItemListener((menuItem, item) -> {
+            if (item instanceof BookingWithCount)
+                onAskCancelBooking(item.getId());
+            else
+                onAskCancelOrder(item.getId());
+        });
         getViewBinding().userBookingsBottomSheet.userBookingsList.setAdapter(adapter);
 
         viewModel.getAllBookings().observe(getViewLifecycleOwner(), this::onBookingEvent);
@@ -224,14 +231,24 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             case MapUtils.ENABLE_LOCATION_REQUEST_CODE:
                 MapUtils.listenLocation(this, this::onNewUserLocation);
                 break;
-            case CANCEL_BOOKING_REQUEST_CODE:
+            case CANCEL_BOOKING_REQUEST_CODE: {
                 if (data == null)
                     break;
                 int bookingId = data.getIntExtra(CANCEL_BOOKING_ID_KEY, -1);
                 if (bookingId == -1)
                     break;
                 viewModel.cancelBooking(bookingId);
-                break;
+            }
+            break;
+            case CANCEL_ORDER_REQUEST_CODE: {
+                if (data == null)
+                    break;
+                int order = data.getIntExtra(CANCEL_BOOKING_ID_KEY, -1);
+                if (order == -1)
+                    break;
+                viewModel.cancelOrder(order);
+            }
+            break;
         }
     }
 
@@ -240,6 +257,13 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         args.putInt(CANCEL_BOOKING_ID_KEY, bookingId);
         ConfirmDialog.showForResult(this, CANCEL_BOOKING_REQUEST_CODE,
                 getString(R.string.cancel_booking_confirm_message), args);
+    }
+
+    private void onAskCancelOrder(int orderId) {
+        Bundle args = new Bundle();
+        args.putInt(CANCEL_ORDER_ID_KEY, orderId);
+        ConfirmDialog.showForResult(this, CANCEL_ORDER_REQUEST_CODE,
+                getString(R.string.cancel_order_confirm_message), args);
     }
 
     private void onBookingEvent(Resource<List<Identifiable>> event) {

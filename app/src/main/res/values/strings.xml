@@ -139,5 +139,6 @@
     <string name="shopping_order_created_at_date">Order with %d items made at %s</string>
     <string name="shopping_order_ready"><b>Your order is ready!</b></string>
     <string name="shopping_order_not_ready">Not ready yet</string>
+    <string name="cancel_order_confirm_message">You will lose your order</string>
 
 </resources>

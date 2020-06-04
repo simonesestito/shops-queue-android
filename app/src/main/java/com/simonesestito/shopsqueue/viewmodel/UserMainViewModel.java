@@ -119,6 +119,16 @@ public class UserMainViewModel extends ViewModel {
                 });
     }
 
+    public void cancelOrder(int order) {
+        bookings.emitLoading();
+        shoppingListService.deleteAListOfMine(order)
+                .onResult(v -> loadBookings())
+                .onError(err -> {
+                    bookings.emitError(err);
+                    loadBookings();
+                });
+    }
+
     public void setFavouriteShop(int shopId, boolean isFavourite) {
         shops.emitLoading();
         int userId = AuthUserHolder.getCurrentUser().getId();

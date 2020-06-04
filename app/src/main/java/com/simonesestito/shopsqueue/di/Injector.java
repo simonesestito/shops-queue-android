@@ -33,6 +33,7 @@ import com.simonesestito.shopsqueue.ui.fragment.LocationPickerFragment;
 import com.simonesestito.shopsqueue.ui.fragment.LoginFragment;
 import com.simonesestito.shopsqueue.ui.fragment.MainFragment;
 import com.simonesestito.shopsqueue.ui.fragment.OwnerBookingsFragment;
+import com.simonesestito.shopsqueue.ui.fragment.OwnerProductEditFragment;
 import com.simonesestito.shopsqueue.ui.fragment.OwnerProductsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.SessionsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.ShopPickerFragment;
@@ -86,6 +87,8 @@ public interface Injector {
     void inject(SessionsFragment sessionsFragment);
 
     void inject(OwnerProductsFragment ownerProductsFragment);
+
+    void inject(OwnerProductEditFragment ownerProductEditFragment);
 
     @Component.Builder
     interface Builder {

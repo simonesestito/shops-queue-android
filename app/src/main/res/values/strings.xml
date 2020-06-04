@@ -127,5 +127,11 @@
     <string name="show_owner_products">Show products</string>
     <string name="owner_products_title">Your products</string>
     <string name="product_delete_confirm_message">This product will be deleted irrevocably</string>
+    <string name="input_ean_hint" translatable="false">EAN</string>
+    <string name="product_edit_save">Save product</string>
+    <string name="input_price_hint">Price</string>
+    <string name="new_product_title">New product</string>
+    <string name="invalid_ean_input">Invalid EAN-13 code</string>
+    <string name="invalid_price_input">Invalid price</string>
 
 </resources>

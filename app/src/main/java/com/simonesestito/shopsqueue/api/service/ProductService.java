@@ -38,6 +38,9 @@ public interface ProductService {
     @POST("/products")
     ApiResponse<Product> addProductToMyShop(@Body NewProduct newProduct);
 
+    @GET("/products/{id}")
+    ApiResponse<Product> getProduct(@Path("id") int productId);
+
     @DELETE("/products/{id}")
     ApiResponse<Void> deleteProductFromMyShop(@Path("id") int productId);
 

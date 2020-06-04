@@ -40,7 +40,6 @@ import com.simonesestito.shopsqueue.databinding.AdminShopEditBinding;
 import com.simonesestito.shopsqueue.model.PickedLocation;
 import com.simonesestito.shopsqueue.model.ShopAdminDetails;
 import com.simonesestito.shopsqueue.ui.MapboxHelper;
-import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.AdminUsersAdapter;
 import com.simonesestito.shopsqueue.util.ArrayUtils;
 import com.simonesestito.shopsqueue.util.FormValidators;
@@ -160,13 +159,6 @@ public class AdminShopEditFragment extends EditFragment<ShopAdminDetails, AdminS
                 && ArrayUtils.all(grantResults, PackageManager.PERMISSION_GRANTED)) {
             pickLocation();
         }
-    }
-
-    @Override
-    protected void handleError(Throwable error) {
-        super.handleError(error);
-        ErrorDialog.newInstance(requireContext(), error)
-                .show(getChildFragmentManager(), null);
     }
 
     @Override

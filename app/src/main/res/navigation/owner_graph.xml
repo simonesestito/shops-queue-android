@@ -34,6 +34,20 @@
         android:id="@+id/ownerProductsFragment"
         android:name="com.simonesestito.shopsqueue.ui.fragment.OwnerProductsFragment"
         android:label="@string/owner_products_title"
-        tools:layout="@layout/products_list" />
+        tools:layout="@layout/products_list">
+        <action
+            android:id="@+id/action_ownerProductsFragment_to_ownerProductEditFragment"
+            app:destination="@id/ownerProductEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ownerProductEditFragment"
+        android:name="com.simonesestito.shopsqueue.ui.fragment.OwnerProductEditFragment"
+        android:label="@string/owner_products_title"
+        tools:layout="@layout/owner_product_edit_fragment">
+        <argument
+            android:name="productId"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

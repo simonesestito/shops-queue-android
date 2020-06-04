@@ -124,5 +124,10 @@
     <string name="show_owner_products">Mostra prodotti</string>
     <string name="owner_products_title">I tuoi prodotti</string>
     <string name="product_delete_confirm_message">Questo prodotto verrà eliminato irrevocabilmente</string>
+    <string name="product_edit_save">Salva prodotto</string>
+    <string name="input_price_hint">Prezzo</string>
+    <string name="new_product_title">Nuovo prodotto</string>
+    <string name="invalid_ean_input">Codice EAN-13 non valido</string>
+    <string name="invalid_price_input">Prezzo non valido</string>
 
 </resources>

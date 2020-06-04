@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
 
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
@@ -35,6 +36,7 @@ import com.simonesestito.shopsqueue.databinding.ProductsListBinding;
 import com.simonesestito.shopsqueue.ui.dialog.ConfirmDialog;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.OwnerProductsAdapter;
+import com.simonesestito.shopsqueue.util.NavUtils;
 import com.simonesestito.shopsqueue.util.ViewUtils;
 import com.simonesestito.shopsqueue.viewmodel.OwnerProductsViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
@@ -94,7 +96,10 @@ public class OwnerProductsFragment extends AbstractAppFragment<ProductsListBindi
         });
 
         adapter.setItemClickListener(product -> {
-            // TODO
+            NavDirections directions = OwnerProductsFragmentDirections
+                    .actionOwnerProductsFragmentToOwnerProductEditFragment()
+                    .setProductId(product.getId());
+            NavUtils.navigate(this, directions);
         });
 
         adapter.setMenuListener((menuItem, item) -> {
@@ -109,7 +114,9 @@ public class OwnerProductsFragment extends AbstractAppFragment<ProductsListBindi
         });
 
         getViewBinding().addOwnerProductFab.setOnClickListener(v -> {
-            // TODO
+            NavDirections directions = OwnerProductsFragmentDirections
+                    .actionOwnerProductsFragmentToOwnerProductEditFragment();
+            NavUtils.navigate(this, directions);
         });
     }
 

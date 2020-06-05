@@ -27,6 +27,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +38,7 @@ import androidx.navigation.NavDirections;
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.Booking;
+import com.simonesestito.shopsqueue.api.dto.ShoppingList;
 import com.simonesestito.shopsqueue.databinding.OwnerFragmentBinding;
 import com.simonesestito.shopsqueue.databinding.OwnerNextUsersQueueBinding;
 import com.simonesestito.shopsqueue.model.ShopOwnerDetails;
@@ -43,6 +46,8 @@ import com.simonesestito.shopsqueue.ui.dialog.ConfirmDialog;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.OwnerBookingsAdapter;
 import com.simonesestito.shopsqueue.util.NavUtils;
+import com.simonesestito.shopsqueue.util.livedata.Resource;
+import com.simonesestito.shopsqueue.viewmodel.OwnerOrdersViewModel;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -56,12 +61,15 @@ public class OwnerBookingsFragment extends AbstractAppFragment<OwnerFragmentBind
     private static final int REQUEST_CANCEL_ALL = 1;
     @Inject ViewModelFactory viewModelFactory;
     private OwnerViewModel ownerViewModel;
+    private OwnerOrdersViewModel ownerOrdersViewModel;
     private OwnerNextUsersQueueBinding queueBinding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ShopsQueueApplication.getInjector().inject(this);
+        ownerViewModel = new ViewModelProvider(this, viewModelFactory).get(OwnerViewModel.class);
+        ownerOrdersViewModel = new ViewModelProvider(this, viewModelFactory).get(OwnerOrdersViewModel.class);
         setHasOptionsMenu(true);
     }
 
@@ -87,12 +95,6 @@ public class OwnerBookingsFragment extends AbstractAppFragment<OwnerFragmentBind
         queueBinding.ownerCancelAll.setOnClickListener(v ->
                 ConfirmDialog.showForResult(this, REQUEST_CANCEL_ALL,
                         getString(R.string.owner_cancel_all_message)));
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        ownerViewModel = new ViewModelProvider(this, viewModelFactory).get(OwnerViewModel.class);
 
         ownerViewModel.getShopData().observe(getViewLifecycleOwner(), event -> {
             if (event.isLoading()) {
@@ -105,6 +107,12 @@ public class OwnerBookingsFragment extends AbstractAppFragment<OwnerFragmentBind
                     ErrorDialog.newInstance(requireContext(), event.getError())
                             .show(getChildFragmentManager(), null);
                 }
+            }
+        });
+
+        ownerOrdersViewModel.getShoppingLists().observe(getViewLifecycleOwner(), event -> {
+            if (event.isSuccessful() && event.getData() != null && event.getData().size() != 0) {
+                requireActivity().invalidateOptionsMenu();
             }
         });
     }
@@ -123,13 +131,25 @@ public class OwnerBookingsFragment extends AbstractAppFragment<OwnerFragmentBind
     }
 
     @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        setupShoppingListsMenuItem(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.ownerProducts) {
-            NavDirections directions = OwnerBookingsFragmentDirections.actionOwnerBookingsFragmentToOwnerProductsFragment();
-            NavUtils.navigate(this, directions);
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+        NavDirections directions;
+        switch (item.getItemId()) {
+            case R.id.ownerProducts:
+                directions = OwnerBookingsFragmentDirections.actionOwnerBookingsFragmentToOwnerProductsFragment();
+                NavUtils.navigate(this, directions);
+                return true;
+            case R.id.ownerShoppingLists:
+                directions = OwnerBookingsFragmentDirections.actionOwnerBookingsFragmentToOwnerOrdersFragment();
+                NavUtils.navigate(this, directions);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -173,5 +193,37 @@ public class OwnerBookingsFragment extends AbstractAppFragment<OwnerFragmentBind
         OwnerBookingsAdapter adapter = (OwnerBookingsAdapter) queueBinding.ownerNextUsers.getAdapter();
         Objects.requireNonNull(adapter);
         adapter.updateDataSet(nextUsers);
+    }
+
+    private void setupShoppingListsMenuItem(Menu menu) {
+        MenuItem badgeItem = menu.findItem(R.id.ownerShoppingLists);
+
+        ImageView menuItemIcon = badgeItem.getActionView().findViewById(R.id.menuItemIcon);
+        menuItemIcon.setImageDrawable(badgeItem.getIcon());
+        menuItemIcon.setContentDescription(badgeItem.getTitle());
+
+        TextView menuItemBadge = badgeItem.getActionView().findViewById(R.id.menuItemBadge);
+        Resource<List<ShoppingList>> value = ownerOrdersViewModel.getShoppingLists().getValue();
+        if (value == null || value.getData() == null) {
+            menuItemBadge.setVisibility(View.GONE);
+        } else {
+            List<ShoppingList> shoppingLists = value.getData();
+            int todoListsCount = 0; // Count how many shopping lists aren't ready yet
+            for (ShoppingList shoppingList : shoppingLists) {
+                if (!shoppingList.isReady())
+                    todoListsCount++;
+            }
+
+            if (todoListsCount == 0) {
+                // All shopping lists are ready to retire
+                menuItemBadge.setVisibility(View.GONE);
+            } else {
+                // There are some shopping lists to prepare
+                menuItemBadge.setVisibility(View.VISIBLE);
+                menuItemBadge.setText(String.valueOf(todoListsCount));
+            }
+        }
+
+        badgeItem.getActionView().setOnClickListener(v -> onOptionsItemSelected(badgeItem));
     }
 }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2020 Simone Sestito
+  ~ This file is part of Shops Queue.
+  ~
+  ~ Shops Queue is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Shops Queue is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:colorBackground"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/activity_content_margin">
+
+        <TextView
+            android:id="@+id/shoppingListStatus"
+            style="@style/Widget.App.BadgeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            tools:text="To Do" />
+
+        <TextView
+            android:id="@+id/shoppingListUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            tools:text="John Scott" />
+
+        <TextView
+            android:id="@+id/shoppingListTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            tools:text="Total: 3.60 €" />
+
+        <TextView
+            android:id="@+id/shoppingListItemsCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textStyle="bold"
+            tools:text="5 products" />
+
+        <TextView
+            android:id="@+id/shoppingListProductsList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_content_margin"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            tools:text="- Bread\n- Water\n- Meat" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

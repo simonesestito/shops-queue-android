@@ -18,7 +18,6 @@
 
 package com.simonesestito.shopsqueue.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.util.TypedValue;
@@ -37,10 +36,9 @@ public class ThemeUtils {
     }
 
     @ColorInt
-    public static int getThemeColor(Activity activity, @AttrRes int attrId) {
+    public static int getThemeColor(Context context, @AttrRes int attrId) {
         TypedValue typedValue = new TypedValue();
-        activity.getTheme()
-                .resolveAttribute(attrId, typedValue, true);
+        context.getTheme().resolveAttribute(attrId, typedValue, true);
         return typedValue.data;
     }
 }

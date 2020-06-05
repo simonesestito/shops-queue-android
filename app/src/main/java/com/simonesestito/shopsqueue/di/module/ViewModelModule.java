@@ -28,6 +28,7 @@ import com.simonesestito.shopsqueue.viewmodel.AdminUserEditViewModel;
 import com.simonesestito.shopsqueue.viewmodel.AdminUsersViewModel;
 import com.simonesestito.shopsqueue.viewmodel.LocationPickerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
+import com.simonesestito.shopsqueue.viewmodel.OwnerOrdersViewModel;
 import com.simonesestito.shopsqueue.viewmodel.OwnerProductsViewModel;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.SessionsViewModel;
@@ -116,4 +117,9 @@ public interface ViewModelModule {
     @IntoMap
     @ViewModelKey(UserShopProductsViewModel.class)
     ViewModel bindUserShopProductsViewModel(UserShopProductsViewModel userShopProductsViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(OwnerOrdersViewModel.class)
+    ViewModel bindOwnerOrdersViewModel(OwnerOrdersViewModel ownerOrdersViewModel);
 }

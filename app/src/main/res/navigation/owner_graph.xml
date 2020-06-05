@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_ownerBookingsFragment_to_ownerProductsFragment"
             app:destination="@id/ownerProductsFragment" />
+        <action
+            android:id="@+id/action_ownerBookingsFragment_to_ownerOrdersFragment"
+            app:destination="@id/ownerOrdersFragment" />
     </fragment>
     <fragment
         android:id="@+id/ownerProductsFragment"
@@ -49,5 +52,10 @@
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/ownerOrdersFragment"
+        android:name="com.simonesestito.shopsqueue.ui.fragment.OwnerOrdersFragment"
+        android:label="@string/owner_shopping_lists_title"
+        tools:layout="@layout/owner_shopping_lists_fragment" />
 
 </navigation>

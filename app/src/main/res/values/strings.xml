@@ -137,8 +137,13 @@
     <string name="user_shop_products">Products</string>
     <string name="products_empty_message">No products available</string>
     <string name="shopping_order_created_at_date">Order with %d items made at %s</string>
-    <string name="shopping_order_ready"><b>Your order is ready!</b></string>
+    <string name="shopping_order_ready"><b>Your order is ready to retire!</b></string>
     <string name="shopping_order_not_ready">Not ready yet</string>
     <string name="cancel_order_confirm_message">You will lose your order</string>
+    <string name="total_price_label">Total: %.2f €</string>
+    <string name="shopping_list_status_ready">Ready to retire</string>
+    <string name="shopping_list_status_to_do">To Do</string>
+    <string name="owner_orders_empty_message">No orders received yet</string>
+    <string name="owner_shopping_lists_title">Received orders</string>
 
 </resources>

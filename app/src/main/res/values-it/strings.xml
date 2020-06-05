@@ -135,5 +135,11 @@
     <string name="shopping_order_created_at_date">Ordine di %d prodotti fatto alle %s</string>
     <string name="shopping_order_ready"><b>Il tuo ordine è pronto</b></string>
     <string name="shopping_order_not_ready">Non ancora pronto</string>
+    <string name="cancel_order_confirm_message">Perderai il tuo ordine</string>
+    <string name="total_price_label">Totale: %.2f €</string>
+    <string name="shopping_list_status_ready">Pronto al ritiro</string>
+    <string name="shopping_list_status_to_do">Da fare</string>
+    <string name="owner_orders_empty_message">Nessun ordine ancora ricevuto</string>
+    <string name="owner_shopping_lists_title">Ordini ricevuti</string>
 
 </resources>

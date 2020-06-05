@@ -71,7 +71,7 @@ public class OwnerProductsFragment extends AbstractAppFragment<ProductsListBindi
 
         viewModel = new ViewModelProvider(this, viewModelFactory).get(OwnerProductsViewModel.class);
         viewModel.loadProducts();
-        viewModel.getProducts().observe(this, event -> {
+        viewModel.getProducts().observe(getViewLifecycleOwner(), event -> {
             if (event.isLoading()) {
                 getViewBinding().productsLoading.setVisibility(View.VISIBLE);
                 getViewBinding().productsEmptyView.setVisibility(View.INVISIBLE);

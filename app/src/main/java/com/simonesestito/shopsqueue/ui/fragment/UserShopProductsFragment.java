@@ -70,7 +70,7 @@ public class UserShopProductsFragment extends AbstractAppFragment<ProductsListBi
         getViewBinding().addOwnerProductFab.setVisibility(View.GONE);
         onSelectedItem();
 
-        viewModel.getProductsByShopId(args.getShopId()).observe(this, event -> {
+        viewModel.getProductsByShopId(args.getShopId()).observe(getViewLifecycleOwner(), event -> {
             if (event.isLoading()) {
                 getViewBinding().productsLoading.setVisibility(View.VISIBLE);
                 getViewBinding().productsEmptyView.setVisibility(View.INVISIBLE);

@@ -121,7 +121,7 @@ public class UserMainViewModel extends ViewModel {
 
     public void cancelOrder(int order) {
         bookings.emitLoading();
-        shoppingListService.deleteAListOfMine(order)
+        shoppingListService.deleteShoppingList(order)
                 .onResult(v -> loadBookings())
                 .onError(err -> {
                     bookings.emitError(err);

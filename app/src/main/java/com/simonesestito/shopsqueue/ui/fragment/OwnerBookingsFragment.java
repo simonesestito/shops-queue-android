@@ -69,7 +69,6 @@ public class OwnerBookingsFragment extends AbstractAppFragment<OwnerFragmentBind
         super.onCreate(savedInstanceState);
         ShopsQueueApplication.getInjector().inject(this);
         ownerViewModel = new ViewModelProvider(this, viewModelFactory).get(OwnerViewModel.class);
-        ownerOrdersViewModel = new ViewModelProvider(this, viewModelFactory).get(OwnerOrdersViewModel.class);
         setHasOptionsMenu(true);
     }
 
@@ -77,6 +76,19 @@ public class OwnerBookingsFragment extends AbstractAppFragment<OwnerFragmentBind
     @Override
     protected OwnerFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return OwnerFragmentBinding.inflate(layoutInflater, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ownerOrdersViewModel = new ViewModelProvider(requireActivity(), viewModelFactory)
+                .get(OwnerOrdersViewModel.class);
+
+        ownerOrdersViewModel.getShoppingLists().observe(getViewLifecycleOwner(), event -> {
+            if (event.isSuccessful() && event.getData() != null && event.getData().size() != 0) {
+                requireActivity().invalidateOptionsMenu();
+            }
+        });
     }
 
     @Override
@@ -109,12 +121,6 @@ public class OwnerBookingsFragment extends AbstractAppFragment<OwnerFragmentBind
                 }
             }
         });
-
-        ownerOrdersViewModel.getShoppingLists().observe(getViewLifecycleOwner(), event -> {
-            if (event.isSuccessful() && event.getData() != null && event.getData().size() != 0) {
-                requireActivity().invalidateOptionsMenu();
-            }
-        });
     }
 
     @Override
@@ -127,6 +133,7 @@ public class OwnerBookingsFragment extends AbstractAppFragment<OwnerFragmentBind
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.owner_fragment_menu, menu);
+        inflater.inflate(R.menu.owner_orders_fragment_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

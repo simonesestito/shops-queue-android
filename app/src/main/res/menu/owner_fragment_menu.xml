@@ -26,9 +26,4 @@
         app:actionLayout="@layout/menu_item_toolbar_badge"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
-
-    <item
-        android:id="@+id/ownerProducts"
-        android:title="@string/show_owner_products"
-        app:showAsAction="never" />
 </menu>

@@ -35,7 +35,7 @@
             style="@style/Widget.App.BadgeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp"
+            android:layout_marginTop="8dp"
             tools:text="To Do" />
 
         <TextView

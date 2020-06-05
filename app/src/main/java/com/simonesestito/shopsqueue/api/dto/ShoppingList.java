@@ -18,12 +18,16 @@
 
 package com.simonesestito.shopsqueue.api.dto;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.simonesestito.shopsqueue.model.Identifiable;
 
 import java.util.Date;
 import java.util.List;
 
-public class ShoppingList implements Identifiable {
+
+public class ShoppingList implements Identifiable, Parcelable {
     private int id;
     private Date createdAt;
     private int userId;
@@ -96,4 +100,42 @@ public class ShoppingList implements Identifiable {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
+
+    public static final Creator<ShoppingList> CREATOR = new Creator<ShoppingList>() {
+        @Override
+        public ShoppingList createFromParcel(Parcel in) {
+            return new ShoppingList(in);
+        }
+
+        @Override
+        public ShoppingList[] newArray(int size) {
+            return new ShoppingList[size];
+        }
+    };
+
+    //region Parcelable
+    protected ShoppingList(Parcel in) {
+        id = in.readInt();
+        userId = in.readInt();
+        userName = in.readString();
+        isReady = in.readByte() != 0;
+        total = in.readDouble();
+        shop = in.readParcelable(Shop.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(userId);
+        dest.writeString(userName);
+        dest.writeByte((byte) (isReady ? 1 : 0));
+        dest.writeDouble(total);
+        dest.writeParcelable(shop, flags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    //endregion
 }

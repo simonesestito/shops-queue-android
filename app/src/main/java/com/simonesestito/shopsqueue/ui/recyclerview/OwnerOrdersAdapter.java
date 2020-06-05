@@ -48,7 +48,7 @@ public class OwnerOrdersAdapter extends DiffUtilAdapter<ShoppingList, OwnerOrder
             // Init theme colors
             todoStatusColor = ThemeUtils.getThemeColor(context, R.attr.colorError);
             onTodoStatusColor = ThemeUtils.getThemeColor(context, R.attr.colorOnError);
-            readyStatusColor = ThemeUtils.getThemeColor(context, R.attr.colorPrimaryVariant);
+            readyStatusColor = ThemeUtils.getThemeColor(context, R.attr.colorPrimary);
             onReadyStatusColor = ThemeUtils.getThemeColor(context, R.attr.colorOnPrimary);
         }
 
@@ -63,13 +63,18 @@ public class OwnerOrdersAdapter extends DiffUtilAdapter<ShoppingList, OwnerOrder
         Context context = holder.itemView.getContext();
         ShoppingList shoppingList = getItemAt(position);
         holder.binding.shoppingListUserName.setText(shoppingList.getUserName());
-        holder.binding.shoppingListItemsCount.setText(shoppingList.getProducts().size());
+        String productsText = context.getResources().getQuantityString(
+                R.plurals.products_count_label,
+                shoppingList.getProducts().size(),
+                shoppingList.getProducts().size()
+        );
+        holder.binding.shoppingListItemsCount.setText(productsText);
 
         String totalPrice = context.getString(R.string.total_price_label, shoppingList.getTotal());
         holder.binding.shoppingListTotal.setText(totalPrice);
 
         bindProductsList(context, holder.binding.shoppingListProductsList, shoppingList);
-        bindShoppingListStatus(context, holder.binding.shoppingListStatus, shoppingList);
+        bindShoppingListStatus(holder.binding.shoppingListStatus, shoppingList);
     }
 
     private void bindProductsList(Context context, TextView productsListView, ShoppingList shoppingList) {
@@ -94,7 +99,7 @@ public class OwnerOrdersAdapter extends DiffUtilAdapter<ShoppingList, OwnerOrder
         productsListView.setText(products.toString());
     }
 
-    private void bindShoppingListStatus(Context context, TextView statusView, ShoppingList shoppingList) {
+    private void bindShoppingListStatus(TextView statusView, ShoppingList shoppingList) {
         if (shoppingList.isReady()) {
             ViewUtils.setBackgroundTint(statusView, readyStatusColor);
             statusView.setTextColor(onReadyStatusColor);

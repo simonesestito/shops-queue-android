@@ -28,6 +28,7 @@
         <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
         <item name="android:statusBarColor">?colorPrimarySurface</item>
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
     </style>
 
     <style name="Base.Theme.App.Light">
@@ -43,5 +44,12 @@
     <style name="Theme.App.ActionBar">
         <item name="android:windowActionBar">true</item>
         <item name="android:background">?android:colorBackground</item>
+    </style>
+
+    <style name="ThemeOverlay.App.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.App.BottomSheet</item>
+        <item name="shapeAppearanceOverlay">
+            @style/ShapeAppearanceOverlay.App.BottomSheet.TopRounded
+        </item>
     </style>
 </resources>

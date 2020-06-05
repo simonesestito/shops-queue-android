@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ Copyright 2020 Simone Sestito
   ~ This file is part of Shops Queue.
   ~
@@ -16,17 +16,13 @@
   ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <plurals name="shop_queue_count">
-        <item quantity="one">@string/shops_queue_count_singular</item>
-        <item quantity="other">@string/shops_queue_count_plural</item>
-    </plurals>
-    <plurals name="user_booking_queue_count">
-        <item quantity="one">@string/user_booking_queue_count_singular</item>
-        <item quantity="other">@string/user_booking_queue_count_plural</item>
-    </plurals>
-    <plurals name="products_count_label">
-        <item quantity="one">@string/products_count_label_singular</item>
-        <item quantity="other">@string/products_count_label_plural</item>
-    </plurals>
-</resources>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:tint="?attr/colorControlNormal"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:fillColor="@android:color/white"
+      android:pathData="M12,2C6.47,2 2,6.47 2,12s4.47,10 10,10 10,-4.47 10,-10S17.53,2 12,2zM17,15.59L15.59,17 12,13.41 8.41,17 7,15.59 10.59,12 7,8.41 8.41,7 12,10.59 15.59,7 17,8.41 13.41,12 17,15.59z" />
+</vector>

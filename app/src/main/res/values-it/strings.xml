@@ -141,5 +141,11 @@
     <string name="shopping_list_status_to_do">Da fare</string>
     <string name="owner_orders_empty_message">Nessun ordine ancora ricevuto</string>
     <string name="owner_shopping_lists_title">Ordini ricevuti</string>
+    <string name="owner_orders_action_cancel">Annulla questo ordine</string>
+    <string name="owner_orders_action_prepare">Imposta ordine come pronto al ritiro</string>
+    <string name="owner_orders_action_retired">Imposta ordine come ritirato dall\'utente</string>
+    <string name="owner_orders_bottom_sheet_title">Ordine di %s</string>
+    <string name="products_count_label_singular">%d prodotto</string>
+    <string name="products_count_label_plural">%d prodotti</string>
 
 </resources>

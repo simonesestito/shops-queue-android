@@ -38,7 +38,7 @@ public class OwnerOrdersViewModel extends ViewModel {
         loadOrders();
     }
 
-    private void loadOrders() {
+    public void loadOrders() {
         shoppingLists.emitLoading();
         shoppingListService.getMyShopOrders()
                 .onResult(shoppingLists::emitResult)
@@ -48,6 +48,13 @@ public class OwnerOrdersViewModel extends ViewModel {
     public void prepareOrder(int orderId) {
         shoppingLists.emitLoading();
         shoppingListService.prepareShoppingList(orderId)
+                .onResult(list -> loadOrders())
+                .onError(shoppingLists::emitError);
+    }
+
+    public void deleteOrder(int orderId) {
+        shoppingLists.emitLoading();
+        shoppingListService.deleteShoppingList(orderId)
                 .onResult(list -> loadOrders())
                 .onError(shoppingLists::emitError);
     }

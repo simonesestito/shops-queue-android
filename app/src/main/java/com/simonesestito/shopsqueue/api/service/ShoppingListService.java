@@ -41,7 +41,7 @@ public interface ShoppingListService {
     ApiResponse<List<ShoppingList>> getMyShopOrders();
 
     @DELETE("/lists/{id}")
-    ApiResponse<Void> deleteAListOfMine(@Path("id") int listId);
+    ApiResponse<Void> deleteShoppingList(@Path("id") int listId);
 
     @POST("/lists/{id}")
     ApiResponse<ShoppingList> prepareShoppingList(@Path("id") int listId);

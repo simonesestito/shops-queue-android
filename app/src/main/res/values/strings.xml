@@ -145,5 +145,10 @@
     <string name="shopping_list_status_to_do">To Do</string>
     <string name="owner_orders_empty_message">No orders received yet</string>
     <string name="owner_shopping_lists_title">Received orders</string>
-
+    <string name="owner_orders_action_cancel">Cancel this order</string>
+    <string name="owner_orders_action_prepare">Set this order ready to be retired</string>
+    <string name="owner_orders_action_retired">Set the order retired by the user</string>
+    <string name="owner_orders_bottom_sheet_title">%s\'s order</string>
+    <string name="products_count_label_singular">%d product</string>
+    <string name="products_count_label_plural">%d products</string>
 </resources>

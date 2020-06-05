@@ -56,6 +56,22 @@
         android:id="@+id/ownerOrdersFragment"
         android:name="com.simonesestito.shopsqueue.ui.fragment.OwnerOrdersFragment"
         android:label="@string/owner_shopping_lists_title"
-        tools:layout="@layout/owner_shopping_lists_fragment" />
+        tools:layout="@layout/owner_shopping_lists_fragment">
+        <action
+            android:id="@+id/action_ownerOrdersFragment_to_ownerOrdersBottomSheet"
+            app:destination="@id/ownerOrdersBottomSheet" />
+        <action
+            android:id="@+id/action_ownerOrdersFragment_to_ownerProductsFragment"
+            app:destination="@id/ownerProductsFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/ownerOrdersBottomSheet"
+        android:name="com.simonesestito.shopsqueue.ui.dialog.OwnerOrdersBottomSheet"
+        android:label="@string/owner_shopping_lists_title"
+        tools:layout="@layout/owner_orders_bottom_sheet">
+        <argument
+            android:name="shoppingList"
+            app:argType="com.simonesestito.shopsqueue.api.dto.ShoppingList" />
+    </dialog>
 
 </navigation>

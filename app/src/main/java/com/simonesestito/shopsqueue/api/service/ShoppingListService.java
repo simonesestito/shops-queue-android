@@ -37,6 +37,9 @@ public interface ShoppingListService {
     @GET("/users/me/lists")
     ApiResponse<List<ShoppingList>> getMyShoppingLists();
 
+    @GET("/shops/me/lists")
+    ApiResponse<List<ShoppingList>> getMyShopOrders();
+
     @DELETE("/lists/{id}")
     ApiResponse<Void> deleteAListOfMine(@Path("id") int listId);
 

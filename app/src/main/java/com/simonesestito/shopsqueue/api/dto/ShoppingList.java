@@ -27,6 +27,7 @@ public class ShoppingList implements Identifiable {
     private int id;
     private Date createdAt;
     private int userId;
+    private String userName;
     private boolean isReady;
     private double total;
     private Shop shop;
@@ -54,6 +55,14 @@ public class ShoppingList implements Identifiable {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public boolean isReady() {

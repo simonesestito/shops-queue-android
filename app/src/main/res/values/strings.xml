@@ -151,4 +151,7 @@
     <string name="owner_orders_bottom_sheet_title">%s\'s order</string>
     <string name="products_count_label_singular">%d product</string>
     <string name="products_count_label_plural">%d products</string>
+    <string name="notification_channel_orders_notice">Product orders</string>
+    <string name="notification_order_ready_message">Your order is ready to retire!</string>
+    <string name="notification_order_cancelled_message">Your order has been cancelled by the shop owner</string>
 </resources>

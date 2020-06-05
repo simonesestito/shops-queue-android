@@ -147,5 +147,8 @@
     <string name="owner_orders_bottom_sheet_title">Ordine di %s</string>
     <string name="products_count_label_singular">%d prodotto</string>
     <string name="products_count_label_plural">%d prodotti</string>
+    <string name="notification_channel_orders_notice">Ordinazioni prodotti</string>
+    <string name="notification_order_ready_message">Il tuo ordine è pronto per essere ritirato!</string>
+    <string name="notification_order_cancelled_message">Il tuo ordine è stato annullato dal commerciante</string>
 
 </resources>

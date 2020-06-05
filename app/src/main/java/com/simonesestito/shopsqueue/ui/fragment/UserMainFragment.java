@@ -105,6 +105,8 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             ShopResult shopResult = new ShopResult(clickedShop, true);
             onShopMarkerClicked(shopResult);
         }
+
+        viewModel.loadBookings();
     }
 
     @Override

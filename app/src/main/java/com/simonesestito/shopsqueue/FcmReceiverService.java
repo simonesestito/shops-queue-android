@@ -33,6 +33,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.simonesestito.shopsqueue.api.DateJsonAdapter;
 import com.simonesestito.shopsqueue.api.dto.Booking;
 import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
 import com.simonesestito.shopsqueue.api.dto.FcmToken;
@@ -57,6 +58,7 @@ public class FcmReceiverService extends FirebaseMessagingService {
     private static final String NOTIFICATION_CHANNEL_ORDERS_NOTICE_ID = "orders-notice";
     @Inject FcmService fcmService;
     @Inject SharedPreferencesStore sharedPreferencesStore;
+    @Inject DateJsonAdapter dateJsonAdapter;
 
     @Override
     public void onCreate() {
@@ -196,6 +198,7 @@ public class FcmReceiverService extends FirebaseMessagingService {
 
         try {
             return new Moshi.Builder()
+                    .add(dateJsonAdapter)
                     .build()
                     .adapter(clazz)
                     .fromJson(json);

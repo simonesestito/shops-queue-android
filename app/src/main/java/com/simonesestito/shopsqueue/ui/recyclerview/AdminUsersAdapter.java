@@ -19,7 +19,6 @@
 package com.simonesestito.shopsqueue.ui.recyclerview;
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,7 +33,7 @@ import com.simonesestito.shopsqueue.databinding.AdminUsersItemBinding;
 
 
 public class AdminUsersAdapter extends DiffUtilAdapter<UserDetails, AdminUsersAdapter.ViewHolder> {
-    private MenuItemListener menuItemListener;
+    private MenuItemListener<UserDetails> menuItemListener;
 
     @NonNull
     @Override
@@ -59,11 +58,11 @@ public class AdminUsersAdapter extends DiffUtilAdapter<UserDetails, AdminUsersAd
             holder.view.userItemMenu.setVisibility(View.VISIBLE);
             holder.view.userItemMenu.setOnClickListener(menuIcon -> {
                 PopupMenu popupMenu = new PopupMenu(menuIcon.getContext(), menuIcon);
-                popupMenu.inflate(R.menu.admin_users_popup_menu);
+                popupMenu.inflate(R.menu.list_popup_delete_menu);
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     int index = holder.getAdapterPosition();
-                    User clickedUser = getItemAt(index);
-                    menuItemListener.onClick(menuItem, clickedUser.getId());
+                    UserDetails clickedUser = getItemAt(index);
+                    menuItemListener.onClick(menuItem, clickedUser);
                     return true;
                 });
                 popupMenu.show();
@@ -71,15 +70,11 @@ public class AdminUsersAdapter extends DiffUtilAdapter<UserDetails, AdminUsersAd
         }
     }
 
-    public void setMenuItemListener(MenuItemListener menuItemListener) {
+    public void setMenuItemListener(MenuItemListener<UserDetails> menuItemListener) {
         this.menuItemListener = menuItemListener;
     }
 
-    public interface MenuItemListener {
-        void onClick(MenuItem menuItem, int userId);
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final AdminUsersItemBinding view;
 
         ViewHolder(AdminUsersItemBinding view) {

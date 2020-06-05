@@ -123,5 +123,35 @@
     <string name="login_email_not_confirmed">Check your e-mail box: you should have received an e-mail to confirm your account.</string>
     <string name="user_active_account_input">Activate account</string>
     <string name="sign_up_confirm_email_dialog_title">Confirm your e-mail address</string>
-
+    <string name="price_label" translatable="false">€ %.2f</string>
+    <string name="show_owner_products">Show products</string>
+    <string name="owner_products_title">Your products</string>
+    <string name="product_delete_confirm_message">This product will be deleted irrevocably</string>
+    <string name="input_ean_hint" translatable="false">EAN</string>
+    <string name="product_edit_save">Save product</string>
+    <string name="input_price_hint">Price</string>
+    <string name="new_product_title">New product</string>
+    <string name="invalid_ean_input">Invalid EAN-13 code</string>
+    <string name="invalid_price_input">Invalid price</string>
+    <string name="shop_order_items">Order items</string>
+    <string name="user_shop_products">Products</string>
+    <string name="products_empty_message">No products available</string>
+    <string name="shopping_order_created_at_date">Order with %d items made at %s</string>
+    <string name="shopping_order_ready"><b>Your order is ready to retire!</b></string>
+    <string name="shopping_order_not_ready">Not ready yet</string>
+    <string name="cancel_order_confirm_message">You will lose your order</string>
+    <string name="total_price_label">Total: %.2f €</string>
+    <string name="shopping_list_status_ready">Ready to retire</string>
+    <string name="shopping_list_status_to_do">To Do</string>
+    <string name="owner_orders_empty_message">No orders received yet</string>
+    <string name="owner_shopping_lists_title">Received orders</string>
+    <string name="owner_orders_action_cancel">Cancel this order</string>
+    <string name="owner_orders_action_prepare">Set this order ready to be retired</string>
+    <string name="owner_orders_action_retired">Set the order retired by the user</string>
+    <string name="owner_orders_bottom_sheet_title">%s\'s order</string>
+    <string name="products_count_label_singular">%d product</string>
+    <string name="products_count_label_plural">%d products</string>
+    <string name="notification_channel_orders_notice">Product orders</string>
+    <string name="notification_order_ready_message">Your order is ready to retire!</string>
+    <string name="notification_order_cancelled_message">Your order has been cancelled by the shop owner</string>
 </resources>

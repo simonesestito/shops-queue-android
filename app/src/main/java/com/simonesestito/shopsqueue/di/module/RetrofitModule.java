@@ -26,8 +26,10 @@ import com.simonesestito.shopsqueue.api.service.BookingService;
 import com.simonesestito.shopsqueue.api.service.FavouritesService;
 import com.simonesestito.shopsqueue.api.service.FcmService;
 import com.simonesestito.shopsqueue.api.service.LoginService;
+import com.simonesestito.shopsqueue.api.service.ProductService;
 import com.simonesestito.shopsqueue.api.service.SessionService;
 import com.simonesestito.shopsqueue.api.service.ShopService;
+import com.simonesestito.shopsqueue.api.service.ShoppingListService;
 import com.simonesestito.shopsqueue.api.service.UserService;
 import com.squareup.moshi.Moshi;
 
@@ -105,5 +107,15 @@ public class RetrofitModule {
     @Provides
     SessionService provideSessionService(Retrofit retrofit) {
         return retrofit.create(SessionService.class);
+    }
+
+    @Provides
+    ProductService provideProductService(Retrofit retrofit) {
+        return retrofit.create(ProductService.class);
+    }
+
+    @Provides
+    ShoppingListService provideShoppingListService(Retrofit retrofit) {
+        return retrofit.create(ShoppingListService.class);
     }
 }

@@ -108,6 +108,43 @@ public class FormValidators {
             return validator.validate(inputLayout);
     }
 
+    @SuppressWarnings("ConstantConditions")
+    public static boolean isEan(TextInputLayout inputLayout) {
+        Context context = inputLayout.getContext();
+        String input = inputLayout.getEditText().getText().toString().trim();
+        if (input.length() != 13) {
+            inputLayout.setError(context.getString(R.string.invalid_ean_input));
+            return false;
+        }
+
+        char[] chars = input.toCharArray();
+        for (char c : chars) {
+            if (!Character.isDigit(c)) {
+                inputLayout.setError(context.getString(R.string.invalid_ean_input));
+                return false;
+            }
+        }
+
+        inputLayout.setError("");
+        return true;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static boolean isPrice(TextInputLayout inputLayout) {
+        Context context = inputLayout.getContext();
+        String input = inputLayout.getEditText().getText().toString().trim();
+        double price = Double.parseDouble(input);
+        price = Math.round(price * 100) / 100.0;
+        inputLayout.getEditText().setText(String.valueOf(price));
+
+        if (price <= 0) {
+            inputLayout.setError(context.getString(R.string.invalid_price_input));
+            return false;
+        }
+
+        return true;
+    }
+
     public interface Validator {
         boolean validate(TextInputLayout inputLayout);
     }

@@ -21,7 +21,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ownerQueueRefreshLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

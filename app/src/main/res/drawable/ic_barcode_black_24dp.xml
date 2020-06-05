@@ -16,17 +16,12 @@
   ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <plurals name="shop_queue_count">
-        <item quantity="one">@string/shops_queue_count_singular</item>
-        <item quantity="other">@string/shops_queue_count_plural</item>
-    </plurals>
-    <plurals name="user_booking_queue_count">
-        <item quantity="one">@string/user_booking_queue_count_singular</item>
-        <item quantity="other">@string/user_booking_queue_count_plural</item>
-    </plurals>
-    <plurals name="products_count_label">
-        <item quantity="one">@string/products_count_label_singular</item>
-        <item quantity="other">@string/products_count_label_plural</item>
-    </plurals>
-</resources>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#000"
+        android:pathData="M2,6H4V18H2V6M5,6H6V18H5V6M7,6H10V18H7V6M11,6H12V18H11V6M14,6H16V18H14V6M17,6H20V18H17V6M21,6H22V18H21V6Z" />
+</vector>

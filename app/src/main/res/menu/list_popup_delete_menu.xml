@@ -16,17 +16,8 @@
   ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <plurals name="shop_queue_count">
-        <item quantity="one">@string/shops_queue_count_singular</item>
-        <item quantity="other">@string/shops_queue_count_plural</item>
-    </plurals>
-    <plurals name="user_booking_queue_count">
-        <item quantity="one">@string/user_booking_queue_count_singular</item>
-        <item quantity="other">@string/user_booking_queue_count_plural</item>
-    </plurals>
-    <plurals name="products_count_label">
-        <item quantity="one">@string/products_count_label_singular</item>
-        <item quantity="other">@string/products_count_label_plural</item>
-    </plurals>
-</resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/deleteMenuAction"
+        android:title="@string/menu_delete_action" />
+</menu>

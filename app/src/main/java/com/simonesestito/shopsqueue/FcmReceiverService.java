@@ -33,9 +33,11 @@ import androidx.core.content.ContextCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.simonesestito.shopsqueue.api.DateJsonAdapter;
 import com.simonesestito.shopsqueue.api.dto.Booking;
 import com.simonesestito.shopsqueue.api.dto.BookingWithCount;
 import com.simonesestito.shopsqueue.api.dto.FcmToken;
+import com.simonesestito.shopsqueue.api.dto.ShoppingList;
 import com.simonesestito.shopsqueue.api.service.FcmService;
 import com.simonesestito.shopsqueue.ui.MainActivity;
 import com.squareup.moshi.Moshi;
@@ -50,9 +52,13 @@ public class FcmReceiverService extends FirebaseMessagingService {
     private static final String KEY_MESSAGE_DATA = "data";
     private static final String MESSAGE_TYPE_QUEUE_NOTICE = "queue-notice";
     private static final String MESSAGE_TYPE_BOOKING_CANCELLED = "booking-cancelled";
+    private static final String MESSAGE_TYPE_ORDER_READY = "order-ready";
+    private static final String MESSAGE_TYPE_ORDER_CANCELLED = "order-cancelled";
     private static final String NOTIFICATION_CHANNEL_BOOKINGS_NOTICE_ID = "bookings-notice";
+    private static final String NOTIFICATION_CHANNEL_ORDERS_NOTICE_ID = "orders-notice";
     @Inject FcmService fcmService;
     @Inject SharedPreferencesStore sharedPreferencesStore;
+    @Inject DateJsonAdapter dateJsonAdapter;
 
     @Override
     public void onCreate() {
@@ -90,11 +96,17 @@ public class FcmReceiverService extends FirebaseMessagingService {
             return;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
+            NotificationChannel bookingsChannel = new NotificationChannel(
                     NOTIFICATION_CHANNEL_BOOKINGS_NOTICE_ID,
                     getString(R.string.notification_channel_booking_notice),
                     NotificationManager.IMPORTANCE_HIGH);
-            notificationManager.createNotificationChannel(channel);
+            notificationManager.createNotificationChannel(bookingsChannel);
+
+            NotificationChannel ordersChannel = new NotificationChannel(
+                    NOTIFICATION_CHANNEL_ORDERS_NOTICE_ID,
+                    getString(R.string.notification_channel_orders_notice),
+                    NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(ordersChannel);
         }
 
         switch (messageType != null ? messageType : "null") {
@@ -104,6 +116,12 @@ public class FcmReceiverService extends FirebaseMessagingService {
             case MESSAGE_TYPE_BOOKING_CANCELLED:
                 handleBookingCancellation(jsonData);
                 break;
+            case MESSAGE_TYPE_ORDER_READY:
+                handleOrderReady(jsonData);
+                break;
+            case MESSAGE_TYPE_ORDER_CANCELLED:
+                handleOrderCancellation(jsonData);
+                break;
             default:
                 Log.e(TAG, "Received payload with unknown type: " + messageType);
         }
@@ -112,7 +130,7 @@ public class FcmReceiverService extends FirebaseMessagingService {
     private void handleQueueNotice(String jsonString) {
         BookingWithCount data = parseJson(jsonString, BookingWithCount.class);
         if (data == null) {
-            Log.e(TAG, "Received payload with empty Booking data");
+            Log.e(TAG, "Received payload with invalid Booking data");
             return;
         }
 
@@ -134,7 +152,7 @@ public class FcmReceiverService extends FirebaseMessagingService {
     private void handleBookingCancellation(String jsonString) {
         Booking data = parseJson(jsonString, Booking.class);
         if (data == null) {
-            Log.e(TAG, "Received payload with empty Booking data");
+            Log.e(TAG, "Received payload with invalid Booking data");
             return;
         }
 
@@ -145,6 +163,34 @@ public class FcmReceiverService extends FirebaseMessagingService {
         );
     }
 
+    private void handleOrderReady(String json) {
+        ShoppingList data = parseJson(json, ShoppingList.class);
+        if (data == null) {
+            Log.e(TAG, "Received payload with invalid ShoppingList data");
+            return;
+        }
+
+        showNotification(
+                data.getId() + 100_000,
+                data.getShop().getName(),
+                getString(R.string.notification_order_ready_message)
+        );
+    }
+
+    private void handleOrderCancellation(String json) {
+        ShoppingList data = parseJson(json, ShoppingList.class);
+        if (data == null) {
+            Log.e(TAG, "Received payload with invalid ShoppingList data");
+            return;
+        }
+
+        showNotification(
+                data.getId() + 100_000,
+                data.getShop().getName(),
+                getString(R.string.notification_order_cancelled_message)
+        );
+    }
+
     @Nullable
     private <T> T parseJson(String json, Class<T> clazz) {
         if (json == null || json.isEmpty())
@@ -152,6 +198,7 @@ public class FcmReceiverService extends FirebaseMessagingService {
 
         try {
             return new Moshi.Builder()
+                    .add(dateJsonAdapter)
                     .build()
                     .adapter(clazz)
                     .fromJson(json);

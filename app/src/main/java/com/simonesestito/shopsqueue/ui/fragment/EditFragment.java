@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 
+import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.util.livedata.LiveResource;
 
 public abstract class EditFragment<T, V extends ViewBinding> extends AbstractAppFragment<V> {
@@ -87,6 +88,8 @@ public abstract class EditFragment<T, V extends ViewBinding> extends AbstractApp
     }
 
     protected void handleError(Throwable error) {
+        ErrorDialog.newInstance(requireContext(), error)
+                .show(getChildFragmentManager(), null);
     }
 
     protected void onSaveForm() {

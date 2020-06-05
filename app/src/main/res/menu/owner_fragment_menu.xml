@@ -16,8 +16,14 @@
   ~ along with Shops Queue.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:id="@+id/deleteUserMenuAction"
-        android:title="@string/menu_delete_action" />
+        android:id="@+id/ownerShoppingLists"
+        android:icon="@drawable/ic_shopping_cart_white_24dp"
+        android:title="@string/owner_shopping_lists_title"
+        app:actionLayout="@layout/menu_item_toolbar_badge"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
 </menu>

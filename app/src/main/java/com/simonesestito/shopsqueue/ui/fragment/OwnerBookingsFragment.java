@@ -22,22 +22,32 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
 
 import com.simonesestito.shopsqueue.R;
 import com.simonesestito.shopsqueue.ShopsQueueApplication;
 import com.simonesestito.shopsqueue.api.dto.Booking;
+import com.simonesestito.shopsqueue.api.dto.ShoppingList;
 import com.simonesestito.shopsqueue.databinding.OwnerFragmentBinding;
 import com.simonesestito.shopsqueue.databinding.OwnerNextUsersQueueBinding;
 import com.simonesestito.shopsqueue.model.ShopOwnerDetails;
 import com.simonesestito.shopsqueue.ui.dialog.ConfirmDialog;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
 import com.simonesestito.shopsqueue.ui.recyclerview.OwnerBookingsAdapter;
+import com.simonesestito.shopsqueue.util.NavUtils;
+import com.simonesestito.shopsqueue.util.livedata.Resource;
+import com.simonesestito.shopsqueue.viewmodel.OwnerOrdersViewModel;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
@@ -47,22 +57,38 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
+public class OwnerBookingsFragment extends AbstractAppFragment<OwnerFragmentBinding> {
     private static final int REQUEST_CANCEL_ALL = 1;
     @Inject ViewModelFactory viewModelFactory;
     private OwnerViewModel ownerViewModel;
+    private OwnerOrdersViewModel ownerOrdersViewModel;
     private OwnerNextUsersQueueBinding queueBinding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ShopsQueueApplication.getInjector().inject(this);
+        ownerViewModel = new ViewModelProvider(this, viewModelFactory).get(OwnerViewModel.class);
+        setHasOptionsMenu(true);
     }
 
     @NonNull
     @Override
     protected OwnerFragmentBinding onCreateViewBinding(LayoutInflater layoutInflater, @Nullable ViewGroup container) {
         return OwnerFragmentBinding.inflate(layoutInflater, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ownerOrdersViewModel = new ViewModelProvider(requireActivity(), viewModelFactory)
+                .get(OwnerOrdersViewModel.class);
+
+        ownerOrdersViewModel.getShoppingLists().observe(getViewLifecycleOwner(), event -> {
+            if (event.isSuccessful() && event.getData() != null && event.getData().size() != 0) {
+                requireActivity().invalidateOptionsMenu();
+            }
+        });
     }
 
     @Override
@@ -81,12 +107,6 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
         queueBinding.ownerCancelAll.setOnClickListener(v ->
                 ConfirmDialog.showForResult(this, REQUEST_CANCEL_ALL,
                         getString(R.string.owner_cancel_all_message)));
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        ownerViewModel = new ViewModelProvider(this, viewModelFactory).get(OwnerViewModel.class);
 
         ownerViewModel.getShopData().observe(getViewLifecycleOwner(), event -> {
             if (event.isLoading()) {
@@ -108,6 +128,36 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CANCEL_ALL && resultCode == Activity.RESULT_OK)
             ownerViewModel.cancelAllBookings();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.owner_fragment_menu, menu);
+        inflater.inflate(R.menu.owner_orders_fragment_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        setupShoppingListsMenuItem(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        NavDirections directions;
+        switch (item.getItemId()) {
+            case R.id.ownerProducts:
+                directions = OwnerBookingsFragmentDirections.actionOwnerBookingsFragmentToOwnerProductsFragment();
+                NavUtils.navigate(this, directions);
+                return true;
+            case R.id.ownerShoppingLists:
+                directions = OwnerBookingsFragmentDirections.actionOwnerBookingsFragmentToOwnerOrdersFragment();
+                NavUtils.navigate(this, directions);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void onProgress() {
@@ -150,5 +200,37 @@ public class OwnerFragment extends AbstractAppFragment<OwnerFragmentBinding> {
         OwnerBookingsAdapter adapter = (OwnerBookingsAdapter) queueBinding.ownerNextUsers.getAdapter();
         Objects.requireNonNull(adapter);
         adapter.updateDataSet(nextUsers);
+    }
+
+    private void setupShoppingListsMenuItem(Menu menu) {
+        MenuItem badgeItem = menu.findItem(R.id.ownerShoppingLists);
+
+        ImageView menuItemIcon = badgeItem.getActionView().findViewById(R.id.menuItemIcon);
+        menuItemIcon.setImageDrawable(badgeItem.getIcon());
+        menuItemIcon.setContentDescription(badgeItem.getTitle());
+
+        TextView menuItemBadge = badgeItem.getActionView().findViewById(R.id.menuItemBadge);
+        Resource<List<ShoppingList>> value = ownerOrdersViewModel.getShoppingLists().getValue();
+        if (value == null || value.getData() == null) {
+            menuItemBadge.setVisibility(View.GONE);
+        } else {
+            List<ShoppingList> shoppingLists = value.getData();
+            int todoListsCount = 0; // Count how many shopping lists aren't ready yet
+            for (ShoppingList shoppingList : shoppingLists) {
+                if (!shoppingList.isReady())
+                    todoListsCount++;
+            }
+
+            if (todoListsCount == 0) {
+                // All shopping lists are ready to retire
+                menuItemBadge.setVisibility(View.GONE);
+            } else {
+                // There are some shopping lists to prepare
+                menuItemBadge.setVisibility(View.VISIBLE);
+                menuItemBadge.setText(String.valueOf(todoListsCount));
+            }
+        }
+
+        badgeItem.getActionView().setOnClickListener(v -> onOptionsItemSelected(badgeItem));
     }
 }

@@ -95,4 +95,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/currentShopQueueCount" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/shoppingButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/form_element_margin"
+        android:text="@string/shop_order_items"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/currentShopBookButton"
+        app:layout_constraintTop_toBottomOf="@id/currentShopQueueCount" />
 </androidx.constraintlayout.widget.ConstraintLayout>

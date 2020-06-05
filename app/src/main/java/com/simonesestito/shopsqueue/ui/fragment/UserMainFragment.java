@@ -36,6 +36,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -47,6 +48,7 @@ import com.simonesestito.shopsqueue.api.dto.ShopResult;
 import com.simonesestito.shopsqueue.databinding.UserFragmentBinding;
 import com.simonesestito.shopsqueue.model.ApiException;
 import com.simonesestito.shopsqueue.model.HttpStatus;
+import com.simonesestito.shopsqueue.model.Identifiable;
 import com.simonesestito.shopsqueue.ui.MapboxHelper;
 import com.simonesestito.shopsqueue.ui.dialog.ConfirmDialog;
 import com.simonesestito.shopsqueue.ui.dialog.ErrorDialog;
@@ -69,12 +71,16 @@ import javax.inject.Inject;
 
 public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
     private static final String CANCEL_BOOKING_ID_KEY = "bookingId";
+    private static final String CANCEL_ORDER_ID_KEY = "bookingId";
     private static final int CANCEL_BOOKING_REQUEST_CODE = 2;
+    private static final int CANCEL_ORDER_REQUEST_CODE = 3;
     @Inject ViewModelFactory viewModelFactory;
     private UserMainViewModel viewModel;
     private MapboxHelper mapboxHelper;
     private boolean shouldFitAll = false;
+    @SuppressWarnings("rawtypes")
     private BottomSheetBehavior currentShopBottomSheet;
+    @SuppressWarnings("rawtypes")
     private BottomSheetBehavior userBookingsBottomSheet;
 
     @Override
@@ -99,6 +105,8 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             ShopResult shopResult = new ShopResult(clickedShop, true);
             onShopMarkerClicked(shopResult);
         }
+
+        viewModel.loadBookings();
     }
 
     @Override
@@ -111,10 +119,15 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         userBookingsBottomSheet = BottomSheetBehavior.from(getViewBinding().userBookingsBottomSheet.getRoot());
 
         UserBookingsAdapter adapter = new UserBookingsAdapter();
-        adapter.setMenuItemListener(((menuItem, booking) -> onAskCancelBooking(booking.getId())));
+        adapter.setMenuItemListener((menuItem, item) -> {
+            if (item instanceof BookingWithCount)
+                onAskCancelBooking(item.getId());
+            else
+                onAskCancelOrder(item.getId());
+        });
         getViewBinding().userBookingsBottomSheet.userBookingsList.setAdapter(adapter);
 
-        viewModel.getBookings().observe(getViewLifecycleOwner(), this::onBookingEvent);
+        viewModel.getAllBookings().observe(getViewLifecycleOwner(), this::onBookingEvent);
         viewModel.getShops().observe(getViewLifecycleOwner(), this::onShopsEvent);
 
         MapUtils.listenLocation(this, this::onNewUserLocation);
@@ -122,7 +135,8 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
         currentShopBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         NavUtils.onBackPressed(this, a -> {
-            if (getViewBinding().shopSearchEditText.getText().toString().trim().length() > 0) {
+            if (Objects.requireNonNull(getViewBinding().shopSearchEditText.getText())
+                    .toString().trim().length() > 0) {
                 onUserRefreshMenuClicked();
                 return true;
             }
@@ -219,14 +233,24 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             case MapUtils.ENABLE_LOCATION_REQUEST_CODE:
                 MapUtils.listenLocation(this, this::onNewUserLocation);
                 break;
-            case CANCEL_BOOKING_REQUEST_CODE:
+            case CANCEL_BOOKING_REQUEST_CODE: {
                 if (data == null)
                     break;
                 int bookingId = data.getIntExtra(CANCEL_BOOKING_ID_KEY, -1);
                 if (bookingId == -1)
                     break;
                 viewModel.cancelBooking(bookingId);
-                break;
+            }
+            break;
+            case CANCEL_ORDER_REQUEST_CODE: {
+                if (data == null)
+                    break;
+                int order = data.getIntExtra(CANCEL_BOOKING_ID_KEY, -1);
+                if (order == -1)
+                    break;
+                viewModel.cancelOrder(order);
+            }
+            break;
         }
     }
 
@@ -237,7 +261,14 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
                 getString(R.string.cancel_booking_confirm_message), args);
     }
 
-    private void onBookingEvent(Resource<List<BookingWithCount>> event) {
+    private void onAskCancelOrder(int orderId) {
+        Bundle args = new Bundle();
+        args.putInt(CANCEL_ORDER_ID_KEY, orderId);
+        ConfirmDialog.showForResult(this, CANCEL_ORDER_REQUEST_CODE,
+                getString(R.string.cancel_order_confirm_message), args);
+    }
+
+    private void onBookingEvent(Resource<List<Identifiable>> event) {
         UserBookingsAdapter adapter = (UserBookingsAdapter) getViewBinding()
                 .userBookingsBottomSheet
                 .userBookingsList
@@ -248,8 +279,6 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             getViewBinding().userBookingsBottomSheet.userBookingsLoading.setVisibility(View.VISIBLE);
             getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.GONE);
             getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.GONE);
-            currentShopBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-            userBookingsBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
             return;
         }
 
@@ -270,7 +299,7 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
             return;
         }
 
-        List<BookingWithCount> bookings = Objects.requireNonNull(event.getData());
+        List<Identifiable> bookings = Objects.requireNonNull(event.getData());
         adapter.updateDataSet(bookings);
         if (bookings.isEmpty()) {
             getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.GONE);
@@ -335,12 +364,12 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
     private void adjustBookButton(Shop shop) {
         int bookingId = -1;
-        Resource<List<BookingWithCount>> currentState = viewModel.getBookings().getValue();
+        Resource<List<Identifiable>> currentState = viewModel.getAllBookings().getValue();
         if (currentState != null && currentState.isSuccessful()) {
-            List<BookingWithCount> currentBookings = currentState.getData();
+            List<Identifiable> currentBookings = currentState.getData();
             if (currentBookings != null) {
-                for (BookingWithCount booking : currentBookings) {
-                    if (booking.getShop().getId() == shop.getId()) {
+                for (Identifiable booking : currentBookings) {
+                    if (booking instanceof BookingWithCount && ((BookingWithCount) booking).getShop().getId() == shop.getId()) {
                         bookingId = booking.getId();
                         break;
                     }
@@ -350,16 +379,25 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
         if (bookingId == -1) {
             getViewBinding().currentShopBottomSheet.currentShopBookButton.setVisibility(View.VISIBLE);
+            getViewBinding().currentShopBottomSheet.shoppingButton.setVisibility(View.VISIBLE);
             getViewBinding().currentShopBottomSheet.currentShopCancelButton.setVisibility(View.GONE);
         } else {
             getViewBinding().currentShopBottomSheet.currentShopBookButton.setVisibility(View.GONE);
+            getViewBinding().currentShopBottomSheet.shoppingButton.setVisibility(View.GONE);
             getViewBinding().currentShopBottomSheet.currentShopCancelButton.setVisibility(View.VISIBLE);
         }
 
         getViewBinding().currentShopBottomSheet.currentShopBookButton
                 .setOnClickListener(v -> viewModel.book(shop.getId()));
-        int finalBookingId = bookingId;
+
+        final int finalBookingId = bookingId;
         getViewBinding().currentShopBottomSheet.currentShopCancelButton
                 .setOnClickListener(v -> onAskCancelBooking(finalBookingId));
+
+        getViewBinding().currentShopBottomSheet.shoppingButton.setOnClickListener(v -> {
+            NavDirections directions = UserMainFragmentDirections
+                    .actionUserMainFragmentToUserShopProductsFragment(shop.getId());
+            NavUtils.navigate(this, directions);
+        });
     }
 }

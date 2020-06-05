@@ -115,7 +115,6 @@ public class UserProfileFragment extends EditFragment<UserDetails, UserProfileFr
 
     @Override
     protected void handleError(Throwable error) {
-        super.handleError(error);
         if (error instanceof EmailRevokedException) {
             Toast.makeText(requireActivity(), R.string.login_email_not_confirmed, Toast.LENGTH_LONG).show();
             loginViewModel.logout();

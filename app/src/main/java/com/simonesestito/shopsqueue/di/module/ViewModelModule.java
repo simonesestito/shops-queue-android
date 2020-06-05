@@ -28,12 +28,15 @@ import com.simonesestito.shopsqueue.viewmodel.AdminUserEditViewModel;
 import com.simonesestito.shopsqueue.viewmodel.AdminUsersViewModel;
 import com.simonesestito.shopsqueue.viewmodel.LocationPickerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.LoginViewModel;
+import com.simonesestito.shopsqueue.viewmodel.OwnerOrdersViewModel;
+import com.simonesestito.shopsqueue.viewmodel.OwnerProductsViewModel;
 import com.simonesestito.shopsqueue.viewmodel.OwnerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.SessionsViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ShopPickerViewModel;
 import com.simonesestito.shopsqueue.viewmodel.UserFavouriteShopsViewModel;
 import com.simonesestito.shopsqueue.viewmodel.UserMainViewModel;
 import com.simonesestito.shopsqueue.viewmodel.UserProfileViewModel;
+import com.simonesestito.shopsqueue.viewmodel.UserShopProductsViewModel;
 import com.simonesestito.shopsqueue.viewmodel.ViewModelFactory;
 
 import dagger.Binds;
@@ -104,4 +107,19 @@ public interface ViewModelModule {
     @IntoMap
     @ViewModelKey(SessionsViewModel.class)
     ViewModel bindSessionsViewModel(SessionsViewModel sessionsViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(OwnerProductsViewModel.class)
+    ViewModel bindOwnerProductsViewModel(OwnerProductsViewModel ownerProductsViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(UserShopProductsViewModel.class)
+    ViewModel bindUserShopProductsViewModel(UserShopProductsViewModel userShopProductsViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(OwnerOrdersViewModel.class)
+    ViewModel bindOwnerOrdersViewModel(OwnerOrdersViewModel ownerOrdersViewModel);
 }

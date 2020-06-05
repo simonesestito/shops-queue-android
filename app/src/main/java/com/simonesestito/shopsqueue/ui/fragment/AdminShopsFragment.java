@@ -66,10 +66,10 @@ public class AdminShopsFragment extends AbstractAppFragment<AdminChildFragmentBi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ShopsAdapter adapter = new ShopsAdapter();
-        adapter.setMenuItemListener((menuItem, shopId) -> {
-            if (menuItem.getItemId() == R.id.deleteShopMenuAction) {
+        adapter.setMenuItemListener((menuItem, shop) -> {
+            if (menuItem.getItemId() == R.id.deleteMenuAction) {
                 Bundle data = new Bundle();
-                data.putInt(EXTRA_CLICKED_SHOP_ID, shopId);
+                data.putInt(EXTRA_CLICKED_SHOP_ID, shop.getId());
                 ConfirmDialog.showForResult(this,
                         REQUEST_DELETE_SHOP,
                         getString(R.string.shop_delete_confirm_message),

@@ -19,12 +19,14 @@
 package com.simonesestito.shopsqueue.util;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
@@ -119,5 +121,9 @@ public class ViewUtils {
         );
         if (imm != null)
             imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    }
+
+    public static void setBackgroundTint(View view, @ColorInt int color) {
+        view.setBackgroundTintList(ColorStateList.valueOf(color));
     }
 }

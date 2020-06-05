@@ -78,7 +78,8 @@ public class LiveResource<T> extends LiveData<Resource<T>> {
      * Emit a new event indicating the task is in progress
      */
     public void emitLoading() {
-        setValue(Resource.loading());
+        if (getValue() == null || !getValue().isLoading())
+            setValue(Resource.loading());
     }
 
     /**

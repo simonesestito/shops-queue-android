@@ -25,6 +25,7 @@ import com.simonesestito.shopsqueue.di.module.RetrofitModule;
 import com.simonesestito.shopsqueue.di.module.SharedPreferencesModule;
 import com.simonesestito.shopsqueue.di.module.ViewModelModule;
 import com.simonesestito.shopsqueue.ui.MainActivity;
+import com.simonesestito.shopsqueue.ui.dialog.OwnerOrdersBottomSheet;
 import com.simonesestito.shopsqueue.ui.fragment.AdminShopEditFragment;
 import com.simonesestito.shopsqueue.ui.fragment.AdminShopsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.AdminUserEditFragment;
@@ -32,13 +33,19 @@ import com.simonesestito.shopsqueue.ui.fragment.AdminUsersFragment;
 import com.simonesestito.shopsqueue.ui.fragment.LocationPickerFragment;
 import com.simonesestito.shopsqueue.ui.fragment.LoginFragment;
 import com.simonesestito.shopsqueue.ui.fragment.MainFragment;
-import com.simonesestito.shopsqueue.ui.fragment.OwnerFragment;
+import com.simonesestito.shopsqueue.ui.fragment.OwnerBookingsFragment;
+import com.simonesestito.shopsqueue.ui.fragment.OwnerOrdersFragment;
+import com.simonesestito.shopsqueue.ui.fragment.OwnerProductEditFragment;
+import com.simonesestito.shopsqueue.ui.fragment.OwnerProductsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.SessionsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.ShopPickerFragment;
 import com.simonesestito.shopsqueue.ui.fragment.SignUpFragment;
 import com.simonesestito.shopsqueue.ui.fragment.UserFavouriteShopsFragment;
 import com.simonesestito.shopsqueue.ui.fragment.UserMainFragment;
 import com.simonesestito.shopsqueue.ui.fragment.UserProfileFragment;
+import com.simonesestito.shopsqueue.ui.fragment.UserShopProductsFragment;
+
+import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -48,6 +55,7 @@ import dagger.Component;
         SharedPreferencesModule.class,
         ViewModelModule.class
 })
+@Singleton
 public interface Injector {
     void inject(MainActivity mainActivity);
 
@@ -57,7 +65,7 @@ public interface Injector {
 
     void inject(SignUpFragment signUpFragment);
 
-    void inject(OwnerFragment ownerFragment);
+    void inject(OwnerBookingsFragment ownerBookingsFragment);
 
     void inject(AdminUsersFragment adminUsersFragment);
 
@@ -80,6 +88,16 @@ public interface Injector {
     void inject(UserProfileFragment userProfileFragment);
 
     void inject(SessionsFragment sessionsFragment);
+
+    void inject(OwnerProductsFragment ownerProductsFragment);
+
+    void inject(OwnerProductEditFragment ownerProductEditFragment);
+
+    void inject(UserShopProductsFragment userShopProductsFragment);
+
+    void inject(OwnerOrdersFragment ownerOrdersFragment);
+
+    void inject(OwnerOrdersBottomSheet ownerOrdersBottomSheet);
 
     @Component.Builder
     interface Builder {

@@ -29,11 +29,23 @@
         <action
             android:id="@+id/action_userMainFragment_to_userFavouriteShopsFragment"
             app:destination="@id/userFavouriteShopsFragment" />
+        <action
+            android:id="@+id/action_userMainFragment_to_userShopProductsFragment"
+            app:destination="@id/userShopProductsFragment" />
     </fragment>
     <fragment
         android:id="@+id/userFavouriteShopsFragment"
         android:name="com.simonesestito.shopsqueue.ui.fragment.UserFavouriteShopsFragment"
         android:label="@string/user_favourite_shops"
         tools:layout="@layout/user_favourite_shops" />
+    <fragment
+        android:id="@+id/userShopProductsFragment"
+        android:name="com.simonesestito.shopsqueue.ui.fragment.UserShopProductsFragment"
+        android:label="@string/user_shop_products"
+        tools:layout="@layout/products_list">
+        <argument
+            android:name="shopId"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

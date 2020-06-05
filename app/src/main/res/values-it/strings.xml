@@ -121,5 +121,34 @@
     <string name="login_email_not_confirmed">Controlla la tua casella e-mail: dovresti aver ricevuto una mail per confermare il tuo account.</string>
     <string name="user_active_account_input">Attiva account</string>
     <string name="sign_up_confirm_email_dialog_title">Conferma il tuo indirizzo e-mail</string>
+    <string name="show_owner_products">Mostra prodotti</string>
+    <string name="owner_products_title">I tuoi prodotti</string>
+    <string name="product_delete_confirm_message">Questo prodotto verrà eliminato irrevocabilmente</string>
+    <string name="product_edit_save">Salva prodotto</string>
+    <string name="input_price_hint">Prezzo</string>
+    <string name="new_product_title">Nuovo prodotto</string>
+    <string name="invalid_ean_input">Codice EAN-13 non valido</string>
+    <string name="invalid_price_input">Prezzo non valido</string>
+    <string name="shop_order_items">Ordina prodotti</string>
+    <string name="user_shop_products">Prodotti</string>
+    <string name="products_empty_message">Nessun prodotto disponibile</string>
+    <string name="shopping_order_created_at_date">Ordine di %d prodotti fatto alle %s</string>
+    <string name="shopping_order_ready"><b>Il tuo ordine è pronto</b></string>
+    <string name="shopping_order_not_ready">Non ancora pronto</string>
+    <string name="cancel_order_confirm_message">Perderai il tuo ordine</string>
+    <string name="total_price_label">Totale: %.2f €</string>
+    <string name="shopping_list_status_ready">Pronto al ritiro</string>
+    <string name="shopping_list_status_to_do">Da fare</string>
+    <string name="owner_orders_empty_message">Nessun ordine ancora ricevuto</string>
+    <string name="owner_shopping_lists_title">Ordini ricevuti</string>
+    <string name="owner_orders_action_cancel">Annulla questo ordine</string>
+    <string name="owner_orders_action_prepare">Imposta ordine come pronto al ritiro</string>
+    <string name="owner_orders_action_retired">Imposta ordine come ritirato dall\'utente</string>
+    <string name="owner_orders_bottom_sheet_title">Ordine di %s</string>
+    <string name="products_count_label_singular">%d prodotto</string>
+    <string name="products_count_label_plural">%d prodotti</string>
+    <string name="notification_channel_orders_notice">Ordinazioni prodotti</string>
+    <string name="notification_order_ready_message">Il tuo ordine è pronto per essere ritirato!</string>
+    <string name="notification_order_cancelled_message">Il tuo ordine è stato annullato dal commerciante</string>
 
 </resources>

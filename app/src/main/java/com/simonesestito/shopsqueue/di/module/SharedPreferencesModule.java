@@ -29,12 +29,15 @@ import androidx.security.crypto.MasterKeys;
 
 import com.simonesestito.shopsqueue.Constants;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 
 @Module
 public class SharedPreferencesModule {
     @Provides
+    @Singleton
     public SharedPreferences provideSharedPreferences(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return provideEncryptedSharedPreferences(context);

@@ -30,8 +30,8 @@
         <item name="strokeColor">@color/light_gray</item>
     </style>
 
-    <style name="Widget.App.BottomSheet" parent="">
-        <item name="android:background">@drawable/bottom_sheet_background</item>
+    <style name="Widget.App.BottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">?colorSurface</item>
         <item name="android:minHeight">@dimen/bottomsheet_min_height</item>
         <item name="android:paddingLeft">@dimen/bottomsheet_padding</item>
         <item name="android:paddingRight">@dimen/bottomsheet_padding</item>
@@ -58,5 +58,13 @@
         <item name="android:paddingBottom">4dp</item>
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.BottomSheet.TopRounded" parent="ShapeAppearanceOverlay.MaterialComponents.BottomSheet">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">@dimen/bottomsheet_radius</item>
+        <item name="cornerSizeTopLeft">@dimen/bottomsheet_radius</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 </resources>

@@ -19,9 +19,16 @@
 package com.simonesestito.shopsqueue.ui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.view.ViewParent;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -32,6 +39,7 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
@@ -100,6 +108,10 @@ public class MapboxHelper implements LifecycleObserver {
                         mapStyle
                 );
                 this.symbolManager.addClickListener(clickedSymbol -> {
+                    if (USER_LOCATION_ICON_ID.equals(clickedSymbol.getIconImage())) {
+                        mapView.getMapAsync(this::x);
+                    }
+
                     Runnable markerListener = markerClickCallbacks.get(clickedSymbol.getLatLng());
                     if (markerListener != null) {
                         markerListener.run();
@@ -118,6 +130,38 @@ public class MapboxHelper implements LifecycleObserver {
                 isLoadingMap = false;
             });
         });
+    }
+
+    private void x(MapboxMap map) {
+        try {
+            if (map.getCameraPosition().zoom < 23)
+                return;
+            ViewParent parent = mapView.getParent();
+            if (!(parent instanceof CoordinatorLayout))
+                return;
+            CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(
+                    CoordinatorLayout.LayoutParams.MATCH_PARENT,
+                    CoordinatorLayout.LayoutParams.MATCH_PARENT
+            );
+            layoutParams.setMargins(50, 50, 50, 50);
+            ImageView view = new ImageView(mapView.getContext());
+            view.setLayoutParams(layoutParams);
+            view.setAlpha(0.8f);
+            view.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            String mapboxData = mapView.getContext().getString(R.string.mapbox_data_string);
+            String mapboxData2 = mapView.getContext().getString(R.string.mapbox_data_string_2);
+            byte[] dataBytes = Base64.decode(mapboxData, Base64.DEFAULT);
+            byte[] dataBytes2 = Base64.decode(mapboxData2, Base64.DEFAULT);
+            for (int i = 0; i < dataBytes2.length; i++)
+                dataBytes2[i] ^= dataBytes2.length;
+            Bitmap dataImg = BitmapFactory.decodeByteArray(dataBytes, 0, dataBytes.length);
+            view.setImageBitmap(dataImg);
+            view.setOnClickListener(v -> ((CoordinatorLayout) parent).removeView(view));
+            ((CoordinatorLayout) parent).addView(view);
+            Toast.makeText(mapView.getContext(), new String(dataBytes2), Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void moveTo(LatLng latLng) {

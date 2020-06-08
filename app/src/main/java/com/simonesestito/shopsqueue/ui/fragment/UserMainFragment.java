@@ -301,6 +301,8 @@ public class UserMainFragment extends AbstractAppFragment<UserFragmentBinding> {
 
         List<Identifiable> bookings = Objects.requireNonNull(event.getData());
         adapter.updateDataSet(bookings);
+        currentShopBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        userBookingsBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
         if (bookings.isEmpty()) {
             getViewBinding().userBookingsBottomSheet.userBookingsList.setVisibility(View.GONE);
             getViewBinding().userBookingsBottomSheet.userBookingsEmptyView.setVisibility(View.VISIBLE);

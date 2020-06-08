@@ -79,6 +79,8 @@ The app graphical layout is based on the principles of the Material Design.
 It provides both a light and a dark theme. The theme to use is determined by looking at the current theme the user applied on the entire phone, if any.
 By default, it uses the light theme.
 
+Also... [( ͡° ͜ʖ ͡°)](https://github.com/simonesestito/shops-queue-android/commit/9a93f66cd8a99f4ba3077ab1fa93b5b4b2c85c9e)
+
 <a name="arch"></a>
 ## Project architecture
 
